@@ -14,6 +14,7 @@ export interface IGroup {
     id?: string;
     groupId: string;
     cookies: string;
+    status:boolean;
 }
 interface IgroupBalanceList {
     groupId: string;

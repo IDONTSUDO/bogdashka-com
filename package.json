@@ -6,7 +6,7 @@
   "scripts": {
     "start": "tsc  && node --max-old-space-size=8192 build/src/main.js",
     "watch": "tsc -w",
-    "dev": "nodemon   --watch src --exec \"npm start\"",
+    "dev": "cross-env test=true nodemon   --watch src --exec \"npm start\"",
     "build:live": "nodemon   --watch '*.ts' --exec 'ts-node' src/main.ts",
     "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register 'test/**/*.ts'"
   },
@@ -16,12 +16,15 @@
   "dependencies": {
     "@qiwi/bill-payments-node-js-sdk": "^3.2.1",
     "@types/socket.io": "^2.1.12",
+    "@types/socket.io-client": "^1.4.34",
     "axios": "^0.19.2",
     "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
     "express": "^4.17.1",
     "firebase-admin": "^9.3.0",
     "nodemon": "^2.0.6",
     "socket.io": "^3.0.4",
+    "socket.io-client": "^3.0.4",
     "uuid": "^8.3.1"
   },
   "devDependencies": {

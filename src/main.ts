@@ -22,10 +22,9 @@ const socket = require("socket.io");
 const server = new http.Server(app);
 const io = socket(server);
 
-server.listen(env.port, () => {
-  console.log(`Application listening on port ${env.port || 3000}!`);
+server.listen(env.port,() => {
+  console.log(`Application listening on port ${env.port || 3000}!`)
 });
-
 io.on("connection", (socket) => {
   console.log("A user has connected to the socket!");
   socket.on('disconnect', () => console.log('A user has disconnected from the socket!'));
