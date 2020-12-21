@@ -1,7 +1,7 @@
 import db from '../lib/firestore';
 
 export class Payments {
-    static ref = db.collection('payments')
+    static ref = db.collection('Payments')
     static async savePayment(transaction: IPayments) {
         try {
             await Payments.ref.doc(transaction.id).set(transaction);

@@ -1,6 +1,6 @@
 import db from '../lib/firestore';
-const ref = db.collection('group');
 export class Group {
+    static ref = db.collection('Groups');
     static findAllGroup() {
 
     }
