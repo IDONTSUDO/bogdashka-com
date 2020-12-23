@@ -94,5 +94,6 @@ appsettings.json
 local.settings.json
 .DS_Store
 package-lock.json
-env.json
-/build
+build/
+server/build
+build
