@@ -1,0 +1,26 @@
+[
+    {
+        "groupId": "1",
+        "balance": 10
+    },
+    {
+        "groupId": "2",
+        "balance": 10
+    },
+    {
+        "groupId": "3",
+        "balance": 10
+    },
+    {
+        "groupId": "4",
+        "balance": 10
+    },
+    {
+        "groupId": "5",
+        "balance": 10
+    },
+    {
+        "groupId": "6",
+        "balance": 10
+    }
+]

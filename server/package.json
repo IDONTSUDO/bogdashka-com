@@ -1,0 +1,48 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "build/index.js",
+  "scripts": {
+    "start": "tsc  && node --max-old-space-size=8192 build/src/main.js",
+    "watch": "tsc -w",
+    "dev": "cross-env test=true nodemon   --watch src --exec \"npm start\"",
+    "build:live": "nodemon   --watch '*.ts' --exec 'ts-node' src/main.ts",
+    "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register 'test/**/*.ts'"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "firebase": "^7.19.1",
+    "firebase-functions": "^3.12.0",
+    "firebase-tools": "^8.18.1",
+    "@qiwi/bill-payments-node-js-sdk": "^3.2.1",
+    "@types/socket.io": "^2.1.12",
+    "@types/socket.io-client": "^1.4.34",
+    "axios": "^0.19.2",
+    "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
+    "express": "^4.17.1",
+    "firebase-admin": "^9.3.0",
+    "nodemon": "^2.0.6",
+    "socket.io": "^3.0.4",
+    "socket.io-client": "^3.0.4",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "@types/uuid": "^8.3.0",
+    "@types/bull": "^3.12.2",
+    "@types/chai": "^4.2.14",
+    "@types/cors": "^2.8.6",
+    "@types/express": "^4.17.6",
+    "@types/jsonwebtoken": "^8.3.9",
+    "@types/mocha": "^8.2.0",
+    "@types/node": "13.11.1",
+    "chai": "^4.2.0",
+    "mocha": "^8.2.1",
+    "ts-node": "^8.10.2",
+    "tslint": "^6.1.1",
+    "typescript": "^3.8.3"
+  }
+}
