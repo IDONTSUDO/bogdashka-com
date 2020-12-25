@@ -1,0 +1,594 @@
+@media (max-width: 1600px) {
+  .container {
+    max-width: 1400px;
+  }
+
+  /*====Header====*/
+  .header {
+    .nav {
+      .number {
+        margin-right: 50px;
+      }
+    }
+
+    &__text {
+      &-title {
+        max-width: 680px;
+        margin-bottom: 60px;
+      }
+
+      &-subtitle {
+        max-width: 500px;
+        margin-bottom: 170px;
+      }
+    }
+  }
+
+  /*====We make====*/
+  .weMake {
+    .container {
+      justify-content: space-around;
+      margin-bottom: 100px;
+    }
+
+    &__item {
+      max-width: 360px;
+      margin: 50px 0;
+    }
+  }
+
+  /*====Tinkoff====*/
+  .tinkoff {
+    &__img {
+      max-width: 35%;
+      margin: 50px 0 -40px 400px;
+    }
+  }
+
+  /*====Six Reason====*/
+  .sixReason {
+    &__wrapper {
+      justify-content: space-evenly;
+    }
+  }
+
+  /*===Reviews===*/
+  .owl-carousel__slide-img {
+    margin-right: 50px;
+  }
+}
+
+@media (max-width: 1440px) {
+  .container {
+    max-width: 1240px;
+  }
+
+  /*====Header====*/
+  .header {
+    &__text {
+      &-subtitle {
+        margin-bottom: 130px;
+      }
+    }
+  }
+
+  /*====Project====*/
+  .project {
+    .section-title {
+      margin-bottom: 30px;
+    }
+
+    &__list {
+      margin-bottom: 50px;
+
+      li {
+        margin-bottom: 15px;
+      }
+    }
+  }
+
+  /*====Tinkoff====*/
+  .tinkoff {
+    &__img {
+      max-width: 35%;
+      margin: 50px 0 -40px 200px;
+    }
+  }
+
+  /*====Adidas====*/
+  .adidas {
+    &__img {
+      max-width: 40%;
+    }
+
+    &__text {
+      max-width: 740px;
+      margin-left: 150px;
+    }
+  }
+
+  /*====Six Reason====*/
+  .sixReason {
+    &__title {
+      margin-left: 390px;
+      margin-bottom: 150px;
+
+      &::before {
+        left: -100px;
+      }
+    }
+
+    &__item {
+      margin-bottom: 70px;
+    }
+  }
+
+  /*===Reviews===*/
+  .reviews {
+    padding: 50px 0 100px;
+  }
+
+  /*===Reviews===*/
+  .owl-carousel__slide-img {
+    margin-right: 30px;
+  }
+}
+
+@media (max-width: 1366px) {
+  .container {
+    max-width: 1140px;
+  }
+
+  /*====Header====*/
+  .header {
+    .nav {
+      padding-top: 50px;
+      margin-bottom: 100px;
+    }
+
+    &__text {
+      &-title {
+        max-width: 500px;
+        margin-bottom: 40px;
+      }
+
+      &-subtitle {
+        max-width: 450px;
+        margin-bottom: 150px;
+      }
+    }
+  }
+
+
+  /*====We make====*/
+  .weMake {
+    .container {
+      margin-bottom: 50px;
+    }
+
+    &__item {
+      max-width: 300px;
+    }
+  }
+
+  /*====Gazprom====*/
+
+  .gazprom {
+    &__img {
+      max-width: 60%;
+      margin-bottom: -150px;
+    }
+
+    &__text {
+      margin-bottom: 0px;
+      margin-left: 70px;
+    }
+  }
+
+  /*===Reviews===*/
+  .owl-carousel__slide-img {
+    margin-right: 20px;
+  }
+}
+
+
+@media (max-width: 1024px) {
+  .container {
+    max-width: 880px;
+  }
+
+  /*====Header====*/
+  .header {
+    .nav {
+      padding-top: 50px;
+      margin-bottom: 70px;
+
+      .logo {
+        flex-basis: 250px;
+      }
+
+      &__menu {
+        max-width: 400px;
+
+        &-list {
+          li {
+            margin-right: 20px;
+
+            a {
+              padding: 0;
+              border: 0;
+
+              &:hover {
+                border: none;
+              }
+            }
+          }
+        }
+      }
+
+      .number {
+        flex-basis: 150px;
+        margin-right: 30px;
+      }
+
+      .language {
+        flex-basis: 90px;
+      }
+    }
+
+    &__text {
+      &-subtitle {
+        max-width: 450px;
+        margin-bottom: 180px;
+      }
+    }
+  }
+
+  /*====We make====*/
+  .weMake {
+    &__item {
+      max-width: 300px;
+      text-align: center;
+      margin: 20px 0;
+
+      &-img {
+        align-self: center;
+      }
+    }
+  }
+
+  /*====Project====*/
+  .project {
+    &__btn {
+      max-width: 210px;
+      padding: 10px 50px 10px 10px;
+    }
+  }
+
+  /*====Gazprom====*/
+
+  .gazprom {
+    &__img {
+      margin-bottom: -110px;
+    }
+  }
+
+  /*====Tinkoff====*/
+  .tinkoff {
+    &__img {
+      margin: 50px 0 -40px 100px;
+    }
+  }
+
+  /*====Adidas====*/
+  .adidas {
+    padding: 90px 0 90px;
+    margin-bottom: 0px;
+
+    &__text {
+      max-width: 740px;
+      margin-left: 150px;
+    }
+  }
+
+
+  /*====Six Reason====*/
+  .sixReason {
+    &__title {
+      padding-top: 95px;
+      margin-left: 250px;
+      margin-bottom: 100px;
+
+      &::before {
+        width: 135px;
+        height: 200px;
+        left: -50px;
+      }
+    }
+
+    &__item {
+      justify-content: space-evenly;
+      max-width: 300px;
+      margin-bottom: 70px;
+      align-self: flex-start;
+    }
+  }
+
+
+  /*====Clients====*/
+  .clients {
+    .container {
+      justify-content: space-evenly;
+    }
+
+    &__img {
+      max-width: 50%;
+    }
+
+    &__title {
+      padding: 70px 0 0px;
+
+    }
+
+    &__link {
+      width: 200px;
+      opacity: 1;
+
+    }
+  }
+
+  /*====Blockquote====*/
+  .blockquote {
+    text-align: center;
+    padding: 150px 0;
+
+    &__text {
+      max-width: 700px;
+    }
+  }
+
+  /*===Reviews===*/
+  .reviews {
+    padding: 50px 0 50px;
+  }
+
+  .owl-carousel {
+    position: relative;
+
+    &__slide {
+      flex-direction: column;
+
+      &-text {
+        height: 150px;
+        text-align: center;
+      }
+
+      &-textAuthor {
+        margin-bottom: 40px;
+      }
+
+      &-info {
+        max-width: 400px;
+      }
+    }
+
+    .owl-dots {
+      width: 150px;
+      height: 25px;
+      padding-bottom: 5px;
+      display: flex;
+      justify-content: space-evenly;
+
+      margin: 0 auto;
+      background-color: #aeaeae56;
+      border-radius: 10px;
+      box-shadow: 0px 5px 20px 0.1px rgba(122, 122, 122, 0.411);
+
+      &:last-child {
+        padding-right: 10px;
+      }
+
+      .owl-dot,
+      .owl-dot.active {
+        position: relative;
+        outline: none;
+
+        span {
+          width: 15px;
+          height: 15px;
+          border-radius: 50%;
+
+          bottom: 0;
+          background: rgb(255, 255, 255);
+          position: absolute;
+          z-index: 22;
+
+        }
+
+
+
+      }
+
+      .owl-dot.active {
+        span {
+          border: 3px solid #747474;
+        }
+      }
+    }
+  }
+
+  .owl-carousel .owl-item img {
+    max-width: 90%;
+    margin: 0 0 30px 0;
+  }
+
+
+  /*===Footer===*/
+  .feedback {
+    padding: 50px 0;
+  }
+
+  .social {
+    padding: 30px 0;
+
+    &__box {
+      &-img {
+        max-width: 50px;
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    max-width: 700px;
+  }
+
+  /*====Header====*/
+  .header {
+    background-position: top;
+    background-size: 100% 100%;
+
+    min-height: 0;
+
+    .nav {
+      padding-top: 50px;
+      margin-bottom: 70px;
+
+      .logo {
+        flex-basis: 200px;
+      }
+
+      &__menu {
+        max-width: 300px;
+
+        &-list {
+          li {
+            margin-right: 15px;
+          }
+        }
+      }
+
+      .number {
+        margin-right: 0;
+      }
+
+      .language {
+        flex-basis: 70px;
+      }
+    }
+
+    &__text {
+      &-title {
+        max-width: 350px;
+      }
+
+      &-subtitle {
+        max-width: 310px;
+        margin-bottom: 20px;
+      }
+    }
+  }
+
+  /*====We make====*/
+  .weMake {
+    &__item {
+      max-width: 280px;
+      margin: 15px 0 30px;
+      min-height: 0px;
+
+      &-title {
+        margin-bottom: 15px;
+      }
+
+      &-img {
+        margin-bottom: 15px;
+      }
+    }
+  }
+
+  /*====Project====*/
+  .project {
+    &__list {
+      margin-bottom: 30px;
+    }
+  }
+
+  /*====Gazprom====*/
+
+  .gazprom {
+    &__img {
+      margin-bottom: -80px;
+    }
+
+    &__text {
+      margin-left: 40px;
+    }
+  }
+
+  /*====Tinkoff====*/
+  .tinkoff {
+    padding-top: 50px;
+
+    &__img {
+      margin: 50px 0 -20px 100px;
+    }
+  }
+
+  /*====Adidas====*/
+  .adidas {
+    &__text {
+      margin-left: 100px;
+    }
+  }
+
+
+  /*====Six Reason====*/
+  .sixReason {
+    padding-bottom: 40px;
+
+    &__item {
+      max-width: 280px;
+      margin-bottom: 50px;
+
+      &-title {
+        margin-bottom: 20px;
+      }
+    }
+  }
+
+  /*====Blockquote====*/
+  .blockquote {
+    text-align: center;
+    padding: 150px 0;
+
+    &__text {
+      max-width: 600px;
+    }
+  }
+}
+
+@media (max-width: 640px) {
+
+}
+
+@media (max-width: 420px) {
+
+}
+
+
+@media (max-width: 375px) {
+  
+}
+
+@media (max-width: 360px) {
+
+}
+
+@media (max-width: 320px) {
+  
+}
+
+//max-width: 768px
+
+@media (max-height: 420px) {}
