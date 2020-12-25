@@ -8,9 +8,11 @@ if(prod){
 const SERVER_URL = 'http://localhost:8080' 
 
 
-
+const CALCULATIONGROUPVALUE = 3;
 const socket = io(SERVER_URL);
 const session = localStorage.getItem('sessionId');
+const MINIMALPAY = 10;
+
 if(session == undefined){
     socket.emit('new-session','')
 }else{
@@ -19,6 +21,15 @@ if(session == undefined){
 socket.on('sendSession', (msg) =>{
     localStorage.setItem('sessionId',msg)
 })
+const mimimunAmountDoc = document.getElementById('minimalPay');
+const sum = document.getElementById('sum');
+const payProcessAlertDoc = document.getElementById('pay-process-alert');
+
+mimimunAmountDoc.innerText = MINIMALPAY;
+
+const roboxPayDoc = document.getElementById('robox-pay');
+const priceRobux = document.getElementById('price-robux');
+
 const amountInput = document.getElementById('amount');
 const promoCodeInput = document.getElementById('promocodeInput');
 const NameInput = document.getElementById('nameInput');
@@ -33,3 +44,13 @@ btnSender.addEventListener("click", async function () {
     let result = await response.json();
     console.log(result);
 });
+
+socket.on('pay', (msg) =>{
+    console.log(msg);
+})
+
+payProcessAlertDoc.addEventListener('click', function (){
+    roboxPayDoc.innerText = amountInput.value;
+
+    priceRobux.innerText = amountInput.value * CALCULATIONGROUPVALUE;
+})
