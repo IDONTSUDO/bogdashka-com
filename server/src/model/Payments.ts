@@ -1,4 +1,5 @@
 import db from '../lib/firestore';
+import { sendSocket } from '../main';
 
 export class Payments {
     static ref = db.collection('Payments')
@@ -9,9 +10,14 @@ export class Payments {
             console.log(error);
         }
     }
-    static async newStatus(id){
-        try {   
-           await Payments.ref.doc(id).update({status:'COMPLETE'}); 
+    static async newStatus(id) {
+        try {
+            await Payments.ref.doc(id).update({ status: 'COMPLETE' });
+            const fire = await Payments.ref.doc(id).get();
+            const doc = fire.data();
+            if (doc != undefined) {
+                sendSocket(doc.sessionId, 'pay', '')
+            }
         } catch (error) {
             console.log(error);
         }
@@ -24,7 +30,7 @@ export interface IPayments {
     status: string;
     service: servicePay;
     sessionId: string;
-    payLogin:string;
+    payLogin: string;
 }
 enum statusPay {
     'CANCEL', 'COMPLETE', 'PEDDING', 'RETURN_PAY',

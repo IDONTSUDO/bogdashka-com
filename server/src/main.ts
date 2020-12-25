@@ -37,25 +37,23 @@ io.on("connection", (socket) => {
   })
   socket.on('disconnect', () => {
     const sessionId = myCache.get(socket.id);
-    if(sessionId != undefined){
+    if (sessionId != undefined) {
       myCache.del(sessionId);
       myCache.del(socket.id);
     }
   });
 });
-
-export const sendSocket = (session_id,event,payload) =>{
+/**
+ * @session_id { айди  сессии }
+ * @event {тип ивента}
+ * @payload {данные которые надо отправить}
+ */
+export const sendSocket = (session_id, event, payload) => {
   const socketId = myCache.get(session_id);
-  if(socketId != undefined){
-    if(!isProd()){
-      console.log(event,payload)
+  if (socketId != undefined) {
+    if (!isProd()) {
+      console.log(event, payload)
     }
-    io.to(socketId).emit(event,payload);
+    io.to(socketId).emit(event, payload);
   }
-}
-
-interface IpayloadSendSoket {
-  id: string;
-  data: any;
-  event: string;
 }
