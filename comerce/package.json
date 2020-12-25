@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "build": "webpack --mode watch",
-    "dev": "webpack --mode development"
+    "dev": "webpack --mode development",
+    "deploy": "firebase deploy"
   },
   "author": "Vadim Prokopchuk",
   "license": "ISC",
