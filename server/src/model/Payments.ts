@@ -1,26 +1,58 @@
 import db from '../lib/firestore';
 import { sendSocket } from '../main';
+import { RobloxService } from '../service/roblox.service';
 
 export class Payments {
-    static ref = db.collection('Payments')
-    static async savePayment(transaction: IPayments) {
+    static ref = db.collection('Payments');
+    /**
+     * @problem Получение платежа по айди.
+     * @param {string} id
+     * @return {*}  {Promise<IPayments>}
+     */
+    static async getPayment(id: string): Promise<IPayments> {
+        try {
+            const p: any | IPayments = await Payments.ref.doc(id).get();
+            if (p.exists) {
+                return p.data();
+            } else {
+                throw new Error('Payment not found');
+            }
+        } catch (error) {
+            throw new Error(`Payments id is undefined:${error}`);
+        }
+    }
+
+    /**
+     * @problem Получение платежа по айди.
+     * @param {IPayments} transaction
+     */
+    static async savePayment(transaction: IPayments): Promise<void> {
         try {
             await Payments.ref.doc(transaction.id).set(transaction);
         } catch (error) {
-            console.log(error);
+            throw new Error(`Payments is not  save:${error}`);
         }
     }
-    static async newStatus(id) {
+
+
+    /**
+     * @problem Апдейт платежки.
+     * @param {string} id
+     */
+    static async newStatus(id: string) {
         try {
             await Payments.ref.doc(id).update({ status: 'COMPLETE' });
             const fire = await Payments.ref.doc(id).get();
             const doc = fire.data();
-            if (doc != undefined) {
-                sendSocket(doc.sessionId, 'pay', '')
+            if (doc !== undefined) {
+                sendSocket(doc.sessionId, 'pay', '');
             }
         } catch (error) {
             console.log(error);
         }
+    }
+    static async updateErrorPayment(id: string, log: any): Promise<void> {
+        await Payments.ref.doc(id).set({'log': JSON.stringify(log), 'status': 'ERROR'});
     }
 }
 

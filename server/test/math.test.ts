@@ -6,6 +6,7 @@ const testMoock: any = groupMock;
 describe('Тесты расчетов', () => {
     it('Превышение баланса', async () => {
         const p = Group.paymentWithOutGroup(testMoock, 100)
+        console.log(p);
         expect(p).to.be.an("Object")
     });
     it('Сильное превышение баланса', async () => {
@@ -14,6 +15,7 @@ describe('Тесты расчетов', () => {
     });
     it('Нормальный баланс', async () => {
         const p = Group.paymentWithOutGroup(testMoock, 49);
+        console.log(p);
         expect(p).to.be.an("Array")
     });
 });

@@ -4,7 +4,7 @@ import * as mockTrans from './mocks/transaction.json';
 
 describe('Тесты Robox', () => { 
     it('Получение XCRFTOKEN', async () => { 
-        const p = await RobloxApi.getXCrfToken(mockTrans.cookie,'1')
+        const p = await RobloxApi.getXCrfToken(mockTrans.cookie)
         expect(p).to.be.an("string")
     });
     it('Получение баланса группы', async () => { 

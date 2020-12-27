@@ -1,43 +1,75 @@
 import db from '../lib/firestore';
 export class Group {
     static ref = db.collection('Groups');
-    static findAllGroup() {
-
+    /**
+     * @problem Апдейт баланца групп.
+     * @static
+     * @return {*}  {void}
+     */
+    static async updateBalance(id: string, amount: number): Promise<void> {
+        const fire: FirebaseFirestore.DocumentData = await Group.ref.doc(id).get();
+        if (fire.exists) {
+            await Group.ref.doc(id).set({'balance': fire.balance - amount}, {merge: true});
+        }
     }
-    static paymentWithOutGroup(groups: [IgroupBalanceList], amount: number) {
-        const p = recursive(groups, 0, amount, [])
-        return p;
+    /**
+     * @problem Поиск всех групп с не нулевым баланцем.
+     * @static
+     * @return {*}  {Promise<[IGroup]>}
+     */
+    static async findAllGroup(): Promise<[IGroup]> {
+        const fire: any = await Group.ref.where('balance', '>', '0').get();
+        return fire.docs;
+    }
+    /**
+    * @problem Валидация платежа
+    * @param {[IgroupBalanceList]} groups
+    * @param {number} index
+    * @param {number} totalAmount
+    * @param {*} PayList
+    * @return {boolean} если баланс слишком маленький
+    * @return {void} потому что рекурсия
+    * @return {IPayList} лист платежа, с каких групп сколько списать.
+    */
+    static groupValidatePayment(groups: [IgroupBalanceList], index: number, totalAmount: number, PayList): boolean | void | IPayList {
+        if (groups[index] !== undefined) {
+            const sum = totalAmount - groups[index].balance;
+            PayList.push({ totalAmount: groups[index].balance, groupId: groups[index].groupId, cookies: groups[index].cookies });
+            if (isPositive(sum)) {
+                return PayList;
+            } else {
+                return Group.groupValidatePayment(groups, index + 1, sum, PayList);
+            }
+        } else {
+
+            return { pay_operations: PayList, misingSum: totalAmount };
+        }
     }
 }
 export interface IGroup {
-    balace: number;
+    balance: number;
     id?: string;
     groupId: string;
     cookies: string;
-    status:boolean;
+    status: boolean;
 }
 interface IgroupBalanceList {
+    balance: number;
+    id?: string;
     groupId: string;
-    balance: number
+    cookies: string;
+    status: boolean;
 }
 
-function recursive(groups: [IgroupBalanceList], index: number, totalAmount: number, PayList) {
-    if (groups[index] != undefined) {
-        const sum = totalAmount - groups[index].balance;
-        PayList.push({ group: groups[index].balance, groupId: groups[index].groupId })
-        if (isPositive(sum)) {
-            return PayList;
-        } else {
-            return recursive(groups, index + 1, sum, PayList)
-        }
-    } else {
-        
-        return {pay_operation:PayList,misingSum:totalAmount};
-    }
-}
-function isPositive(num) {
 
-    var result;
+/**
+ * @problem определение позитивных чисел
+ * @param {*} num
+ * @return {*}  {boolean}
+ */
+function isPositive(num): boolean {
+
+    let result;
 
     if (num >= 0) {
         result = false;

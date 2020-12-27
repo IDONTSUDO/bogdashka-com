@@ -1,11 +1,12 @@
 import * as env from '../config/env.json';
-export const isProd = () =>{
-    if(process.env.test !== 'true'){
+export const isProd = () => {
+    if (process.env.test !== 'true') {
         return true;
-    }else{
+    } else {
         return false;
     }
-}
-export const isDeploy = () =>{
+};
+
+export const isDeploy = () => {
     return env.deploy;
-}
+};
