@@ -4,6 +4,7 @@ import * as env from '../config/env.json';
 import { v1 as uuidv1 } from 'uuid';
 import { IPayments, Payments } from '../model/Payments';
 import { isProd } from '../lib/prod';
+import { FAKE_ORDER_ID } from '../lib/contsanst';
 
 const qiwiApi = new QiwiBillPaymentsAPI(env.qiwiServer);
 
@@ -16,7 +17,7 @@ export const payProcessing = async (userLogin, amount, service, sessionId) => {
     if (isProd()) {
        id = uuidv1();
     } else {
-        id = '1dbc8680-42f4-11eb-85d0-17d057c3393f';
+        id = FAKE_ORDER_ID;
     }
     const trancaction: IPayments = {
         id: id,

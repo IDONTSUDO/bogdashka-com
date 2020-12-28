@@ -18,16 +18,14 @@ router.post('/qiwi/pay', async (req: Request, res: Response) => {
         return res.status(400).json(error);
     }
 });
-router.post('/qiwi/complete/', async (req: Request, res: Response) => {
+router.post('/qiwi/complete', async (req: Request, res: Response) => {
     try {
         const idQuery: string | any = req.query.id;
         const calculatedPayment: IPayments = await Payments.getPayment(idQuery);
         res.status(200).json(true);
-
-        await RobloxService.transactionClient(calculatedPayment);
-
+         const p =   await RobloxService.transactionClient(calculatedPayment);
     } catch (error) {
-        return res.status(400).json(error);
+       console.log(error);
     }
 });
 export const routerQiwi = router;

@@ -8,6 +8,7 @@ import { Server } from 'socket.io';
 import { v1 as uuidv1 } from 'uuid';
 import { isProd } from './lib/prod';
 import NodeCache = require('node-cache');
+import { comerceRoboxRouter } from './route/comerce.route';
 const myCache = new NodeCache();
 const app = express();
 app.use(cors());
@@ -18,10 +19,10 @@ app.get('*', (req: Request, res: Response) => {
   res.send(`API ${env.version}`);
 });
 app.use('/', routerQiwi);
+app.use('/', comerceRoboxRouter);
 const server = app.listen(env.port, () => {
   console.log(`SERVER START:${env.port}`);
 });
-
 const io = new Server(server, { cors: { origin: '*' } });
 
 io.on('connection', (socket) => {

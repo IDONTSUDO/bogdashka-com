@@ -1,25 +1,29 @@
+import { sign } from 'jsonwebtoken';
+import { RESPONCE_ALL_GROUP } from '../lib/contsanst';
 import db from '../lib/firestore';
 export class Group {
     static ref = db.collection('Groups');
     /**
-     * @problem Апдейт баланца групп.
-     * @static
+     * @problem Апдейт баланса групп.
      * @return {*}  {void}
      */
     static async updateBalance(id: string, amount: number): Promise<void> {
         const fire: FirebaseFirestore.DocumentData = await Group.ref.doc(id).get();
         if (fire.exists) {
-            await Group.ref.doc(id).set({'balance': fire.balance - amount}, {merge: true});
+            await Group.ref.doc(id).set({ 'balance': fire.balance - amount }, { merge: true });
         }
     }
     /**
      * @problem Поиск всех групп с не нулевым баланцем.
-     * @static
      * @return {*}  {Promise<[IGroup]>}
      */
     static async findAllGroup(): Promise<[IGroup]> {
-        const fire: any = await Group.ref.where('balance', '>', '0').get();
-        return fire.docs;
+        const fire: FirebaseFirestore.DocumentData = await Group.ref.where('balance', '>', 0).orderBy('balance', 'asc').get();
+        const fireDoc: any = [];
+        fire.docs.forEach(doc => {
+            fireDoc.push(doc.data());
+        });
+        return fireDoc;
     }
     /**
     * @problem Валидация платежа
@@ -28,21 +32,34 @@ export class Group {
     * @param {number} totalAmount
     * @param {*} PayList
     * @return {boolean} если баланс слишком маленький
-    * @return {void} потому что рекурсия
     * @return {IPayList} лист платежа, с каких групп сколько списать.
     */
-    static groupValidatePayment(groups: [IgroupBalanceList], index: number, totalAmount: number, PayList): boolean | void | IPayList {
-        if (groups[index] !== undefined) {
-            const sum = totalAmount - groups[index].balance;
-            PayList.push({ totalAmount: groups[index].balance, groupId: groups[index].groupId, cookies: groups[index].cookies });
-            if (isPositive(sum)) {
-                return PayList;
-            } else {
+    static groupValidatePayment(groups: [IGroup], index: number, totalAmount: number, PayList): boolean | IPayList {
+        if (groups.length !== 1) {
+            if (groups[index] !== undefined) {
+                const sum =  totalAmount -  groups[index].balance;
+                if (isPositive(sum)) {
+                    return PayList;
+                }
+                PayList.push({ totalAmount: groups[index].balance, groupId: groups[index].groupId, cookies: groups[index].cookies });
                 return Group.groupValidatePayment(groups, index + 1, sum, PayList);
             }
-        } else {
-
             return { pay_operations: PayList, misingSum: totalAmount };
+        } else {
+            const sum =  totalAmount -  groups[index].balance;
+            if (isPositive(sum)) {
+                PayList.push({
+                    totalAmount: sum +  groups[index].balance,
+                    groupId: groups[index].groupId,
+                    cookies: groups[index].cookies
+                });
+                return PayList;
+            } else {
+                return {misingSum: sum, pay_operations: [{
+                    totalAmount: sum +  groups[index].balance,
+                    groupId: groups[index].groupId,
+                }]};
+            }
         }
     }
 }
@@ -53,14 +70,6 @@ export interface IGroup {
     cookies: string;
     status: boolean;
 }
-interface IgroupBalanceList {
-    balance: number;
-    id?: string;
-    groupId: string;
-    cookies: string;
-    status: boolean;
-}
-
 
 /**
  * @problem определение позитивных чисел
@@ -71,10 +80,19 @@ function isPositive(num): boolean {
 
     let result;
 
-    if (num >= 0) {
+    if (num > 0) {
         result = false;
     } else if (num < 0) {
         result = true;
     }
     return result;
+}
+interface IPayList {
+    pay_operations: [IpaymentOperation];
+    misingSum: number;
+}
+
+interface IpaymentOperation {
+    totalAmount: number;
+    groupId: string;
 }

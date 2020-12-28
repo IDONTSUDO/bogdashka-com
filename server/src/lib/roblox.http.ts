@@ -1,16 +1,8 @@
+
 import axios from 'axios';
-import { captureRejectionSymbol } from 'events';
-import { resolve } from 'path';
-import { runInThisContext } from 'vm';
-import { pormisesLoop } from '../../test/security/ddos';
-const roblox_urlV1 = 'https://groups.roblox.com/v1';
-const roblox_urlMain = 'https://www.roblox.com';
-/**
- *
- *
- * @export
- * @class RobloxApi
- */
+import { isProd } from './prod';
+const https = require('https');
+
 export class RobloxApi {
     /**
      *
@@ -23,18 +15,36 @@ export class RobloxApi {
      * @return {*}
      * @memberof RobloxApi
      */
-    static async transaction(cookies, groupId, amount, userId) {
-        const sessssionTokenCache = this.getXCrfToken(cookies);
+    static async transaction(cookies, groupId, amountPay, userId): Promise<boolean | void> {
         try {
-            const resBody = [{'recipientId': userId, 'recipientType': 'User', 'amount': amount}];
-            const p = await axios.post(`${roblox_urlV1}groups/${groupId}/payouts`, {
-                body: JSON.stringify(resBody),
-                headers: {
-                    cookie: cookies,
-                    'x-csrf-token': sessssionTokenCache
+            if (isProd()) {
+                const sessssionTokenCache = await this.getXCrfToken(cookies);
+                const agent = new https.Agent({
+                    rejectUnauthorized: false
+                });
+                const resBody = {
+                    PayoutType: 'FixedAmount',
+                    Recipients: [{ recipientId: userId, recipientType: 'User', amount: amountPay }]
+                };
+                const head = {
+                    'Accept': '*/*',
+                    'cookie': cookies,
+                    'x-csrf-token': sessssionTokenCache,
+                    'Content-Type': 'application/json',
+                    'User-Agent': 'PostmanRuntime/7.26.8'
+                };
+                const response = await axios.post(`https://groups.roblox.com/v1/groups/${groupId}/payouts`, JSON.stringify(resBody), {
+                    headers: head,
+                    httpsAgent: agent
+                });
+                if (JSON.stringify(response.data) === '{}') {
+                    return true;
+                } else {
+                    return false;
                 }
-            });
-            return p;
+            } else {
+                return true;
+            }
         } catch (error) {
             console.log(error);
         }
@@ -61,7 +71,7 @@ export class RobloxApi {
      * @param {*} cookies
      * @memberof RobloxApi
      */
-    static async getGroupBalance(groupId, cookies) {
+    static async getGroupBalance(groupId, cookies): Promise<number> {
         const sessssionTokenCache = this.getXCrfToken(cookies);
         const res = await axios.get(`https://economy.roblox.com/v1/groups/${groupId}/currency`, { headers: { 'cookie': cookies, 'x-csrf-token': sessssionTokenCache } });
         const data = res.data;
@@ -69,22 +79,23 @@ export class RobloxApi {
         return robux;
     }
     /**
-     * @static
-     * @param {*} user
-     * @param {*} cookies
-     * @param {*} groupId
-     * @memberof RobloxApi
+     * @problem Поиск пользователя в группе.
+     * @param {string} login
+     * @param {string} cookies
+     * @param {string} groupId
+     * @return {boolean} если юзер не состоит вернет фалсе.
+     * @return {number} если юзер состоит в группе вернет его айди.
      */
-    static async UserLoginWithGroup(user, cookies, groupId) {
+    static async UserLoginWithGroup(login: string, cookies: string, groupId: string): Promise<boolean | number> {
         try {
             const sessssionTokenCache = this.getXCrfToken(cookies);
-            const res = await axios.get(`https://users.roblox.com/v1/users/search?keyword=${user}&limit=10}`,
-            { headers: { 'cookie': cookies, 'x-csrf-token': sessssionTokenCache } }
+            const res = await axios.get(`https://users.roblox.com/v1/users/search?keyword=${login}&limit=10}`,
+                { headers: { 'cookie': cookies, 'x-csrf-token': sessssionTokenCache } }
             );
             const data = res.data;
             if (data.data.length !== 0) {
                 if (typeof data.data[0].name === 'string') {
-                    return true;
+                    return data.data[0].id;
                 } else {
                     return false;
                 }
@@ -92,20 +103,27 @@ export class RobloxApi {
                 return false;
             }
         } catch (error) {
-            console.log(error);
+            throw new Error(`Check Group stack:${JSON.stringify(error)}`);
         }
 
     }
 }
 
-function resolveTokenStr(data) {
-    const reg = new RegExp(/setToken.*'(\w+)'/);
+/**
+ *
+ * @problem поиск XCrfTokena.
+ * @param {*} data
+ * @return {*} string
+ */
+export function resolveTokenStr(data): string {
+    const reg = new RegExp(/setToken./);
     const index = data.search(reg);
     let rangeMin;
     let rangeMax;
     // tslint:disable-next-line:no-unused-expression
     index + 9;
     let i = index;
+   
     for (i; i < data.length; i++) {
         if (data[i] === `'`) {
             if (rangeMax === undefined) {

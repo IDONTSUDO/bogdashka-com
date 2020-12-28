@@ -8,7 +8,7 @@ export class Payments {
      * @problem Получение платежа по айди.
      * @param {string} id
      * @return {*}  {Promise<IPayments>}
-     */
+    */
     static async getPayment(id: string): Promise<IPayments> {
         try {
             const p: any | IPayments = await Payments.ref.doc(id).get();
@@ -27,6 +27,7 @@ export class Payments {
      * @param {IPayments} transaction
      */
     static async savePayment(transaction: IPayments): Promise<void> {
+        transaction.date = new Date().toJSON();
         try {
             await Payments.ref.doc(transaction.id).set(transaction);
         } catch (error) {
@@ -63,6 +64,7 @@ export interface IPayments {
     service: servicePay;
     sessionId: string;
     payLogin: string;
+    date?: string;
 }
 enum statusPay {
     'CANCEL', 'COMPLETE', 'PEDDING', 'RETURN_PAY',
