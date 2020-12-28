@@ -5,6 +5,7 @@ export interface IPaymentsBlock {
   date: string;
   amount: number;
   operationID: string;
+  type: TYPEPAYMENTBLOCK;
 }
 export class PaymentsBlock {
   static ref = db.collection('PaymentsBlock');
@@ -21,4 +22,8 @@ export class PaymentsBlock {
     }
 
   }
+}
+export enum TYPEPAYMENTBLOCK {
+  NEW_REQUEST = 'NEW_REQUEST',
+  ERROR = 'ERROR'
 }

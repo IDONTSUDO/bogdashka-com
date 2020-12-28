@@ -16,6 +16,7 @@ export class RobloxApi {
      * @memberof RobloxApi
      */
     static async transaction(cookies, groupId, amountPay, userId): Promise<boolean | void> {
+        return true;
         try {
             if (isProd()) {
                 const sessssionTokenCache = await this.getXCrfToken(cookies);
@@ -123,7 +124,7 @@ export function resolveTokenStr(data): string {
     // tslint:disable-next-line:no-unused-expression
     index + 9;
     let i = index;
-   
+
     for (i; i < data.length; i++) {
         if (data[i] === `'`) {
             if (rangeMax === undefined) {

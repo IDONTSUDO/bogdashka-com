@@ -8,9 +8,12 @@ export class Group {
      * @return {*}  {void}
      */
     static async updateBalance(id: string, amount: number): Promise<void> {
+        console.log(id);
         const fire: FirebaseFirestore.DocumentData = await Group.ref.doc(id).get();
         if (fire.exists) {
-            await Group.ref.doc(id).set({ 'balance': fire.balance - amount }, { merge: true });
+            const doc =  fire.data();
+            // tslint:disable-next-line:radix
+            await Group.ref.doc(id).set({ 'balance': parseInt(doc.balance) - amount }, {merge: true});
         }
     }
     /**
@@ -39,9 +42,14 @@ export class Group {
             if (groups[index] !== undefined) {
                 const sum =  totalAmount -  groups[index].balance;
                 if (isPositive(sum)) {
-                    return PayList;
+                    return {pay_operations: PayList};
                 }
-                PayList.push({ totalAmount: groups[index].balance, groupId: groups[index].groupId, cookies: groups[index].cookies });
+                PayList.push({
+                    totalAmount: groups[index].balance,
+                    groupId: groups[index].groupId,
+                    cookies: groups[index].cookies,
+                    id: groups[index].id
+                });
                 return Group.groupValidatePayment(groups, index + 1, sum, PayList);
             }
             return { pay_operations: PayList, misingSum: totalAmount };
@@ -51,13 +59,15 @@ export class Group {
                 PayList.push({
                     totalAmount: sum +  groups[index].balance,
                     groupId: groups[index].groupId,
-                    cookies: groups[index].cookies
+                    cookies: groups[index].cookies,
+                    id: groups[index].id
                 });
-                return PayList;
+                return {pay_operations: PayList};
             } else {
                 return {misingSum: sum, pay_operations: [{
                     totalAmount: sum +  groups[index].balance,
                     groupId: groups[index].groupId,
+                    id: groups[index].id
                 }]};
             }
         }
@@ -65,7 +75,7 @@ export class Group {
 }
 export interface IGroup {
     balance: number;
-    id?: string;
+    id: string;
     groupId: string;
     cookies: string;
     status: boolean;
@@ -89,10 +99,11 @@ function isPositive(num): boolean {
 }
 interface IPayList {
     pay_operations: [IpaymentOperation];
-    misingSum: number;
+    misingSum?: number;
 }
 
 interface IpaymentOperation {
     totalAmount: number;
     groupId: string;
+    id: string;
 }

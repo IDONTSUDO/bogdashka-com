@@ -54,9 +54,7 @@ io.on('connection', (socket) => {
 export const sendSocket = (session_id, event, payload) => {
   const socketId: any = myCache.get(session_id);
   if (socketId !== undefined) {
-    if (!isProd()) {
-      console.log(event, payload);
-    }
+    console.log(event, payload);
     io.to(socketId).emit(event, payload);
   }
 

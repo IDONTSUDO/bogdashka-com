@@ -4,7 +4,7 @@ import { RobloxApi } from '../lib/roblox.http';
 import { sendSocket } from '../main';
 import { Group } from '../model/Group';
 import { IPayments, Payments } from '../model/Payments';
-import { IPaymentsBlock, PaymentsBlock } from '../model/PaymentsBlock';
+import { IPaymentsBlock, PaymentsBlock, TYPEPAYMENTBLOCK } from '../model/PaymentsBlock';
 
 export class RobloxService {
     static async amountValid(amount: number) {
@@ -20,23 +20,31 @@ export class RobloxService {
         try {
             const groupList = await Group.findAllGroup();
             const paymentValid: any = Group.groupValidatePayment(groupList, 0, amount, []);
+            console.log(paymentValid);
             if (paymentValid.pay_operations) {
                 for (const pay of paymentValid.pay_operations) {
-                    await RobloxApi.transaction(pay.cookies, pay.groupId, pay.amount, pay.userId);
-                    await Group.updateBalance(pay.id, pay.amount);
+                    await RobloxApi.transaction(pay.cookies, pay.groupId, pay.totalAmount, pay.userId);
+                    console.log(pay.id, pay.totalAmount);
+                    await Group.updateBalance(pay.id, pay.totalAmount);
                 }
                 if (paymentValid.misingSum !== undefined) {
                     const doc: IPaymentsBlock = {
                         userLogin: payLogin,
                         date: new Date().toJSON(),
-                        amount: amount,
-                        operationID: id
+                        amount: paymentValid.misingSum,
+                        operationID: id,
+                        type: TYPEPAYMENTBLOCK.ERROR
                     };
                     await PaymentsBlock.new(doc);
                 }
-                sendSocket(sessionId, 'pay', 'PayComplete');
+                if (paymentValid.pay_operations.length === 0) {
+                    sendSocket(sessionId, 'badPay', 'PayBad');
+                } else {
+                    sendSocket(sessionId, 'pay', 'PayComplete');
+                }
             }
         } catch (error) {
+            console.log(error);
             // await Payments.updateErrorPayment(id, error);
             throw new Error('');
             // TODO: ERROR
