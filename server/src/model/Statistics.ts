@@ -1,22 +1,20 @@
-import { resolveSrv } from 'dns';
 import db from '../lib/firestore';
-export enum StatiscUpdate {
-  NEW_TRANSACTION = 'NEW_TRANSACTION',
-  MESSAGE = 'MESSAGE',
-  REQUEST_AT_ZERO_BALANCE = 'REQUEST_AT_ZERO_BALANCE'
+export enum EventStatisticUpdate {
+  NEW_TRANSACTION = 'NEW_TRANSACTION', // НОВАЯ ТРАНЗАКЦИЯ
+  MESSAGE = 'MESSAGE', // НОВОЕ СООБЩЕНИЕ
+  REQUEST_AT_ZERO_BALANCE = 'REQUEST_AT_ZERO_BALANCE' // ЗАПРОС ПРИ НУЛЕВОМ БАЛАНСЕ
 }
 export class Statistic {
   private static ref = db.collection(`Statictics`).doc(String(new Date().getFullYear()));
 
   private  static  getTodayDate() {
-    console.log(200);
     const now: any = new Date();
     const start: any = new Date(now.getFullYear(), 0, 0);
     const diff = now - start;
     const oneDay = 1000 * 60 * 60 * 24;
     return Math.floor(diff / oneDay);
   }
-  static async updateStatic(event: StatiscUpdate, amount?: number) {
+  static async updateStatic(event: EventStatisticUpdate, amount?: number) {
     const todayKey =  Statistic.getTodayDate();
     const fire = await Statistic.ref.get();
     if (fire.exists) {
@@ -71,11 +69,3 @@ export class Statistic {
     }
   }
 }
-
-async function name() {
-
-  await Statistic.updateStatic(StatiscUpdate.NEW_TRANSACTION, 300);
-  await Statistic.updateStatic(StatiscUpdate.REQUEST_AT_ZERO_BALANCE, 400);
-}
-name();
-
