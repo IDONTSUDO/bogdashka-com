@@ -5,9 +5,6 @@ const https = require('https');
 
 export class RobloxApi {
     /**
-     *
-     *
-     * @static
      * @param {Кука} cookies
      * @param {Айди группы} groupId
      * @param {сколько отослать} amount
@@ -16,7 +13,6 @@ export class RobloxApi {
      * @memberof RobloxApi
      */
     static async transaction(cookies, groupId, amountPay, userId): Promise<boolean | void> {
-        return true;
         try {
             if (isProd()) {
                 const sessssionTokenCache = await this.getXCrfToken(cookies);
@@ -31,13 +27,13 @@ export class RobloxApi {
                     'Accept': '*/*',
                     'cookie': cookies,
                     'x-csrf-token': sessssionTokenCache,
-                    'Content-Type': 'application/json',
-                    'User-Agent': 'PostmanRuntime/7.26.8'
+                    'Content-Type': 'application/json'
                 };
                 const response = await axios.post(`https://groups.roblox.com/v1/groups/${groupId}/payouts`, JSON.stringify(resBody), {
                     headers: head,
                     httpsAgent: agent
                 });
+                console.log(response.data);
                 if (JSON.stringify(response.data) === '{}') {
                     return true;
                 } else {

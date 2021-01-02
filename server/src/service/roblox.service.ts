@@ -8,12 +8,17 @@ import { IPaymentsBlock, PaymentsBlock, TYPEPAYMENTBLOCK } from '../model/Paymen
 
 export class RobloxService {
     static async amountValid(amount: number) {
-        const groupList = await Group.findAllGroup();
-        let allBalance = 0;
-        groupList.forEach((group) => {
-            allBalance = + group.balance;
-        });
-        return  0 <= allBalance - amount;
+        const groupList: any = await Group.findAllGroup();
+        console.log(groupList);
+        if (groupList && groupList.length !== 0) {
+            console.log(200);
+            let allBalance = 0;
+            groupList.forEach((group) => {
+                allBalance = + group.balance;
+            });
+            return  0 <= allBalance - amount;
+        }
+        return false;
     }
     static async transactionClient(payment: IPayments) {
         const { amount, sessionId, id, payLogin } = payment;

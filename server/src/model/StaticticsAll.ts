@@ -2,7 +2,7 @@ import { STATISTIC_ALL_ID } from '../lib/contsanst';
 import db from '../lib/firestore';
 
 export class StatisticAll {
-  static ref = db.doc(`${STATISTIC_ALL_ID}`);
+  static ref = db.doc(`StaticticsAll/${STATISTIC_ALL_ID}`);
   static up() {
 
   }

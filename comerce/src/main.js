@@ -52,6 +52,9 @@ const btnSender = document.getElementById("sendAmount");
 //     // let result = await response.json();
 //     // console.log(result);
 // });
+socket.on('userOnline', (msg) =>{
+    console.log(msg)
+})
 socket.on('badPay', (msg) =>{
     console.log(msg);
 })

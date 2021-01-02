@@ -9,7 +9,7 @@ import { v1 as uuidv1 } from 'uuid';
 import { isProd } from './lib/prod';
 import NodeCache = require('node-cache');
 import { comerceRoboxRouter } from './route/comerce.route';
-const myCache = new NodeCache();
+const userOnlineCache = new NodeCache();
 const app = express();
 app.use(cors());
 app.use(bodyParser.json({ limit: '50mb' }));
@@ -25,24 +25,31 @@ const server = app.listen(env.port, () => {
 });
 const io = new Server(server, { cors: { origin: '*' } });
 
+
+let userOnline = 0;
+
 io.on('connection', (socket) => {
+  userOnline =  userOnline + 1;
+  io.emit('userOnline', userOnline);
   socket.on('new-session', () => {
     const session = uuidv1();
     io.to(socket.id).emit('sendSession', session);
-    myCache.set(session, socket.id, 100000);
-    myCache.set(socket.id, session, 100000);
+    userOnlineCache.set(session, socket.id, 100000);
+    userOnlineCache.set(socket.id, session, 100000);
   });
 
   socket.on('reboot-session', (msg) => {
-    myCache.set(msg, socket.id, 100000);
-    myCache.set(socket.id, msg, 100000);
+    userOnlineCache.set(msg, socket.id, 100000);
+    userOnlineCache.set(socket.id, msg, 100000);
   });
 
   socket.on('disconnect', () => {
-    const sessionId: any = myCache.get(socket.id);
+    userOnline = userOnline  - 1;
+    io.emit('userOnline', userOnline);
+    const sessionId: any = userOnlineCache.get(socket.id);
     if (sessionId !== undefined) {
-      myCache.del(sessionId);
-      myCache.del(socket.id);
+      userOnlineCache.del(sessionId);
+      userOnlineCache.del(socket.id);
     }
   });
 });
@@ -52,7 +59,7 @@ io.on('connection', (socket) => {
  * @payload { данные которые надо отправить }
  */
 export const sendSocket = (session_id, event, payload) => {
-  const socketId: any = myCache.get(session_id);
+  const socketId: any = userOnlineCache.get(session_id);
   if (socketId !== undefined) {
     console.log(event, payload);
     io.to(socketId).emit(event, payload);

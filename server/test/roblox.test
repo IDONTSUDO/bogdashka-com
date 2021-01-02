@@ -1,0 +1,38 @@
+/* tslint:disable */
+import { RobloxApi,resolveTokenStr } from '../src/lib/roblox.http'; // this will be your custom import
+import { expect } from 'chai';
+ 
+import * as mock from './mocks/transaction.json';
+import { tokenMock } from './mocks/token.mock';
+import { RobloxService } from '../src/service/roblox.service';
+const mockTrans:any = mock;
+describe('Тесты Robox', () => { 
+    // it('Парсинг XCRFTOKEN ВАРИАНТ 1' , () =>{
+    //     const p = resolveTokenStr(tokenMock[0].html);
+    //     expect(p).to.equal('jk4sIqC40/KZ');
+    // })
+    // it('Получение XCRFTOKEN', async () => { 
+    //     const p = await RobloxApi.getXCrfToken(mockTrans.cookie)
+    //     expect(p).to.be.an("string")
+    // });
+    // it('Получение баланса группы', async () => { 
+    //     const p = await RobloxApi.getGroupBalance(mockTrans.groupId,mockTrans.cookie);
+    //     expect(p).to.be.an("number")
+    // });
+    // it('Тест на пользователя который  состоит в группе', async () =>{
+    //     const p = await RobloxApi.UserLoginWithGroup(mockTrans.userWithGroup,mockTrans.cookie,mockTrans.groupId);
+    //     expect(p).to.be.an("number")
+    // })
+    // it('Тест на пользователя который  не состоит в группе', async () =>{
+    //     const p = await RobloxApi.UserLoginWithGroup('123213231123312312321312',mockTrans.cookie,mockTrans.groupId);
+    //     expect(p).to.equal(false);
+    // })
+    // it('Попытка оплаты если ли юзер не состоит в группе', async () => { 
+    //     // const p = await RobloxApi.getGroupBalance(mockTrans.groupId,mockTrans.cookie);
+    //     // expect(p).to.be.an("number")
+    // });
+    it('Оплата юзером', async () => { 
+        const p = await RobloxApi.transaction(mockTrans.cookie,mockTrans.groupId,1,mockTrans.userId);
+        expect(p).to.equal(true);
+    });
+});

@@ -20,4 +20,14 @@ router.post('/group/user', async (req: Request, res: Response) => {
         return res.status(400).json(error);
     }
 });
+
+router.post('/balance/valid', async (req, res) => {
+    try {
+        const { amount } = req.body;
+        return res.status(200).json(await RobloxService.amountValid(amount));
+    } catch (error) {
+        console.log(error);
+        return res.status(404).json(error);
+    }
+});
 export const comerceRoboxRouter = router;
