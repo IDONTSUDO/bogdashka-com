@@ -103,6 +103,7 @@ interface IPayList {
 }
 
 interface IpaymentOperation {
+    [x: string]: any;
     totalAmount: number;
     groupId: string;
     id: string;

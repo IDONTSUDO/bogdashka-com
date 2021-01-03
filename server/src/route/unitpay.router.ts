@@ -18,7 +18,7 @@ router.post('/qiwi/pay', async (req: Request, res: Response) => {
         return res.status(400).json(error);
     }
 });
-router.post('/qiwi/complete', async (req: Request, res: Response) => {
+router.post('/unitpay/complete', async (req: Request, res: Response) => {
     try {
         const idQuery: string | any = req.query.id;
         const calculatedPayment: IPayments = await Payments.getPayment(idQuery);

@@ -1,6 +1,6 @@
 
 import axios from 'axios';
-import { isProd } from './prod';
+import { isProd } from '../lib/prod';
 const https = require('https');
 
 export class RobloxApi {

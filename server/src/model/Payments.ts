@@ -1,7 +1,10 @@
 import db from '../lib/firestore';
-import { sendSocket } from '../main';
+import { sendSocket } from '../io';
 import { RobloxService } from '../service/roblox.service';
 
+export enum servicePaymentError {
+    BALANCE_ERROR = 'BALANCE_ERROR'
+}
 export class Payments {
     static ref = db.collection('Payments');
     /**
@@ -52,8 +55,8 @@ export class Payments {
             console.log(error);
         }
     }
-    static async updateErrorPayment(id: string, log: any): Promise<void> {
-        await Payments.ref.doc(id).set({'log': JSON.stringify(log), 'status': 'ERROR'});
+    static async updateErrorPayment(id: string, event: servicePaymentError): Promise<void> {
+        await Payments.ref.doc(id).set({'status': event}, {merge: true});
     }
 }
 
@@ -72,3 +75,4 @@ enum statusPay {
 enum servicePay {
     'GROUP', 'LOG+PASS'
 }
+

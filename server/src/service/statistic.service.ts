@@ -1,6 +1,11 @@
-import db from '../lib/firestore';
+import { EventIO, sendIo } from '../io';
+import { StatisticAll } from '../model/StaticticsAll';
+import { Statistic, EventStatisticUpdate } from '../model/Statistics';
+
 export class StatisticService {
-   static update() {
-      
+   static async updateTransation(amount: number) {
+      await Statistic.updateStatic(EventStatisticUpdate.NEW_TRANSACTION, amount);
+      await StatisticAll.updateTransaction(amount);
+      sendIo(EventIO.NEW_PAY, amount);
    }
 }
