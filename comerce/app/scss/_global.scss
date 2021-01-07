@@ -21,16 +21,18 @@ input[type="checkbox"] {
 
 body {
   @extend %playregular-400;
-  line-height: 1.2;
+
+  line-height: 1;
   max-width: 1920px;
   min-width: 320px;
-  color: #fff;
+  color: $white;
+  background-color: $black;
   overflow-x: hidden;
 }
 
 a {
   text-decoration: none;
-  color: #fff;
+  color: $white;
   outline: none;
 }
 
@@ -99,9 +101,7 @@ a:hover {
   border-radius: 10px;
   
   text-transform: uppercase;
-  color: #fff;
-  font-family: arial;
-  letter-spacing: 1px;
+  color: $white;
   
   box-shadow: -6px 6px 0 $dark-blue;
   text-decoration: none;
@@ -148,4 +148,51 @@ a:active.btn {
     top: 1px;
     left: 1px;
   }
+}
+
+
+
+
+/*=====garland=====*/
+#garland {
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-image: url('../images/christmas-big.png');
+  height: 36px;
+  max-width: 1920px;
+  width: 100%;
+  overflow: hidden;
+  z-index: 99;
+}
+#garland-small {
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-image: url('../images/christmas-small.png');
+  height: 20px;
+  min-width: 320px;
+  width: 100%;
+  overflow: hidden;
+  z-index: 99;
+  display: none;
+}
+#nums_1 {
+  padding: 100px;
+}
+
+.garland_1 {
+  background-position: 0 0;
+}
+
+.garland_2 {
+  background-position: 0 -36px;
+}
+
+.garland_3 {
+  background-position: 0 -72px;
+}
+
+.garland_4 {
+  background-position: 0 -108px;
 }

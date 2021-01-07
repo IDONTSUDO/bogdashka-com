@@ -1,49 +1,55 @@
-$('.count').each(function () {
-  $(this).prop('Counter',0).animate({
-      Counter: $(this).text()
-  }, {
-      duration: 4000,
-      easing: 'swing',
-      step: function (now) {
-          $(this).text(Math.ceil(now));
-      }
-  });
-});
-
-//конвертер
-/* document.getElementsByClassName('rub')[0].addEventListener('keypress', function(){
-    const val = $(this).val()
-    $('#summ').text(val + 1 * 2)
-});
- */
+new WOW().init();
+wow = new WOW(
+  {
+  boxClass:     'wow',      // default
+  animateClass: 'animated', // default
+  offset:       0,          // default
+  mobile:       true,       // default
+  live:         true        // default
+}
+);
 
 
-
-// $( document ).ready(function() {
-//     $('.trigger').click(function() {
-//        $('.modal-wrapper').toggleClass('open');
-//       $('.page-wrapper').toggleClass('blur');
-//        return false;
-//     });
-//   });
-
-
-
-// Smooth scroll naivgation
+//Popup
 $(document).ready(function () {
-    $("#buy-robox, #next, #atHome").on("click", "a", function (event) {
-      //отменяем стандартную обработку нажатия по ссылке
-      event.preventDefault();
-  
-      //забираем идентификатор бока с атрибута href
-      var id = $(this).attr("href"),
-        //узнаем высоту от начала страницы до блока на который ссылается якорь
-        top = $(id).offset().top;
-  
-      //анимируем переход на расстояние - top за 1500 мс
-      $("body,html").animate({
-        scrollTop: top
-      }, 1500);
-    });
+  $('.trigger').click(function () {
+    $('.modal-wrapper').toggleClass('open');
+    $('.page-wrapper').toggleClass('blur');
+    return false;
   });
-    
+});
+
+//плавный скролл по ссылкам
+$('a[href*="#"]').on('click',
+  function (e) {
+    e.preventDefault();
+    var scroll_el = $(this).attr('href');
+    if ($(scroll_el).length != 0) {
+      $('html, body').animate({
+        scrollTop: $(scroll_el).offset().top - 50
+      }, 1000);
+    }
+    return false;
+  }
+);
+
+
+//удаление скролла при открытой модалке
+const showPopup = () => {
+  document.getElementById('popup').classList.add('show');
+  const scrollY = document.documentElement.style.getPropertyValue('--scroll-y');
+  const body = document.body;
+  body.style.position = 'fixed';
+  body.style.top = `-${scrollY}`;
+};
+const closePopup = () => {
+  const body = document.body;
+  const scrollY = body.style.top;
+  body.style.position = '';
+  body.style.top = '';
+  window.scrollTo(0, parseInt(scrollY || '0') * -1);
+  document.getElementById('popup').classList.remove('show');
+}
+window.addEventListener('scroll', () => {
+  document.documentElement.style.setProperty('--scroll-y', `${window.scrollY}px`);
+});
