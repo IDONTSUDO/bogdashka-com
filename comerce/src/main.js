@@ -14,11 +14,12 @@ if (prod) {
 const SERVER_URL = 'http://localhost:8080'
 
 
-const CALCULATIONGROUPVALUE = 3;
+const CALCULATIONGROUPVALUE = 2;
 const socket = io(SERVER_URL);
 const session = localStorage.getItem('sessionId');
 const MINIMALPAY = 10;
-console.log(200)
+
+
 if (session == undefined) {
     socket.emit('new-session', '')
 } else {
@@ -30,10 +31,9 @@ socket.on('sendSession', (msg) => {
 const prelaodHTML = `<div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div><span id='preloader-text' class="title">Проверяем вступили ли вы в наши группы</span>`
 const preloaderDoc = document.getElementById('preloader');
 const LoginInput = document.getElementById('loginInput');
-const preloaderText = document.getElementById('preloader-text');
+const preloaderText = document.getElementById('loader-text');
 const btnBuy = document.getElementById('show');
-const amountInput = document.getElementById('amount');
-const OnlineDoc = document.getElementById('online');
+ const OnlineDoc = document.getElementById('online');
 const SumInput = document.getElementById('sumInput');
 
 SumInput.addEventListener('change', ()=>{
@@ -47,7 +47,9 @@ LoginInput.addEventListener('change', ()=>{
     }
   })
 btnBuy.addEventListener("click", async function () {
-   compose(processAlert(), userPay())
+   compose(processAlert(), 
+   userPay()
+   )
     // const amount = parseInt(amountInput.value);
     // const login = NameInput.value;
     // const promocode = promoCodeInput.value;
@@ -122,61 +124,116 @@ async function userPay() {
     let timerPreloadTwo
     let timerPreloadThere
     preloaderDoc.innerHTML = prelaodHTML;
-    const resBody = JSON.stringify({ login: LoginInput.value });
+    const resBody = JSON.stringify({ login: LoginInput.value,amount:parseInt(SumInput.value) * 2});
     timerPreloadOne = setTimeout(() => preloaderText.innerText = 'Проверяем вступили ли вы в наши группы', 3000)
-    timerPreloadTwo = setTimeout(() => preloaderText.innerText = 'Синхронизируем баланцы', 6000)
+    timerPreloadTwo = setTimeout(() => preloaderText.innerText = 'Синхронизируем балансы', 6000)
     timerPreloadThere = setTimeout(() => preloaderText.innerText = 'Вычисляем стоймость хлеба', 9000)
 
     const responce = await fetch(`${SERVER_URL}/group/user`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: resBody });
+     
     if (responce.status === 200) {
         let result = await responce.json();
         clearTimeout(timerPreloadOne);
         clearTimeout(timerPreloadTwo);
         clearTimeout(timerPreloadThere);
-        const p = responceUserGroupTransformHTML(result);
-        if (p != undefined) {
-            const payInfoHTML = `
-            <div class="popupContent">
-                          <h2>Ваш заказ</h2>
-                          <div class="item-price">
-                            <div class="item-price__img-text">
-                              <img src="./images/rs.png" alt="rs">
-                              <span>${amountInput.value * CALCULATIONGROUPVALUE}</span>
-                              <span>Robux</span>
-                            </div>
-                            <div class="price">
-                              <span>${amountInput.value}</span>
-                              <span>р.</span>
-                            </div>
-                          </div>
-                          <div class="price__summ">
-                            <span>Сумма:</span>
-                            <span>${amountInput.value}</span>р.
-                            <a href="javascript:;" id='pay-process-start' class="content-box__btn btn trigger">Оплатить</a>
-                          </div>`
-            preloaderDoc.innerHTML = payInfoHTML
-            const docProcessPay = document.getElementById('pay-process-start');
-            docProcessPay.addEventListener('click', async () => {
+        const bodyPopup = document.getElementById('popup-body');
+        console.log(result)
+        if(result.amount){
+            console.log(result.groups.lenght == 0)
+            //todo: result.groups.lenght == 0
+            if(true){
+                console.log(20000)
+            //   ЕСЛИ У НАС ВО ВСЕ ГРУППЫ ЧЕЛОВЕК ВСТУПИЛ
+                bodyPopup.classList.remove("centered-loader");
+                    const html = `  <h2>Ваш заказ</h2>
+                    <div class="item-price">
+                      <div class="item-price__img-text"><img src="./images/rs.png" alt="rs"> <span>${parseInt(SumInput.value) * 2}</span>
+                        <span>Robux</span></div>
+                      <div class="price"><span>${SumInput.value}</span> <span>р.</span></div>
+                    </div>
+                    <div class="price__summ">
+                    <form class="form-robox" action="">
+                      <div class="input__promo"><label for="name">Введите ваш промокод (если есть):</label> <input
+                          class="nick" type="text"><br></div>
+                       <a href="#" id='pay_process' class="pay__btn btn" style='    display: flex;
+                       justify-content: center;'>ОПЛАТИТЬ</a>
+                     
+                    </form>  
+                  </div>`
+                    const loader = document.getElementById('loader');
+                    loader.style.display = 'none';
+                    bodyPopup.innerHTML = html;
+                    const pay_processBtn = document.getElementById('pay_process');
+                    pay_processBtn.addEventListener('click', async () =>{
+                        const responceBody = JSON.stringify({ 'userLogin': LoginInput.value, 'amount': parseInt(SumInput.value), 'sessionId': localStorage.getItem('sessionId'), 'serviceType': 'GROUP' });
+                        const responce = await fetch(`${SERVER_URL}/qiwi/pay`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: responceBody });
+                        if (responce.status === 200) {
+                            let result = await responce.json();
+                            if(typeof result === 'string'){
+                              bodyPopup.innerHTML = '';
+                              bodyPopup.innerHTML =`<a href="URL">ссылка на оплату (клик) </a>`;
 
+                            }
+                        }
+                    })
+                  
+            }else{  
+                const p = responceUserGroupTransformHTML(result.groups);
+                bodyPopup.classList.remove("centered-loader");
+                const loader = document.getElementById('loader');
+                loader.style.display = 'none';
+                bodyPopup.innerHTML = p;
+                const btnEntered = document.getElementById('user-group-entered')
+                btnEntered.addEventListener('click', () =>{
+                    userPay();
+                 })
+            }
 
-                const responceBody = JSON.stringify({ 'userLogin': LoginInput.value, 'amount': parseInt(amountInput.value), 'sessionId': localStorage.getItem('sessionId'), 'serviceType': 'GROUP' });
-                const responce = await fetch(`${SERVER_URL}/qiwi/pay`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: responceBody });
-                if (responce.status === 200) {
-                    let result = await responce.json();
-                    console.log(result);
-                }
-            })
-            // preloaderDoc.innerHTML = p;
-            // const btnEntered = document.getElementById('user-group-entered');
-            // btnEntered.addEventListener('click', () =>{
-            //    userPay();
-            // })
-        } else {
-            // preloaderDoc.innerHTML = '';
+        }else{
+            bodyPopup.classList.remove("centered-loader");
+            const loader = document.getElementById('loader');
+            loader.style.display = 'none';
+         
+            bodyPopup.innerHTML = '<h3>Ксожалению недостаточно средтсв на балансе</h3>'
+            return
         }
-    } else {
-        //TODO:ERROR VALIDATOR
+
+    }else{
+
     }
+    //     const p = responceUserGroupTransformHTML(result);
+    //     if (p != undefined) {
+    //         const payInfoHTML = `
+    //         <div class="popupContent">
+    //                       <h2>Ваш заказ</h2>
+    //                       <div class="item-price">
+    //                         <div class="item-price__img-text">
+    //                           <img src="./images/rs.png" alt="rs">
+    //                           <span>${amountInput.value * CALCULATIONGROUPVALUE}</span>
+    //                           <span>Robux</span>
+    //                         </div>
+    //                         <div class="price">
+    //                           <span>${amountInput.value}</span>
+    //                           <span>р.</span>
+    //                         </div>
+    //                       </div>
+    //                       <div class="price__summ">
+    //                         <span>Сумма:</span>
+    //                         <span>${amountInput.value}</span>р.
+    //                         <a href="javascript:;" id='pay-process-start' class="content-box__btn btn trigger">Оплатить</a>
+    //                       </div>`
+    //         preloaderDoc.innerHTML = payInfoHTML
+    //         const docProcessPay = document.getElementById('pay-process-start');
+    //         docProcessPay.addEventListener('click', async () => {
+    //         })
+    //         // preloaderDoc.innerHTML = p;
+    //         // const btnEntered = document.getElementById('user-group-entered');
+    //     } else {
+    //         // preloaderDoc.innerHTML = '';
+    //     }
+    // } else {
+    //     //TODO:ERROR VALIDATOR
+    // }
 
 
 }

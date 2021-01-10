@@ -8,6 +8,7 @@
   <title>Bogdashka</title>
   <link rel="stylesheet" href="css/animate.css">
   <link rel="stylesheet" href="css/style.min.css">
+  <link rel="stylesheet" href="css/index.css">
   <script>window.setTimeout(function () {
       document.querySelector('.preloader').classList.add("preloader-remove");
 
@@ -286,35 +287,12 @@
             <div class="modal">
               <div class="head"><a class="btn-close trigger" id="close" onclick="closePopup()" href="javascript:;"></a>
               </div>
-              <div class="popupContent">
-                <h2>Ваш заказ</h2>
-                <div class="item-price">
-                  <div class="item-price__img-text"><img src="./images/rs.png" alt="rs"> <span>213</span>
-                    <span>Robux</span></div>
-                  <div class="price"><span>70,5</span> <span>р.</span></div>
-                </div>
-                <div class="price__min"><span>Минимальный заказ:</span> <span>10.000</span></div>
-                <div class="price__summ"><span>Сумма:</span> <span>5123121</span>р.</div>
-                <div class="message">
-                  <h3>best rocketman</h3>
-                  <p>Не забудьте вступить в <a
-                      href="https://www.roblox.com/groups/3937390/Content-Deleted-3937390#!/about">группу</a> для
-                    успешного получения робуксов после оплаты.</p>
-                </div>
-                <form class="form-robox" action="">
-                  <div class="input__nick"><label for="name">Введите ваш ник в Roblox:</label> <input class="nick"
-                      type="text"><br></div>
-                  <div class="input__promo"><label for="name">Введите ваш промокод (если есть):</label> <input
-                      class="nick" type="text"><br></div>
-                  <div class="payment-method">
-                    <p class="payment-method__title">Способ оплаты:</p>
-                    <p class="payment-method__radio radio1"><input name="dzen" type="radio" value="nedzen">
-                      ЮMoney/Visa/Master Card</p>
-                    <p class="payment-method__radio radio2"><input name="dzen" type="radio" value="dzen">
-                      QIWI/Visa/Master Card</p><a href="#" class="pay__btn btn">ОПЛАТИТЬ</a>
-                  </div>
-                </form>
-              </div>
+              <div id='popup-body' class="popupContent centered-loader">
+                <span id='loader'>
+                  <div class="hourglass"></div>
+                  <div id='loader-text'>Блабала</div>
+                </span>
+            
             </div>
           </div>
         </div>
