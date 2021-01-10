@@ -3,11 +3,19 @@ import { server } from './main';
 import { Server } from 'socket.io';
 import NodeCache = require('node-cache');
 import { v1 as uuidv1 } from 'uuid';
+import { StatisticAll } from './model/StaticticsAll';
 const userOnlineCache = new NodeCache();
 const io = new Server(server, { cors: { origin: '*' } });
 let userOnline = 0;
-io.on('connection', (socket) => {
+let statictic;
+
+io.on('connection', async (socket) => {
+  console.log('connect');
+  if (statictic === undefined) {
+    statictic = await StatisticAll.getInitStatistic();
+  }
   userOnline =  userOnline + 1;
+  io.to(socket.id).emit('balance', statictic);
   io.emit('userOnline', userOnline);
   socket.on('new-session', () => {
     const session = uuidv1();

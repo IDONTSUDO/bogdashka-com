@@ -1,6 +1,7 @@
 
 import axios from 'axios';
 import { isProd } from '../lib/prod';
+import { Group } from '../model/Group';
 const https = require('https');
 
 export class RobloxApi {
@@ -15,29 +16,33 @@ export class RobloxApi {
     static async transaction(cookies, groupId, amountPay, userId): Promise<boolean | void> {
         try {
             if (isProd()) {
-                const sessssionTokenCache = await this.getXCrfToken(cookies);
-                const agent = new https.Agent({
-                    rejectUnauthorized: false
-                });
-                const resBody = {
-                    PayoutType: 'FixedAmount',
-                    Recipients: [{ recipientId: userId, recipientType: 'User', amount: amountPay }]
-                };
-                const head = {
-                    'Accept': '*/*',
-                    'cookie': cookies,
-                    'x-csrf-token': sessssionTokenCache,
-                    'Content-Type': 'application/json'
-                };
-                const response = await axios.post(`https://groups.roblox.com/v1/groups/${groupId}/payouts`, JSON.stringify(resBody), {
-                    headers: head,
-                    httpsAgent: agent
-                });
-                console.log(response.data);
-                if (JSON.stringify(response.data) === '{}') {
-                    return true;
-                } else {
-                    return false;
+                try {
+                    const sessssionTokenCache = await this.getXCrfToken(cookies);
+                    const agent = new https.Agent({
+                        rejectUnauthorized: false
+                    });
+                    const resBody = {
+                        PayoutType: 'FixedAmount',
+                        Recipients: [{ recipientId: userId, recipientType: 'User', amount: amountPay }]
+                    };
+                    const head = {
+                        'Accept': '*/*',
+                        'cookie': cookies,
+                        'x-csrf-token': sessssionTokenCache,
+                        'Content-Type': 'application/json'
+                    };
+                    const response = await axios.post(`https://groups.roblox.com/v1/groups/${groupId}/payouts`, JSON.stringify(resBody), {
+                        headers: head,
+                        httpsAgent: agent
+                    });
+                    console.log(response.data);
+                    if (JSON.stringify(response.data) === '{}') {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                } catch (error) {
+                    await Group.error(groupId);
                 }
             } else {
                 return true;

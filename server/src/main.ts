@@ -5,7 +5,6 @@ import { Request, Response } from 'express';
 import * as env from './config/env.json';
 import { routerQiwi } from './route/qiwi.route';
 import { comerceRoboxRouter } from './route/comerce.route';
-import { StatisticAll } from './model/StaticticsAll';
 
 const app = express();
 app.use(cors());

@@ -4,6 +4,19 @@ import db from '../lib/firestore';
 export class Group {
     static ref = db.collection('Groups');
     /**
+     * @problem если группа не валидная ставим меняем ее статус
+     * @param {string} id
+      */
+    static async error(id: string) {
+        const fire = await Group.ref.where('groupId', '==', id).get();
+        if (fire.empty) {
+            const docs = fire.docs;
+            docs.forEach((doc) => {
+                Group.ref.doc(doc.id).set({'status': false});
+            });
+        }
+    }
+      /**
      * @problem Апдейт баланса групп.
      * @return {*}  {void}
      */
@@ -23,7 +36,7 @@ export class Group {
     static async findAllGroup(): Promise<[IGroup]> {
         const fire: FirebaseFirestore.DocumentData = await Group.ref.where('balance', '>', 0).orderBy('balance', 'asc').get();
         const fireDoc: any = [];
-        fire.docs.forEach(doc => {
+        fire.docs.forEach(doc  => {
             fireDoc.push(doc.data());
         });
         return fireDoc;

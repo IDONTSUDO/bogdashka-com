@@ -10,14 +10,14 @@ wow = new WOW(
 );
 
 
-//Popup
-$(document).ready(function () {
-  $('.trigger').click(function () {
-    $('.modal-wrapper').toggleClass('open');
-    $('.page-wrapper').toggleClass('blur');
-    return false;
-  });
-});
+// Popup
+// $(document).ready(function () {
+//   $('.trigger').click(function () {
+//     $('.modal-wrapper').toggleClass('open');
+//     $('.page-wrapper').toggleClass('blur');
+//     return false;
+//   });
+// });
 
 //плавный скролл по ссылкам
 $('a[href*="#"]').on('click',

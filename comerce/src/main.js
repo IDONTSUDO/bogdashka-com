@@ -18,7 +18,7 @@ const CALCULATIONGROUPVALUE = 3;
 const socket = io(SERVER_URL);
 const session = localStorage.getItem('sessionId');
 const MINIMALPAY = 10;
-
+console.log(200)
 if (session == undefined) {
     socket.emit('new-session', '')
 } else {
@@ -29,65 +29,77 @@ socket.on('sendSession', (msg) => {
 })
 const prelaodHTML = `<div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div><span id='preloader-text' class="title">Проверяем вступили ли вы в наши группы</span>`
 const preloaderDoc = document.getElementById('preloader');
-const mimimunAmountDoc = document.getElementById('minimalPay');
-const preloaderMain = document.getElementById('preloader-main');
-const sum = document.getElementById('sum');
-const payProcessAlertDoc = document.getElementById('pay-process-alert');
-const LoginInput = document.getElementById('loging-input');
-const summDoc = document.getElementById('summ');
+const LoginInput = document.getElementById('loginInput');
 const preloaderText = document.getElementById('preloader-text');
-const roboxPayDoc = document.getElementById('robox-pay');
-const priceRobux = document.getElementById('price-robux');
-const RoboxCalculteDoc = document.getElementById('calculted-store');
+const btnBuy = document.getElementById('show');
 const amountInput = document.getElementById('amount');
-const promoCodeInput = document.getElementById('promocodeInput');
-const btnSender = document.getElementById("sendAmount");
-// btnSender.addEventListener("click", async function () {
-//     // const amount = parseInt(amountInput.value);
-//     // const login = NameInput.value;
-//     // const promocode = promoCodeInput.value;
-//     // const session = localStorage.getItem('sessionId');
-//     // const res = { amount: amount, sessionId: session, serviceType: "", userLogin: "" }
-//     // const response = await fetch(`${SERVER_URL}/qiwi/pay`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(res) })
-//     // let result = await response.json();
-//     // console.log(result);
-// });
-socket.on('userOnline', (msg) =>{
-    console.log(msg)
+const OnlineDoc = document.getElementById('online');
+const SumInput = document.getElementById('sumInput');
+
+SumInput.addEventListener('change', ()=>{
+  if(SumInput.className === 'rub required'){
+      return SumInput.classList.remove("required");
+  }
 })
-socket.on('badPay', (msg) =>{
+LoginInput.addEventListener('change', ()=>{
+    if(LoginInput.className === 'rub required'){
+        return LoginInput.classList.remove("required");
+    }
+  })
+btnBuy.addEventListener("click", async function () {
+   compose(processAlert(), userPay())
+    // const amount = parseInt(amountInput.value);
+    // const login = NameInput.value;
+    // const promocode = promoCodeInput.value;
+    // const session = localStorage.getItem('sessionId');
+    // const res = { amount: amount, sessionId: session, serviceType: "", userLogin: "" }
+    // const response = await fetch(`${SERVER_URL}/qiwi/pay`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(res) })
+    // let result = await response.json();
+    // console.log(result);
+});
+socket.on('userOnline', (msg) => {
+    OnlineDoc.textContent = msg;
+})
+socket.on('badPay', (msg) => {
     console.log(msg);
 })
 socket.on('balance', (msg) => {
     console.log(msg);
+    // console.log(document.styleSheets[0].addRule('.home .header::before','content: "1" !important;'));
+    // console.log(document.styleSheets[0])
+
+    // .addRule('p.special:before', 'content: "' + str + '";');
+
+    // document.styleSheets[0].addRule('p.special:before','content: "'+str+'";');
+
 })
 socket.on('pay', (msg) => {
     console.log(msg);
 })
-const closeModal = document.getElementById('btn-close trigger');
+const closeModal = document.getElementById('close');
 closeModal.addEventListener('click', function () {
     const el = document.getElementById("modal-wrapper")
     el.classList.toggle("open");
     preloaderText.innerText = 'Проверяем вступили ли вы в наши группы'
 })
-payProcessAlertDoc.addEventListener('click', () => compose(processAlert(), userPay()));
+// payProcessAlertDoc.addEventListener('click', () => compose(processAlert(), userPay()));
 
-LoginInput.addEventListener('change', function () {
-    if (LoginInput.className === 'required-form') {
-        LoginInput.className = '';
-    }
-})
-amountInput.addEventListener('change', function (e) {
-    const value = amountInput.value;
-    if (amountInput.className === 'required-form') {
-        amountInput.className = '';
-    }
-    if (value !== '') {
-        summDoc.innerText = `${value * CALCULATIONGROUPVALUE} ₽`;
-    } else {
-        summDoc.innerText = '';
-    }
-})
+// LoginInput.addEventListener('change', function () {
+//     if (LoginInput.className === 'required-form') {
+//         LoginInput.className = '';
+//     }
+// })
+// amountInput.addEventListener('change', function (e) {
+//     const value = amountInput.value;
+//     if (amountInput.className === 'required-form') {
+//         amountInput.className = '';
+//     }
+//     if (value !== '') {
+//         summDoc.innerText = `${value * CALCULATIONGROUPVALUE} ₽`;
+//     } else {
+//         summDoc.innerText = '';
+//     }
+// })
 
 
 
@@ -144,13 +156,13 @@ async function userPay() {
                           </div>`
             preloaderDoc.innerHTML = payInfoHTML
             const docProcessPay = document.getElementById('pay-process-start');
-            docProcessPay.addEventListener('click', async () =>{
-                
+            docProcessPay.addEventListener('click', async () => {
 
-                const responceBody = JSON.stringify({'userLogin':LoginInput.value,'amount':parseInt(amountInput.value),'sessionId':localStorage.getItem('sessionId'),'serviceType':'GROUP'});
+
+                const responceBody = JSON.stringify({ 'userLogin': LoginInput.value, 'amount': parseInt(amountInput.value), 'sessionId': localStorage.getItem('sessionId'), 'serviceType': 'GROUP' });
                 const responce = await fetch(`${SERVER_URL}/qiwi/pay`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: responceBody });
-                if(responce.status === 200){
-                    let result = await  responce.json();
+                if (responce.status === 200) {
+                    let result = await responce.json();
                     console.log(result);
                 }
             })
@@ -170,18 +182,20 @@ async function userPay() {
 }
 
 function processAlert() {
-    if (LoginInput.value === '') {
-        LoginInput.classList.add('required-form')
+    const amount = SumInput.value;
+    const login = LoginInput.value; 
+    if(amount === ''){
+        SumInput.classList.add('required');   
     }
-    if (amountInput.value === '') {
-        amountInput.classList.add('required-form')
+    if(login === ''){
+        LoginInput.classList.add('required');   
     }
-    if (LoginInput.value != '' && amountInput.value != '') {
-        const el = document.getElementById("modal-wrapper");
-
+    if(LoginInput.value != '' && SumInput.value != '') {
+        const el = document.querySelector(".modal-wrapper");
         if (el.classList.contains('open') === false) {
             el.classList.add("open");
         }
+
     }
 }
 
