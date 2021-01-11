@@ -1,5 +1,5 @@
 // tslint:disable-next-line:import-spacing
-import * as QiwiBillPaymentsAPI from'@qiwi/bill-payments-node-js-sdk';
+import * as QiwiBillPaymentsAPI from '@qiwi/bill-payments-node-js-sdk';
 import * as env from '../config/env.json';
 import { v1 as uuidv1 } from 'uuid';
 import { IPayments, Payments } from '../model/Payments';
@@ -15,7 +15,7 @@ const publicKey = env.qiwiPublic;
 export const payProcessing = async (userLogin, amount, service, sessionId) => {
     let id;
     if (isProd()) {
-       id = uuidv1();
+        id = uuidv1();
     } else {
         id = FAKE_ORDER_ID;
     }
@@ -33,14 +33,20 @@ export const payProcessing = async (userLogin, amount, service, sessionId) => {
 
 export const newPay = async (amount, uuid) => {
     if (isProd()) {
-        const params = {
-            publicKey,
-            amount: amount,
-            billId: uuid,
-            successUrl: `${env.publicURL}/qiwi/complete?=${uuid}`
-        };
-        const link = qiwiApi.createPaymentForm(params);
-        return link;
+        try {
+            const params = {
+                publicKey,
+                amount: amount,
+                comment: `${amount * 2} покупка робуксов`,
+                billId: uuid,
+                successUrl: `${env.publicURL}/qiwi/complete?=${uuid}`,
+                email: 'm@ya.ru'
+            };
+            const link = qiwiApi.createPaymentForm(params);
+            return link;
+        } catch (error) {
+            console.log(error);
+        }
     } else {
         return 'QIWI линк';
     }

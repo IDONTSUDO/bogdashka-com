@@ -105,6 +105,7 @@ export class RobloxApi {
                 return false;
             }
         } catch (error) {
+            await Group.error(groupId);
             throw new Error(`Check Group stack:${JSON.stringify(error)}`);
         }
 

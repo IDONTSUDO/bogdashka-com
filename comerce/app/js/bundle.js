@@ -88,10 +88,11 @@ let userPay = (() => {
 
             if (responce.status === 200) {
               let result = yield responce.json();
+              console.log(result);
 
               if (typeof result === 'string') {
                 bodyPopup.innerHTML = '';
-                bodyPopup.innerHTML = `<a href="URL">ссылка на оплату (клик) </a>`;
+                bodyPopup.innerHTML = `<a href='${result}'>ссылка на оплату (клик) </a>`;
               }
             }
           }));
@@ -103,40 +104,7 @@ let userPay = (() => {
         bodyPopup.innerHTML = '<h3>Ксожалению недостаточно средтсв на балансе</h3>';
         return;
       }
-    } else {} //     const p = responceUserGroupTransformHTML(result);
-    //     if (p != undefined) {
-    //         const payInfoHTML = `
-    //         <div class="popupContent">
-    //                       <h2>Ваш заказ</h2>
-    //                       <div class="item-price">
-    //                         <div class="item-price__img-text">
-    //                           <img src="./images/rs.png" alt="rs">
-    //                           <span>${amountInput.value * CALCULATIONGROUPVALUE}</span>
-    //                           <span>Robux</span>
-    //                         </div>
-    //                         <div class="price">
-    //                           <span>${amountInput.value}</span>
-    //                           <span>р.</span>
-    //                         </div>
-    //                       </div>
-    //                       <div class="price__summ">
-    //                         <span>Сумма:</span>
-    //                         <span>${amountInput.value}</span>р.
-    //                         <a href="javascript:;" id='pay-process-start' class="content-box__btn btn trigger">Оплатить</a>
-    //                       </div>`
-    //         preloaderDoc.innerHTML = payInfoHTML
-    //         const docProcessPay = document.getElementById('pay-process-start');
-    //         docProcessPay.addEventListener('click', async () => {
-    //         })
-    //         // preloaderDoc.innerHTML = p;
-    //         // const btnEntered = document.getElementById('user-group-entered');
-    //     } else {
-    //         // preloaderDoc.innerHTML = '';
-    //     }
-    // } else {
-    //     //TODO:ERROR VALIDATOR
-    // }
-
+    } else {}
   });
 
   return function userPay() {

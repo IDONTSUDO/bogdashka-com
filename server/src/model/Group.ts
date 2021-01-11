@@ -34,7 +34,7 @@ export class Group {
      * @return {*}  {Promise<[IGroup]>}
      */
     static async findAllGroup(): Promise<[IGroup]> {
-        const fire: FirebaseFirestore.DocumentData = await Group.ref.where('balance', '>', 0).orderBy('balance', 'asc').get();
+        const fire: FirebaseFirestore.DocumentData = await Group.ref.where('balance', '>', 0).where('status', '==', true).orderBy('balance', 'asc').get();
         const fireDoc: any = [];
         fire.docs.forEach(doc  => {
             fireDoc.push(doc.data());
