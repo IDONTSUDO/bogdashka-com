@@ -5,21 +5,11 @@ const compose = (...fns) =>
         (...args) => nextFn(prevFn(...args)),
         value => value
     );
-
-if (prod) {
-
-} else {
-
-}
 const SERVER_URL = 'http://localhost:8080'
-
-
-const CALCULATIONGROUPVALUE = 2;
 const socket = io(SERVER_URL);
 const session = localStorage.getItem('sessionId');
-const MINIMALPAY = 10;
-
-
+// В наличии 120.000 R$
+const balanceDoc = document.getElementById('total_balance');
 if (session == undefined) {
     socket.emit('new-session', '')
 } else {
@@ -35,6 +25,7 @@ const preloaderText = document.getElementById('loader-text');
 const btnBuy = document.getElementById('show');
  const OnlineDoc = document.getElementById('online');
 const SumInput = document.getElementById('sumInput');
+const TotalSales = document.getElementById('total-sales');
 
 SumInput.addEventListener('change', ()=>{
   if(SumInput.className === 'rub required'){
@@ -47,17 +38,7 @@ LoginInput.addEventListener('change', ()=>{
     }
   })
 btnBuy.addEventListener("click", async function () {
-   compose(processAlert(), 
-   userPay()
-   )
-    // const amount = parseInt(amountInput.value);
-    // const login = NameInput.value;
-    // const promocode = promoCodeInput.value;
-    // const session = localStorage.getItem('sessionId');
-    // const res = { amount: amount, sessionId: session, serviceType: "", userLogin: "" }
-    // const response = await fetch(`${SERVER_URL}/qiwi/pay`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(res) })
-    // let result = await response.json();
-    // console.log(result);
+   compose(processAlert(),userPay())
 });
 socket.on('userOnline', (msg) => {
     OnlineDoc.textContent = msg;
@@ -66,14 +47,9 @@ socket.on('badPay', (msg) => {
     console.log(msg);
 })
 socket.on('balance', (msg) => {
-    console.log(msg);
-    // console.log(document.styleSheets[0].addRule('.home .header::before','content: "1" !important;'));
-    // console.log(document.styleSheets[0])
-
-    // .addRule('p.special:before', 'content: "' + str + '";');
-
-    // document.styleSheets[0].addRule('p.special:before','content: "'+str+'";');
-
+    const data = JSON.parse(msg);
+    balanceDoc.innerText = ` В наличии ${data.balance} R$`;
+    TotalSales.innerText = data.paidTotal;
 })
 socket.on('pay', (msg) => {
     console.log(msg);
@@ -84,41 +60,18 @@ closeModal.addEventListener('click', function () {
     el.classList.toggle("open");
     preloaderText.innerText = 'Проверяем вступили ли вы в наши группы'
 })
-// payProcessAlertDoc.addEventListener('click', () => compose(processAlert(), userPay()));
-
-// LoginInput.addEventListener('change', function () {
-//     if (LoginInput.className === 'required-form') {
-//         LoginInput.className = '';
-//     }
-// })
-// amountInput.addEventListener('change', function (e) {
-//     const value = amountInput.value;
-//     if (amountInput.className === 'required-form') {
-//         amountInput.className = '';
-//     }
-//     if (value !== '') {
-//         summDoc.innerText = `${value * CALCULATIONGROUPVALUE} ₽`;
-//     } else {
-//         summDoc.innerText = '';
-//     }
-// })
-
-
-
-
-
 function responceUserGroupTransformHTML(paylaod) {
     let html = '';
     if (paylaod instanceof Array) {
         html += '<h3>Список групп</h3>'
         for (const group of paylaod) {
-            html += `<li class='group'>${group}</li>`
+            html += `<li><a class="link-d" target="_blank" href='${group}'>ссылка на группу(клик)</a></li>`
         }
         html += `<a href="javascript:;" id='user-group-entered' class="content-box__btn btn trigger">ВСТУПИЛ</a>`;
     }
     return html;
 }
-
+// <a href='${result}'>ссылка на оплату (клик) </a>
 async function userPay() {
     let timerPreloadOne
     let timerPreloadTwo
@@ -137,12 +90,9 @@ async function userPay() {
         clearTimeout(timerPreloadTwo);
         clearTimeout(timerPreloadThere);
         const bodyPopup = document.getElementById('popup-body');
-        console.log(result)
         if(result.amount){
-            console.log(result.groups.lenght == 0)
             //todo: result.groups.lenght == 0
-            if(true){
-                console.log(20000)
+            if(result.groups.lenght == 0){
             //   ЕСЛИ У НАС ВО ВСЕ ГРУППЫ ЧЕЛОВЕК ВСТУПИЛ
                 bodyPopup.classList.remove("centered-loader");
                     const html = `  <h2>Ваш заказ</h2>
@@ -216,6 +166,7 @@ function processAlert() {
     }
     if(LoginInput.value != '' && SumInput.value != '') {
         const el = document.querySelector(".modal-wrapper");
+
         if (el.classList.contains('open') === false) {
             el.classList.add("open");
         }

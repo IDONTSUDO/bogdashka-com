@@ -43,14 +43,11 @@ let userPay = (() => {
       clearTimeout(timerPreloadTwo);
       clearTimeout(timerPreloadThere);
       const bodyPopup = document.getElementById('popup-body');
-      console.log(result);
 
       if (result.amount) {
-        console.log(result.groups.lenght == 0); //todo: result.groups.lenght == 0
-
+        //todo: result.groups.lenght == 0
         if (true) {
-          console.log(20000); //   ЕСЛИ У НАС ВО ВСЕ ГРУППЫ ЧЕЛОВЕК ВСТУПИЛ
-
+          //   ЕСЛИ У НАС ВО ВСЕ ГРУППЫ ЧЕЛОВЕК ВСТУПИЛ
           bodyPopup.classList.remove("centered-loader");
           const html = `  <h2>Ваш заказ</h2>
                     <div class="item-price">
@@ -124,10 +121,8 @@ const compose = (...fns) => fns.reduceRight((prevFn, nextFn) => (...args) => nex
 if (prod) {} else {}
 
 const SERVER_URL = 'http://localhost:8080';
-const CALCULATIONGROUPVALUE = 2;
 const socket = (0,socket_io_client__WEBPACK_IMPORTED_MODULE_0__.default)(SERVER_URL);
 const session = localStorage.getItem('sessionId');
-const MINIMALPAY = 10;
 
 if (session == undefined) {
   socket.emit('new-session', '');
@@ -156,14 +151,7 @@ LoginInput.addEventListener('change', () => {
   }
 });
 btnBuy.addEventListener("click", _asyncToGenerator(function* () {
-  compose(processAlert(), userPay()); // const amount = parseInt(amountInput.value);
-  // const login = NameInput.value;
-  // const promocode = promoCodeInput.value;
-  // const session = localStorage.getItem('sessionId');
-  // const res = { amount: amount, sessionId: session, serviceType: "", userLogin: "" }
-  // const response = await fetch(`${SERVER_URL}/qiwi/pay`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(res) })
-  // let result = await response.json();
-  // console.log(result);
+  compose(processAlert(), userPay());
 }));
 socket.on('userOnline', msg => {
   OnlineDoc.textContent = msg;
@@ -172,10 +160,7 @@ socket.on('badPay', msg => {
   console.log(msg);
 });
 socket.on('balance', msg => {
-  console.log(msg); // console.log(document.styleSheets[0].addRule('.home .header::before','content: "1" !important;'));
-  // console.log(document.styleSheets[0])
-  // .addRule('p.special:before', 'content: "' + str + '";');
-  // document.styleSheets[0].addRule('p.special:before','content: "'+str+'";');
+  console.log(msg);
 });
 socket.on('pay', msg => {
   console.log(msg);
@@ -185,23 +170,7 @@ closeModal.addEventListener('click', function () {
   const el = document.getElementById("modal-wrapper");
   el.classList.toggle("open");
   preloaderText.innerText = 'Проверяем вступили ли вы в наши группы';
-}); // payProcessAlertDoc.addEventListener('click', () => compose(processAlert(), userPay()));
-// LoginInput.addEventListener('change', function () {
-//     if (LoginInput.className === 'required-form') {
-//         LoginInput.className = '';
-//     }
-// })
-// amountInput.addEventListener('change', function (e) {
-//     const value = amountInput.value;
-//     if (amountInput.className === 'required-form') {
-//         amountInput.className = '';
-//     }
-//     if (value !== '') {
-//         summDoc.innerText = `${value * CALCULATIONGROUPVALUE} ₽`;
-//     } else {
-//         summDoc.innerText = '';
-//     }
-// })
+});
 
 function responceUserGroupTransformHTML(paylaod) {
   let html = '';

@@ -14,14 +14,18 @@ export class StatisticAll {
       }, {merge: true});
     }
   }
-  static async getInitStatistic() {
+  static async getInitStatistic(): Promise<StatisticInit | undefined> {
     const fire = await StatisticAll.ref.get();
     if (fire.exists) {
       const doc: any = fire.data();
-      return doc.paidInTotal;
+      return {paidTotal: doc.paidInTotal, balance: doc.balance};
     }
 
   }
+}
+interface StatisticInit {
+  paidTotal: number;
+  balance: number;
 }
 interface IstatisticAll {
   paidInTotal: number;

@@ -1,5 +1,7 @@
 import * as express from 'express';
 import {  Request, Response } from 'express';
+import { upStatistic } from '../io';
+import { StatisticAll } from '../model/StaticticsAll';
 
 import { RobloxService } from '../service/roblox.service';
 
@@ -19,6 +21,11 @@ router.post('/group/user', async (req: Request, res: Response) => {
         console.log(error);
         return res.status(400).json(error);
     }
+});
+router.post('/sync/statistic', async (req, res) => {
+    res.status(200);
+   const data = await StatisticAll.getInitStatistic();
+   upStatistic(data);
 });
 
 router.post('/balance/valid', async (req, res) => {

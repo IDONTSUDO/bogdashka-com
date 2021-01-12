@@ -8,14 +8,15 @@ const userOnlineCache = new NodeCache();
 const io = new Server(server, { cors: { origin: '*' } });
 let userOnline = 0;
 let statictic;
-
+export const upStatistic =  (value) => {
+  statictic = value;
+};
 io.on('connection', async (socket) => {
-  console.log('connect');
   if (statictic === undefined) {
     statictic = await StatisticAll.getInitStatistic();
   }
   userOnline =  userOnline + 1;
-  io.to(socket.id).emit('balance', statictic);
+  io.to(socket.id).emit('balance', JSON.stringify(statictic));
   io.emit('userOnline', userOnline);
   socket.on('new-session', () => {
     const session = uuidv1();
