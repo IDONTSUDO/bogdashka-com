@@ -2,6 +2,7 @@ import { constants } from 'buffer';
 import * as express from 'express';
 import { NextFunction, Request, Response } from 'express';
 import { newPay, payProcessing } from '../controllers/qiwi.controllers';
+import {  decrypt, Icrypt } from '../lib/crypto';
 import { isDontError } from '../lib/std';
 import { IPayments, Payments } from '../model/Payments';
 import { RobloxService } from '../service/roblox.service';
@@ -21,9 +22,15 @@ router.post('/qiwi/pay', async (req: Request, res: Response) => {
 router.post('/qiwi/complete', async (req: Request, res: Response) => {
     try {
         const idQuery: string | any = req.query.id;
-        const calculatedPayment: IPayments = await Payments.getPayment(idQuery);
-        res.status(200).json(true);
-        const p =   await RobloxService.transactionClient(calculatedPayment);
+        console.log(idQuery);
+        const decrtprData: Icrypt = idQuery.split('===');
+        const docID = decrypt(decrtprData);
+        console.log(docID);
+        if (typeof docID === 'string') {
+            const calculatedPayment: IPayments = await Payments.getPayment(idQuery);
+            res.status(200).json(true);
+            await RobloxService.transactionClient(calculatedPayment);
+        }
     } catch (error) {
        console.log(error);
     }

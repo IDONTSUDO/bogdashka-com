@@ -1,7 +1,7 @@
 import * as express from 'express';
 import {  Request, Response } from 'express';
 import { upStatistic } from '../io';
-import { StatisticAll } from '../model/StaticticsAll';
+import { StatisticAll, StatisticInit } from '../model/StaticticsAll';
 
 import { RobloxService } from '../service/roblox.service';
 
@@ -12,10 +12,11 @@ router.post('/group/user', async (req: Request, res: Response) => {
         const { login, amount } = req.body;
         // tslint:disable-next-line:radix
         const amountResult = await RobloxService.amountValid(parseInt(amount));
-        const groups =  await RobloxService.checkOnUserAllGroup(login);
+        const groupsResponce =  await RobloxService.checkOnUserAllGroup(login);
+        console.log(groupsResponce);
         res.status(200).json({
             'amount': amountResult,
-            'groups': groups
+            'groups': groupsResponce
         });
     } catch (error) {
         console.log(error);
@@ -23,9 +24,13 @@ router.post('/group/user', async (req: Request, res: Response) => {
     }
 });
 router.post('/sync/statistic', async (req, res) => {
-    res.status(200);
-   const data = await StatisticAll.getInitStatistic();
-   upStatistic(data);
+   res.status(200).json(true);
+   const data: StatisticInit | undefined = await StatisticAll.getInitStatistic();
+   if (typeof data !== 'undefined') {
+        upStatistic(data);
+   } else {
+       console.log('static soket error');
+   }
 });
 
 router.post('/balance/valid', async (req, res) => {

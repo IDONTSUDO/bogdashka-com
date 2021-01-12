@@ -1,1 +1,2 @@
 
+cross-env test=true

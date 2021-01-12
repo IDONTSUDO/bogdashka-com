@@ -92,6 +92,7 @@ export interface IGroup {
     groupId: string;
     cookies: string;
     status: boolean;
+    url: string;
 }
 
 /**

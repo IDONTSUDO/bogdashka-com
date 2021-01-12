@@ -80,8 +80,8 @@ export class RobloxService {
         const groupList = await Group.findAllGroup();
         for (const group of groupList) {
             const result = await RobloxApi.UserLoginWithGroup(user, group.cookies, group.id!);
-            if (typeof result === 'number') {
-                responce.push(`${ROBLOC_GROUP_URL}${result}`);
+            if (typeof result !== 'number') {
+                responce.push(group.url);
             }
         }
         if (responce.length === 0) {

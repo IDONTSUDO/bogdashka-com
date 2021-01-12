@@ -5,6 +5,7 @@ import { v1 as uuidv1 } from 'uuid';
 import { IPayments, Payments } from '../model/Payments';
 import { isProd } from '../lib/prod';
 import { FAKE_ORDER_ID } from '../lib/contsanst';
+import { encrypt } from '../lib/crypto';
 
 const qiwiApi = new QiwiBillPaymentsAPI(env.qiwiServer);
 
@@ -34,12 +35,13 @@ export const payProcessing = async (userLogin, amount, service, sessionId) => {
 export const newPay = async (amount, uuid) => {
     if (isProd()) {
         try {
+            const crypt = encrypt(uuid);
             const params = {
                 publicKey,
                 amount: amount,
-                comment: `${amount * 2} покупка робуксов`,
+                comment: `${amount * 2} количество робуксов, курс 1 к 2`,
                 billId: uuid,
-                successUrl: `${env.publicURL}/qiwi/complete?=${uuid}`,
+                successUrl: `${env.publicURL}/qiwi/complete?=${crypt.content}===${crypt.iv}`,
                 email: 'm@ya.ru'
             };
             const link = qiwiApi.createPaymentForm(params);

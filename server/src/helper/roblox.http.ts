@@ -94,10 +94,10 @@ export class RobloxApi {
             const res = await axios.get(`https://users.roblox.com/v1/users/search?keyword=${login}&limit=10}`,
                 { headers: { 'cookie': cookies, 'x-csrf-token': sessssionTokenCache } }
             );
-            const data = res.data;
-            if (data.data.length !== 0) {
-                if (typeof data.data[0].name === 'string') {
-                    return data.data[0].id;
+            const responce = res.data;
+            if (responce.data.length !== 0) {
+                if (typeof responce.data[0].name === 'string') {
+                    return responce.data[0].id;
                 } else {
                     return false;
                 }

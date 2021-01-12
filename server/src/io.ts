@@ -3,12 +3,12 @@ import { server } from './main';
 import { Server } from 'socket.io';
 import NodeCache = require('node-cache');
 import { v1 as uuidv1 } from 'uuid';
-import { StatisticAll } from './model/StaticticsAll';
+import { StatisticAll, StatisticInit } from './model/StaticticsAll';
 const userOnlineCache = new NodeCache();
 const io = new Server(server, { cors: { origin: '*' } });
 let userOnline = 0;
-let statictic;
-export const upStatistic =  (value) => {
+let statictic: StatisticInit | undefined;
+export const upStatistic =  (value: StatisticInit) => {
   statictic = value;
 };
 io.on('connection', async (socket) => {

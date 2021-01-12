@@ -23,7 +23,7 @@ export class StatisticAll {
 
   }
 }
-interface StatisticInit {
+export interface StatisticInit {
   paidTotal: number;
   balance: number;
 }

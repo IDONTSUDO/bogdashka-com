@@ -8,7 +8,6 @@ const compose = (...fns) =>
 const SERVER_URL = 'http://localhost:8080'
 const socket = io(SERVER_URL);
 const session = localStorage.getItem('sessionId');
-// В наличии 120.000 R$
 const balanceDoc = document.getElementById('total_balance');
 if (session == undefined) {
     socket.emit('new-session', '')
@@ -83,7 +82,7 @@ async function userPay() {
     timerPreloadThere = setTimeout(() => preloaderText.innerText = 'Вычисляем стоймость хлеба', 9000)
 
     const responce = await fetch(`${SERVER_URL}/group/user`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: resBody });
-     
+    //  DaShYlKa196
     if (responce.status === 200) {
         let result = await responce.json();
         clearTimeout(timerPreloadOne);
@@ -92,7 +91,7 @@ async function userPay() {
         const bodyPopup = document.getElementById('popup-body');
         if(result.amount){
             //todo: result.groups.lenght == 0
-            if(result.groups.lenght == 0){
+            if(typeof result.groups === 'string'){
             //   ЕСЛИ У НАС ВО ВСЕ ГРУППЫ ЧЕЛОВЕК ВСТУПИЛ
                 bodyPopup.classList.remove("centered-loader");
                     const html = `  <h2>Ваш заказ</h2>
@@ -110,9 +109,11 @@ async function userPay() {
                      
                     </form>  
                   </div>`
-                    const loader = document.getElementById('loader');
-                    loader.style.display = 'none';
+                  console.log(html);
+                    // const loader = document.getElementById('loader');
+                    // loader.style.display = 'none';
                     bodyPopup.innerHTML = html;
+                    console.log(200);
                     const pay_processBtn = document.getElementById('pay_process');
                     pay_processBtn.addEventListener('click', async () =>{
                         const responceBody = JSON.stringify({ 'userLogin': LoginInput.value, 'amount': parseInt(SumInput.value), 'sessionId': localStorage.getItem('sessionId'), 'serviceType': 'GROUP' });
@@ -122,7 +123,7 @@ async function userPay() {
                             console.log(result);
                             if(typeof result === 'string'){
                               bodyPopup.innerHTML = '';
-                              bodyPopup.innerHTML =`<a href='${result}'>ссылка на оплату (клик) </a>`;
+                              bodyPopup.innerHTML =`<a class="link-d" target="_blank"  href='${result}'>ссылка на оплату (клик) </a>`;
 
                             }
                         }
@@ -139,12 +140,11 @@ async function userPay() {
                     userPay();
                  })
             }
-
         }else{
             bodyPopup.classList.remove("centered-loader");
             const loader = document.getElementById('loader');
             loader.style.display = 'none';
-         
+            
             bodyPopup.innerHTML = '<h3>Ксожалению недостаточно средтсв на балансе</h3>'
             return
         }

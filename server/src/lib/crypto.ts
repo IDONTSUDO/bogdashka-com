@@ -4,7 +4,7 @@ import * as env from '../config/env.json';
 const secretKey = env.crypro_secret_key;
 const iv = crypto.randomBytes(16);
 
-interface Icrypt {
+export interface Icrypt {
   iv: string;
   content: string;
 }
@@ -22,10 +22,7 @@ export const encrypt = (text: string): Icrypt => {
 };
 
 export const decrypt = (hash: Icrypt): string => {
-
   const decipher = crypto.createDecipheriv(ALGORITM_CRYPTO, secretKey, Buffer.from(hash.iv, 'hex'));
-
   const decrpyted = Buffer.concat([decipher.update(Buffer.from(hash.content, 'hex')), decipher.final()]);
-
   return decrpyted.toString();
 };
