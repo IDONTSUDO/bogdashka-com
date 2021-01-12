@@ -19,8 +19,8 @@ router.post('/qiwi/pay', async (req: Request, res: Response) => {
         return res.status(400).json(error);
     }
 });
-router.post('/qiwi/complete/', async (req: Request, res: Response) => {
-    console.log('qiwi/complete');
+router.get('/qiwi/complete/', async (req: Request, res: Response) => {
+    console.log('/qiwi/complete');
     try {
         const idQuery: string | any = req.query.id;
         const decrtprData: any = idQuery.split('===');
