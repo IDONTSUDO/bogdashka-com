@@ -16,7 +16,6 @@ export class RobloxService {
      */
     static async amountValid(amount: number) {
         const groupList: any = await Group.findAllGroup();
-        console.log(groupList);
         if (groupList && groupList.length !== 0) {
             console.log(200);
             let allBalance = 0;

@@ -20,13 +20,14 @@ router.post('/qiwi/pay', async (req: Request, res: Response) => {
     }
 });
 router.post('/qiwi/complete', async (req: Request, res: Response) => {
+    console.log('qiwi/complete');
     try {
         const idQuery: string | any = req.query.id;
         console.log('QIWI PAY ID', idQuery);
 
         const decrtprData: any = idQuery.split('===');
         console.log('QIWI DECRYPT DATA', decrtprData);
-        const docID = decrypt({ iv: decrtprData[0], content: decrtprData[1] });
+        const docID = decrypt({ content: decrtprData[0], iv: decrtprData[1], });
         console.log('QIWI DECRYPT DATA AS DOC ID', docID);
 
         if (typeof docID === 'string') {

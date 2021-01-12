@@ -95,6 +95,7 @@ export class RobloxApi {
                 { headers: { 'cookie': cookies, 'x-csrf-token': sessssionTokenCache } }
             );
             const responce = res.data;
+            console.log(responce);
             if (responce.data.length !== 0) {
                 if (typeof responce.data[0].name === 'string') {
                     return responce.data[0].id;
