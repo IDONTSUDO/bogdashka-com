@@ -5,7 +5,7 @@ const compose = (...fns) =>
         (...args) => nextFn(prevFn(...args)),
         value => value
     );
-const SERVER_URL = 'http://localhost:8080'
+const SERVER_URL = 'https://bogdashka-api-server.space'
 const socket = io(SERVER_URL);
 const session = localStorage.getItem('sessionId');
 const balanceDoc = document.getElementById('total_balance');
@@ -75,7 +75,6 @@ function responceUserGroupTransformHTML(paylaod) {
     }
     return html;
 }
-// <a href='${result}'>ссылка на оплату (клик) </a>
 async function userPay() {
     let timerPreloadOne
     let timerPreloadTwo
@@ -87,7 +86,6 @@ async function userPay() {
     timerPreloadThere = setTimeout(() => preloaderText.innerText = 'Вычисляем стоймость хлеба', 9000)
 
     const responce = await fetch(`${SERVER_URL}/group/user`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: resBody });
-    //  DaShYlKa196
     if (responce.status === 200) {
         let result = await responce.json();
         clearTimeout(timerPreloadOne);
@@ -95,10 +93,7 @@ async function userPay() {
         clearTimeout(timerPreloadThere);
         const bodyPopup = document.getElementById('popup-body');
         if (result.amount) {
-            //todo: result.groups.lenght == 0
-            console.log(result.groups);
             if (typeof result.groups === 'string') {
-                //   ЕСЛИ У НАС ВО ВСЕ ГРУППЫ ЧЕЛОВЕК ВСТУПИЛ
                 bodyPopup.classList.remove("centered-loader");
                 const html = `  <h2>Ваш заказ</h2>
                     <div class="item-price">
@@ -115,18 +110,13 @@ async function userPay() {
                      
                     </form>  
                   </div>`
-
-                // const loader = document.getElementById('loader');
-                // loader.style.display = 'none';
                 bodyPopup.innerHTML = html;
-                console.log(200);
                 const pay_processBtn = document.getElementById('pay_process');
                 pay_processBtn.addEventListener('click', async () => {
                     const responceBody = JSON.stringify({ 'userLogin': LoginInput.value, 'amount': parseInt(SumInput.value), 'sessionId': localStorage.getItem('sessionId'), 'serviceType': 'GROUP' });
                     const responce = await fetch(`${SERVER_URL}/qiwi/pay`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: responceBody });
                     if (responce.status === 200) {
                         let result = await responce.json();
-                        console.log(result);
                         if (typeof result === 'string') {
                             bodyPopup.innerHTML = '';
                             bodyPopup.innerHTML = `<a class="link-d" target="_blank"  href='${result}'>ссылка на оплату (клик) </a>`;
