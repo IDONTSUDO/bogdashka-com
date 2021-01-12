@@ -69,7 +69,7 @@ export interface IPayments {
     payLogin: string;
     date?: string;
 }
-enum statusPay {
+export enum statusPay {
     'CANCEL', 'COMPLETE', 'PEDDING', 'RETURN_PAY',
 }
 enum servicePay {
