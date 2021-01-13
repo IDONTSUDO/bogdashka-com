@@ -12,4 +12,5 @@ module.exports = {
       name       : "cron",
       script     : "./src/cron.js",
     }]
+    
 }
