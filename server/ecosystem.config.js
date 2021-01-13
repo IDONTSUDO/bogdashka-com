@@ -1,7 +1,7 @@
 module.exports = {
   apps : [{
       name        : "bogdashka-server",
-      script      : "./src/main.js",
+      script      : "./build/src/main.js",
       instances   : 2,
       exec_mode  : "cluster",
       watch       : true,
@@ -10,7 +10,7 @@ module.exports = {
       }
     },{
       name       : "cron",
-      script     : "./src/cron.js",
+      script     : "./build/src/cron.js",
     }]
     
 }
