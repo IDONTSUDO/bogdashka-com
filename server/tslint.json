@@ -59,7 +59,6 @@
       ],
       "no-misused-new": true,
       "no-non-null-assertion": false,
-      "no-shadowed-variable": true,
       "no-string-literal": false,
       "no-string-throw": true,
       "no-switch-case-fall-through": true,
@@ -80,7 +79,6 @@
         true,
         "single"
       ],
-      "radix": true,
       "semicolon": [
         true,
         "always"

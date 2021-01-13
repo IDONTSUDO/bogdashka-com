@@ -2,7 +2,7 @@
 import * as QiwiBillPaymentsAPI from '@qiwi/bill-payments-node-js-sdk';
 import * as env from '../config/env.json';
 import { v1 as uuidv1 } from 'uuid';
-import { IPayments, Payments } from '../model/Payments';
+import { IPayments, Payments, PaySystem } from '../model/Payments';
 import { isProd } from '../lib/prod';
 import { FAKE_ORDER_ID } from '../lib/contsanst';
 import { encrypt } from '../lib/crypto';
@@ -26,13 +26,14 @@ export const payProcessing = async (userLogin, amount, service, sessionId) => {
         status: 'PEDDING',
         service: service,
         sessionId: sessionId,
-        payLogin: userLogin
+        payLogin: userLogin,
+        pay: PaySystem.QIWI
     };
     await Payments.savePayment(trancaction);
     return id;
 };
 
-export const newPay = async (amount, uuid) => {
+export const newPayQiwi = async (amount, uuid) => {
     if (isProd()) {
         try {
             const crypt = encrypt(uuid);

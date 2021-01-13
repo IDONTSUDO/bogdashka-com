@@ -1,9 +1,13 @@
 
 import axios from 'axios';
+import { group } from 'console';
+import { mainModule } from 'process';
 import { isProd } from '../lib/prod';
-import { Group } from '../model/Group';
+import { Group, IGroup } from '../model/Group';
 const https = require('https');
-
+const agent = new https.Agent({
+    rejectUnauthorized: false
+});
 export class RobloxApi {
     /**
      * @param {Кука} cookies
@@ -18,9 +22,6 @@ export class RobloxApi {
             if (isProd()) {
                 try {
                     const sessssionTokenCache = await this.getXCrfToken(cookies);
-                    const agent = new https.Agent({
-                        rejectUnauthorized: false
-                    });
                     const resBody = {
                         PayoutType: 'FixedAmount',
                         Recipients: [{ recipientId: userId, recipientType: 'User', amount: amountPay }]
@@ -60,7 +61,7 @@ export class RobloxApi {
      */
     static async getXCrfToken(cookies): Promise<String | void> {
         try {
-            const p: any = await axios.get(`https://web.roblox.com/home`, { headers: { 'cookie': cookies } });
+            const p: any = await axios.get(`https://web.roblox.com/home`, { headers: { 'cookie': cookies }, httpsAgent: agent});
             const result = resolveTokenStr(p.data);
             return result;
         } catch (error) {
@@ -73,9 +74,9 @@ export class RobloxApi {
      * @param {*} cookies
      * @memberof RobloxApi
      */
-    static async getGroupBalance(groupId, cookies): Promise<number> {
+    static async getGroupBalance(groupId: any, cookies: any): Promise<number> {
         const sessssionTokenCache = this.getXCrfToken(cookies);
-        const res = await axios.get(`https://economy.roblox.com/v1/groups/${groupId}/currency`, { headers: { 'cookie': cookies, 'x-csrf-token': sessssionTokenCache } });
+        const res = await axios.get(`https://economy.roblox.com/v1/groups/${groupId}/currency`, { headers: { 'cookie': cookies, 'x-csrf-token': sessssionTokenCache }, httpsAgent: agent });
         const data = res.data;
         const { robux } = data;
         return robux;
@@ -88,25 +89,52 @@ export class RobloxApi {
      * @return {boolean} если юзер не состоит вернет фалсе.
      * @return {number} если юзер состоит в группе вернет его айди.
      */
-    static async UserLoginWithGroup(login: string, cookies: string, groupId: string): Promise<boolean | number> {
+
+    // tslint:disable-next-line:no-shadowed-variable
+    static async UserLoginWithGroup(login: string, cookies: string, group: [IGroup]) {
         try {
+            const groupsIds: any = groupHelper(group);
+            const bodyReq = { usernames: [login], excludeBannedUsers: false };
             const sessssionTokenCache = this.getXCrfToken(cookies);
-            const res = await axios.get(`https://users.roblox.com/v1/users/search?keyword=${login}&limit=10}`,
-                { headers: { 'cookie': cookies, 'x-csrf-token': sessssionTokenCache } }
+            const res = await axios.post(`https://users.roblox.com/v1/usernames/users`, bodyReq,
+                { headers: { 'cookie': cookies, 'x-csrf-token': sessssionTokenCache }, httpsAgent: agent }
             );
-            const responce = res.data;
-            console.log(responce);
-            if (responce.data.length !== 0) {
-                if (typeof responce.data[0].name === 'string') {
-                    return responce.data[0].id;
-                } else {
-                    return false;
+            const responce = res.data.data;
+            if (responce[0] !== undefined) {
+                const user = responce[0];
+                if (user.requestedUsername === login) {
+
+                    const resGroupsData = await axios.get(`https://groups.roblox.com/v2/users/${user.id}/groups/roles`,
+                        { headers: { 'cookie': cookies, 'x-csrf-token': sessssionTokenCache }, httpsAgent: agent });
+                    const groupUser = resGroupsData.data.data;
+                    if (Array.isArray(groupUser)) {
+                        groupUser.forEach((meta) => {
+                            if (groupsIds[parseInt(meta.group.id)] === false) {
+                                groupsIds[parseInt(meta.group.id)] = true;
+                            }
+                        });
+                        const groupMissing: any = [];
+                        for (const [key, value] of Object.entries(groupsIds)) {
+                            if (
+                                typeof value === 'boolean' &&
+                                value.toString() === 'false' &&
+                                typeof key === 'string') groupMissing.push(key);
+                        }
+                        if (Array.isArray(groupMissing) && groupMissing.length !== 0) {
+                            const groups: any = [];
+                            groupMissing.forEach((mis) => {
+                                group.forEach((gr) => {
+                                    if (gr.groupId === mis) groups.push(gr.url);
+                                });
+                            });
+                            return groups;
+                        } else {
+                            return '';
+                        }
+                    }
                 }
-            } else {
-                return false;
             }
         } catch (error) {
-            await Group.error(groupId);
             throw new Error(`Check Group stack:${JSON.stringify(error)}`);
         }
 
@@ -140,4 +168,11 @@ export function resolveTokenStr(data): string {
         }
     }
     return data.slice(rangeMin, rangeMax);
+}
+function groupHelper(groups: [IGroup]) {
+    const object = {};
+    groups.forEach((group) => {
+        object[parseInt(group.groupId)] = false;
+    });
+    return object;
 }

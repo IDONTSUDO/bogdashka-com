@@ -2,8 +2,10 @@ import * as express from 'express';
 import {  Request, Response } from 'express';
 import { upStatistic } from '../io';
 import { StatisticAll, StatisticInit } from '../model/StaticticsAll';
+import { validate as uuidValidate } from 'uuid';
 
 import { RobloxService } from '../service/roblox.service';
+import { Payments } from '../model/Payments';
 
 const router = express.Router();
 
@@ -38,8 +40,14 @@ router.post('/balance/valid', async (req, res) => {
         const { amount } = req.body;
         return res.status(200).json(await RobloxService.amountValid(amount));
     } catch (error) {
-        console.log(error);
         return res.status(404).json(error);
+    }
+});
+
+router.post('/pay/process', async (req, res) => {
+    const id = req.body.id;
+    if (uuidValidate(id)) {
+        return res.status(200).json(await Payments.paymentInfo(id));
     }
 });
 export const comerceRoboxRouter = router;
