@@ -36,7 +36,6 @@ export class Statistic {
         const transactionTotal = doc[`${todayKey}`].qualityTransactionDay || 0;
         const amountTotal = doc[`${todayKey}`].amountTotal || 0;
         const missingTotalDoc = doc[`${todayKey}`].missingTotal || 0;
-        console.log(event);
         if (event === 'NEW_TRANSACTION') {
           doc[`${todayKey}`] = {
             amountTotal: amountTotal + amount,

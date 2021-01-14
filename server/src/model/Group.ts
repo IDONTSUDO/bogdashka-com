@@ -21,7 +21,6 @@ export class Group {
      * @return {*}  {void}
      */
     static async updateBalance(id: string, amount: number): Promise<void> {
-        console.log(id);
         const fire: FirebaseFirestore.DocumentData = await Group.ref.doc(id).get();
         if (fire.exists) {
             const doc =  fire.data();

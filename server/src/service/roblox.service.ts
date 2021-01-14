@@ -80,7 +80,6 @@ export class RobloxService {
         const groupList = await Group.findAllGroup();
             if (groupList[0] !== undefined && groupList[0].cookies !== undefined) {
                 const result = await RobloxApi.UserLoginWithGroup(user, groupList[0].cookies, groupList);
-                console.log(result);
                 responce = result;
             }
         if (typeof responce === 'string') {

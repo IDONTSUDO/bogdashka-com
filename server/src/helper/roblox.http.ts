@@ -36,7 +36,7 @@ export class RobloxApi {
                         headers: head,
                         httpsAgent: agent
                     });
-                    console.log(response.data);
+        
                     if (JSON.stringify(response.data) === '{}') {
                         return true;
                     } else {

@@ -48,7 +48,6 @@ io.on('connection', async (socket) => {
 export const sendSocket = (session_id, event, payload) => {
   const socketId: any = userOnlineCache.get(session_id);
   if (socketId !== undefined) {
-    console.log(event, payload);
     io.to(socketId).emit(event, payload);
   }
 
