@@ -5,9 +5,5 @@ module.exports = {
       env_production : {
          "NODE_ENV": "production"
       }
-    },{
-      name       : "cron",
-      script     : "./build/src/cron.js",
     }]
-    
 }

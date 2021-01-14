@@ -1,6 +1,5 @@
 import { RESPONCE_ALL_GROUP, ROBLOC_GROUP_URL } from '../lib/contsanst';
 import { RobloxApi } from '../helper/roblox.http';
-import { sendSocket } from '../io';
 import { Group } from '../model/Group';
 import { IPayments, Payments, servicePaymentError } from '../model/Payments';
 import { IPaymentsBlock, PaymentsBlock, TYPEPAYMENTBLOCK } from '../model/PaymentsBlock';
@@ -33,41 +32,35 @@ export class RobloxService {
      * @return {void} если все прошло успещно
      */
     static async transactionClient(payment: IPayments): Promise<Error | void> {
-        //     const { amount, sessionId, id, payLogin } = payment;
-        //     try {
-        //         const groupList = await Group.findAllGroup();
-        //         const paymentValid = Group.groupValidatePayment(groupList, 0, amount, []);
-        //         if (typeof paymentValid !== 'boolean') {
-        //             if (paymentValid.pay_operations) {
-        //                 for (const pay of paymentValid.pay_operations) {
-        //                     await RobloxApi.transaction(pay.cookies, pay.groupId, pay.totalAmount, pay.userId);
-        //                     await Group.updateBalance(pay.id, pay.totalAmount);
-        //                     await StatisticService.updateTransation(pay.totalAmount);
-        //                 }
-        //                 if (paymentValid.misingSum !== undefined) {
-        //                     const doc: IPaymentsBlock = {
-        //                         userLogin: payLogin,
-        //                         date: new Date().toJSON(),
-        //                         amount: paymentValid.misingSum,
-        //                         operationID: id,
-        //                         type: TYPEPAYMENTBLOCK.ERROR
-        //                     };
-        //                     await PaymentsBlock.new(doc);
-        //                 }
-        //                 if (paymentValid.pay_operations.length === 1) {
-        //                     sendSocket(sessionId, 'pay', 'PayComplete');
-        //                 } else {
-        //                     sendSocket(sessionId, 'badPay', 'PayBad');
-        //                 }
-        //             }
-        //         } else {
-        //             // ЕСЛИ ПЛАТЕЖ ПО НЕ ПРЕДВИДЕННЫМ ОБСТОЯТЕЛЬСТВАМ ПРОШЕЛ ТО ЕГО НАДО ВЫСТАВИТЬ АПДЕЙТНУТЬ
-        //             Payments.updateErrorPayment(id, servicePaymentError.BALANCE_ERROR);
-        //         }
-        //     } catch (error) {
-        //         throw new Error(`${JSON.stringify(error)}`);
-        //     }
-        // }
+        const { amount, id, payLogin } = payment;
+        try {
+            const groupList = await Group.findAllGroup();
+            const paymentValid = Group.groupValidatePayment(groupList, 0, amount, []);
+            if (typeof paymentValid !== 'boolean') {
+                if (paymentValid.pay_operations) {
+                    for (const pay of paymentValid.pay_operations) {
+                        await RobloxApi.transaction(pay.cookies, pay.groupId, pay.totalAmount, pay.userId);
+                        await Group.updateBalance(pay.id, pay.totalAmount);
+                        await StatisticService.updateTransation(pay.totalAmount);
+                    }
+                    if (paymentValid.misingSum !== undefined) {
+                        const doc: IPaymentsBlock = {
+                            userLogin: payLogin,
+                            date: new Date().toJSON(),
+                            amount: paymentValid.misingSum,
+                            operationID: id,
+                            type: TYPEPAYMENTBLOCK.ERROR
+                        };
+                        await PaymentsBlock.new(doc);
+                    }
+                }
+            } else {
+                // ЕСЛИ ПЛАТЕЖ ПО НЕ ПРЕДВИДЕННЫМ ОБСТОЯТЕЛЬСТВАМ ПРОШЕЛ ТО ЕГО НАДО ВЫСТАВИТЬ АПДЕЙТНУТЬ
+                Payments.updateErrorPayment(id, servicePaymentError.BALANCE_ERROR);
+            }
+        } catch (error) {
+            throw new Error(`${JSON.stringify(error)}`);
+        }
     }
     /**
      * @problem Состоит ли пользователь во все возможных группах?
@@ -78,10 +71,10 @@ export class RobloxService {
     static async checkOnUserAllGroup(user: string): Promise<string | [string]> {
         let responce: string | any = [];
         const groupList = await Group.findAllGroup();
-            if (groupList[0] !== undefined && groupList[0].cookies !== undefined) {
-                const result = await RobloxApi.UserLoginWithGroup(user, groupList[0].cookies, groupList);
-                responce = result;
-            }
+        if (groupList[0] !== undefined && groupList[0].cookies !== undefined) {
+            const result = await RobloxApi.UserLoginWithGroup(user, groupList[0].cookies, groupList);
+            responce = result;
+        }
         if (typeof responce === 'string') {
             return RESPONCE_ALL_GROUP;
         } else {

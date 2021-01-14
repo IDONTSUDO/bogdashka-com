@@ -4,6 +4,13 @@ import { Server } from 'socket.io';
 import NodeCache = require('node-cache');
 import { v1 as uuidv1 } from 'uuid';
 import { StatisticAll, StatisticInit } from './model/StaticticsAll';
+import { Payments } from './model/Payments';
+
+const cron = require('node-cron');
+cron.schedule('* * * * *', async () => {
+  console.log('CRON RUNIING');
+  await Payments.PaymentCron();
+});
 const userOnlineCache = new NodeCache();
 const io = new Server(server, { cors: { origin: '*' } });
 let userOnline = 0;
