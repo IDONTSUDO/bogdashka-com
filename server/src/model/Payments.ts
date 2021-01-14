@@ -1,5 +1,4 @@
 import db from '../lib/firestore';
-import { sendSocket } from '../io';
 import { RobloxService } from '../service/roblox.service';
 import * as QiwiBillPaymentsAPI from '@qiwi/bill-payments-node-js-sdk';
 import * as env from '../config/env.json';
@@ -74,9 +73,6 @@ export class Payments {
             await Payments.ref.doc(id).update({ status: 'COMPLETE' });
             const fire = await Payments.ref.doc(id).get();
             const doc = fire.data();
-            if (doc !== undefined) {
-                sendSocket(doc.sessionId, 'pay', '');
-            }
         } catch (error) {
             console.log(error);
         }

@@ -1,4 +1,3 @@
-import db from './lib/firestore';
 import { Payments } from './model/Payments';
 
 
