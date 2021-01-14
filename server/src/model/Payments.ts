@@ -4,6 +4,7 @@ import { RobloxService } from '../service/roblox.service';
 import * as QiwiBillPaymentsAPI from '@qiwi/bill-payments-node-js-sdk';
 import * as env from '../config/env.json';
 import {to} from '../lib/to';
+import { s } from '../lib/s';
 const qiwiApi = new QiwiBillPaymentsAPI(env.qiwiServer);
 
 
@@ -88,7 +89,6 @@ export class Payments {
       const fire =   await Payments.ref.doc(id).get();
         if (fire.exists) {
             const doc =  fire.data() as IPayments;
-            console.log(doc.status);
             return doc.status;
         }
     }

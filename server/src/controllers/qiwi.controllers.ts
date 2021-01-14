@@ -42,7 +42,7 @@ export const newPayQiwi = async (amount, uuid) => {
                 amount: amount,
                 comment: `${amount * 2} количество робуксов, курс 1 к 2`,
                 billId: uuid,
-                successUrl: `${env.publicURL}/qiwi/complete?=${crypt.content}===${crypt.iv}`,
+                successUrl: `${env.frontURL}${uuid}`,
                 email: 'm@ya.ru'
             };
             const link = qiwiApi.createPaymentForm(params);
