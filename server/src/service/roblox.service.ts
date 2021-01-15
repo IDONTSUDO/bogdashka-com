@@ -1,7 +1,7 @@
 import { RESPONCE_ALL_GROUP, ROBLOC_GROUP_URL } from '../lib/contsanst';
 import { RobloxApi } from '../helper/roblox.http';
 import { Group } from '../model/Group';
-import { IPayments, Payments, servicePaymentError } from '../model/Payments';
+import { IPayments, Payments, PaySystem, servicePaymentError } from '../model/Payments';
 import { IPaymentsBlock, PaymentsBlock, TYPEPAYMENTBLOCK } from '../model/PaymentsBlock';
 import { StatisticService } from './statistic.service';
 import { isProd } from '../lib/prod';
@@ -36,26 +36,40 @@ export class RobloxService {
         try {
             const groupList = await Group.findAllGroup();
             const paymentValid = Group.groupValidatePayment(groupList, 0, amount, []);
-            if (typeof paymentValid !== 'boolean') {
-                if (paymentValid.pay_operations) {
-                    for (const pay of paymentValid.pay_operations) {
-                        await RobloxApi.transaction(pay.cookies, pay.groupId, pay.totalAmount, pay.userId);
-                        await Group.updateBalance(pay.id, pay.totalAmount);
-                        await StatisticService.updateTransation(pay.totalAmount);
+
+            const userId = await RobloxApi.userIdAsLogin(payLogin, groupList[0].cookies);
+            if (Array.isArray(groupList) && groupList.length > 0) {
+                if (userId === undefined) {
+                    return await Payments.updateErrorPayment(id, servicePaymentError.USERISNOT);
+                }
+                if (typeof paymentValid !== 'boolean') {
+                    if (paymentValid.pay_operations) {
+                        for (const pay of paymentValid.pay_operations) {
+                            try {
+                                await RobloxApi.transaction(pay.cookies, pay.groupId, pay.totalAmount, userId);
+
+                                await Group.updateBalance(pay.id, pay.totalAmount);
+                                await StatisticService.updateTransation(pay.totalAmount);
+                            } catch (error) {
+                                console.log(error);
+                            }
+                        }
+                        if (paymentValid.misingSum !== undefined) {
+                            const doc: IPaymentsBlock = {
+                                userLogin: payLogin,
+                                date: new Date().toJSON(),
+                                amount: paymentValid.misingSum,
+                                operationID: id,
+                                type: TYPEPAYMENTBLOCK.ERROR
+                            };
+                            await PaymentsBlock.new(doc);
+                        }
                     }
-                    if (paymentValid.misingSum !== undefined) {
-                        const doc: IPaymentsBlock = {
-                            userLogin: payLogin,
-                            date: new Date().toJSON(),
-                            amount: paymentValid.misingSum,
-                            operationID: id,
-                            type: TYPEPAYMENTBLOCK.ERROR
-                        };
-                        await PaymentsBlock.new(doc);
-                    }
+                } else {
+                    // ЕСЛИ ПЛАТЕЖ ПО НЕ ПРЕДВИДЕННЫМ ОБСТОЯТЕЛЬСТВАМ ПРОШЕЛ ТО ЕГО НАДО ВЫСТАВИТЬ АПДЕЙТНУТЬ
+                    Payments.updateErrorPayment(id, servicePaymentError.BALANCE_ERROR);
                 }
             } else {
-                // ЕСЛИ ПЛАТЕЖ ПО НЕ ПРЕДВИДЕННЫМ ОБСТОЯТЕЛЬСТВАМ ПРОШЕЛ ТО ЕГО НАДО ВЫСТАВИТЬ АПДЕЙТНУТЬ
                 Payments.updateErrorPayment(id, servicePaymentError.BALANCE_ERROR);
             }
         } catch (error) {

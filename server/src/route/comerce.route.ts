@@ -15,7 +15,6 @@ router.post('/group/user', async (req: Request, res: Response) => {
         // tslint:disable-next-line:radix
         const amountResult = await RobloxService.amountValid(parseInt(amount));
         const groupsResponce =  await RobloxService.checkOnUserAllGroup(login);
-        console.log(groupsResponce);
         res.status(200).json({
             'amount': amountResult,
             'groups': groupsResponce

@@ -7,7 +7,8 @@ const qiwiApi = new QiwiBillPaymentsAPI(env.qiwiServer);
 
 
 export enum servicePaymentError {
-    BALANCE_ERROR = 'BALANCE_ERROR'
+    BALANCE_ERROR = 'BALANCE_ERROR',
+    USERISNOT = 'USERISNOT'
 }
 export class Payments {
     static ref = db.collection('Payments');
@@ -18,6 +19,7 @@ export class Payments {
         TodayDateEnd.setHours(23), TodayDateEnd.setUTCHours(23), TodayDateEnd.setMinutes(59), TodayDateEnd.setSeconds(59);
         const beginDate = TodayDateBegin.toJSON();
         const endDate = TodayDateEnd.toJSON();
+        // COMPLETE PEDDING
         const fire = await Payments.ref.where('status', '==', 'PEDDING').where('date', '>=', beginDate).where('date', '<=', endDate).get();
             fire.docs.forEach(async firedoc => {
                 const doc = firedoc.data() as IPayments;
@@ -97,6 +99,7 @@ export interface IPayments {
     sessionId: string;
     payLogin: string;
     date?: string;
+    userId?: string;
     pay: PaySystem;
 }
 export enum statusPay {
@@ -108,3 +111,7 @@ enum servicePay {
 export enum PaySystem {
     QIWI = 'QIWI'
 }
+async function main() {
+    await Payments.PaymentCron();
+}
+main();

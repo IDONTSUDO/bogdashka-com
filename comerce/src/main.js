@@ -26,6 +26,7 @@ socket.on('sendSession', (msg) => {
     localStorage.setItem('sessionId', msg)
 })
 socket.on('userOnline', (msg) => {
+    console.log(msg);
     if (OnlineDoc)
         OnlineDoc.textContent = msg;
 })

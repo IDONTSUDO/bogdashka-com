@@ -9,6 +9,20 @@ const agent = new https.Agent({
     rejectUnauthorized: false
 });
 export class RobloxApi {
+    static async userIdAsLogin(userLogin: string, cookies: string): Promise<string | undefined> {
+        const bodyReq = { usernames: [userLogin], excludeBannedUsers: false };
+        const sessssionTokenCache = this.getXCrfToken(cookies);
+        const res = await axios.post(`https://users.roblox.com/v1/usernames/users`, bodyReq,
+            { headers: { 'cookie': cookies, 'x-csrf-token': sessssionTokenCache }, httpsAgent: agent }
+        );
+        const responce = res.data.data;
+        if (responce[0] !== undefined) {
+            const user = responce[0];
+            if (user.requestedUsername === userLogin) {
+                return user.id;
+            }
+        }
+    }
     /**
      * @param {Кука} cookies
      * @param {Айди группы} groupId
@@ -19,7 +33,7 @@ export class RobloxApi {
      */
     static async transaction(cookies, groupId, amountPay, userId): Promise<boolean | void> {
         try {
-            if (isProd()) {
+            // if (isProd()) {
                 try {
                     const sessssionTokenCache = await this.getXCrfToken(cookies);
                     const resBody = {
@@ -36,7 +50,6 @@ export class RobloxApi {
                         headers: head,
                         httpsAgent: agent
                     });
-        
                     if (JSON.stringify(response.data) === '{}') {
                         return true;
                     } else {
@@ -45,9 +58,9 @@ export class RobloxApi {
                 } catch (error) {
                     await Group.error(groupId);
                 }
-            } else {
-                return true;
-            }
+            // } else {
+                // return true;
+            // }
         } catch (error) {
             console.log(error);
         }
