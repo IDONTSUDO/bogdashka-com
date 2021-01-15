@@ -3,7 +3,6 @@ import { htmlComlpetePay, HtmlerrorPay, load, HtmlPedding, preloadHtml, badBalan
 import {compose} from './std';
 import {SERVER_URL} from './constants';
 let path = location.pathname.split('/');
-path = path[path.length - 1];
 const balanceDoc = document.getElementById('total_balance');
 
 
@@ -38,7 +37,7 @@ socket.on('balance', (msg) => {
     }
 })
 const id = path;
-if (path !== '') {
+if (true) {
     SumInput.addEventListener('change', () => {
         if (SumInput.className === 'rub required') {
             return SumInput.classList.remove("required");
