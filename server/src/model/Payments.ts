@@ -108,7 +108,3 @@ enum servicePay {
 export enum PaySystem {
     QIWI = 'QIWI'
 }
-async function name() {
-     await Payments.PaymentCron();
-}
-name();
