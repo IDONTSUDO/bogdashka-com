@@ -1,14 +1,20 @@
 import io from 'socket.io-client';
-import { htmlComlpetePay, HtmlerrorPay, load, HtmlPedding, preloadHtml, badBalanceHtml, prelaodHTML } from './html';
-import {compose} from './std';
-import {SERVER_URL} from './constants';
+import { htmlComlpetePay, HtmlerrorPay, load, HtmlPedding, preloadHtml, badBalanceHtml, prelaodHTML,snackBar } from './html';
+import { compose } from './std';
+import { SERVER_URL } from './constants';
+let COURSE = 3;
+let  maxPay = 15000;
+
+const coourseHeaderDoc = document.getElementById('courseheader');
 let path = location.pathname.split('/');
+const id = path[1]; 
+console.log("ID",id);
+
 const balanceDoc = document.getElementById('total_balance');
 
 
 const socket = io(SERVER_URL);
 const session = localStorage.getItem('sessionId');
-// const prelaodHTML = `<div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div><span id='preloader-text' class="title">Проверяем вступили ли вы в наши группы</span>`
 const preloaderDoc = document.getElementById('preloader');
 const LoginInput = document.getElementById('loginInput');
 const preloaderText = document.getElementById('loader-text');
@@ -17,16 +23,22 @@ const OnlineDoc = document.getElementById('online');
 const SumInput = document.getElementById('sumInput');
 const TotalSales = document.getElementById('total-sales');
 const site = document.getElementById('site');
+const roboxQualityInput = document.getElementById('roboxQuality');
 if (session == undefined) {
     socket.emit('new-session', '')
 } else {
     socket.emit('reboot-session', session)
 }
+socket.on('course',(course) =>{
+    COURSE = course;
+    coourseHeaderDoc.value = `1₽ = ${course}R$`;
+    maxPay = 15000 / course;
+})
 socket.on('sendSession', (msg) => {
     localStorage.setItem('sessionId', msg)
 })
 socket.on('userOnline', (msg) => {
-    console.log(msg);
+ 
     if (OnlineDoc)
         OnlineDoc.textContent = msg;
 })
@@ -37,9 +49,41 @@ socket.on('balance', (msg) => {
         TotalSales.innerText = data.paidTotal;
     }
 })
-const id = path;
-if (true) {
-    SumInput.addEventListener('change', () => {
+
+if (path[1] === '') {
+    roboxQualityInput.addEventListener('change', (e) => {
+        e.preventDefault();
+        if (roboxQualityInput.className === 'rub required') {
+            return roboxQualityInput.classList.remove("required");
+        }
+        const input = parseInt(e.target.value);
+        const curency = input / COURSE;
+        if(curency > 15000 ){
+            roboxQualityInput.classList.add('required');
+            return snackBar('Привышает максимальную  сумму робуксов')
+        }
+        if(curency < 1){
+            roboxQualityInput.classList.add('required');
+            return snackBar('Привышает минимальную  сумму робуксов')
+        }
+        SumInput.value = `${parseInt(curency)}`;
+        
+    })
+    SumInput.addEventListener('change', (e) => {
+        e.preventDefault();
+        
+        const p = SumInput.value;
+        const sum = parseInt(p);
+        const curency = sum * COURSE;
+        if(sum <= 0){
+            SumInput.classList.add('required');
+            return snackBar('Привышает минимальную сумму платежа')
+        }
+        if(sum > 15000){
+            SumInput.classList.add('required');
+            return snackBar('Привышает максимальную  сумму платежа')
+        }
+        roboxQualityInput.value = String(parseInt(curency));
         if (SumInput.className === 'rub required') {
             return SumInput.classList.remove("required");
         }
@@ -49,6 +93,7 @@ if (true) {
             return LoginInput.classList.remove("required");
         }
     })
+
     btnBuy.addEventListener("click", async function () {
         compose(processAlert(), userPay())
     });
@@ -82,12 +127,14 @@ if (true) {
         const responce = await fetch(`${SERVER_URL}/group/user`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: resBody });
         if (responce.status === 200) {
             let result = await responce.json();
+            console.log(result);
             clearTimeout(timerPreloadOne);
             clearTimeout(timerPreloadTwo);
             clearTimeout(timerPreloadThere);
             const bodyPopup = document.getElementById('popup-body');
             if (result.amount) {
-                if (typeof result.groups === 'string') {
+                // typeof result.groups === 'string'
+                if (true) {
                     bodyPopup.classList.remove("centered-loader");
                     const html = `  <h2>Ваш заказ</h2>
                         <div class="item-price">
@@ -150,10 +197,12 @@ if (true) {
         const amount = SumInput.value;
         const login = LoginInput.value;
         if (amount === '') {
-            SumInput.classList.add('required');
+            snackBar('Введите коректную сумму')
+           return SumInput.classList.add('required');
         }
         if (login === '') {
-            LoginInput.classList.add('required');
+            snackBar('Введите коректный логин')
+            return   LoginInput.classList.add('required');
         }
         if (LoginInput.value != '' && SumInput.value != '') {
             const el = document.querySelector(".modal-wrapper");
@@ -170,10 +219,10 @@ if (true) {
     setTimeout(async function processWaiting() {
         const reqBody = JSON.stringify({ id: id })
         const request = await fetch(`${SERVER_URL}/pay/process`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: reqBody });
-        
-        if(request.status === 200){
+
+        if (request.status === 200) {
             let result = await request.json();
-            if(result === 'ERROR') {
+            if (result === 'ERROR') {
                 site.innerHTML = ``;
                 site.innerHTML = HtmlerrorPay('3212');
                 return;

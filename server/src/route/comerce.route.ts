@@ -1,11 +1,12 @@
 import * as express from 'express';
 import {  Request, Response } from 'express';
-import { upStatistic } from '../io';
+import { upCourse, upStatistic } from '../io';
 import { StatisticAll, StatisticInit } from '../model/StaticticsAll';
 import { validate as uuidValidate } from 'uuid';
 
 import { RobloxService } from '../service/roblox.service';
 import { Payments } from '../model/Payments';
+import { Settings } from '../model/Settings';
 
 const router = express.Router();
 
@@ -33,7 +34,15 @@ router.post('/sync/statistic', async (req, res) => {
        console.log('static soket error');
    }
 });
-
+router.post('/upcourse', async (req, res) => {
+    res.status(200).json(true);
+    const data = await Settings.getCourse();
+    if (typeof data !== 'undefined') {
+        upCourse(data);
+    } else {
+        console.log('course soket error');
+    }
+});
 router.post('/balance/valid', async (req, res) => {
     try {
         const { amount } = req.body;

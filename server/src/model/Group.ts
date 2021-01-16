@@ -53,7 +53,6 @@ export class Group {
         if (groups.length !== 1) {
             if (groups[index] !== undefined) {
                 const sum = totalAmount -  groups[index].balance;
-                
                 if (isPositive(sum)) {
                     return {pay_operations: PayList};
                 }

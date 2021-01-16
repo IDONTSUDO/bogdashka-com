@@ -6,6 +6,7 @@ import { IPayments, Payments, PaySystem } from '../model/Payments';
 import { isProd } from '../lib/prod';
 import { FAKE_ORDER_ID } from '../lib/contsanst';
 import { encrypt } from '../lib/crypto';
+import { Settings } from '../model/Settings';
 
 const qiwiApi = new QiwiBillPaymentsAPI(env.qiwiServer);
 
@@ -20,9 +21,10 @@ export const payProcessing = async (userLogin, amount, service, sessionId) => {
     } else {
         id = FAKE_ORDER_ID;
     }
+    const finalAmount = amount * await Settings.getCourse();
     const trancaction: IPayments = {
         id: id,
-        amount: amount,
+        amount: finalAmount,
         status: 'PEDDING',
         service: service,
         sessionId: sessionId,
@@ -54,4 +56,3 @@ export const newPayQiwi = async (amount, uuid) => {
         return 'QIWI линк';
     }
 };
-

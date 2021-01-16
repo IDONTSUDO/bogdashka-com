@@ -5,6 +5,7 @@ import NodeCache = require('node-cache');
 import { v1 as uuidv1 } from 'uuid';
 import { StatisticAll, StatisticInit } from './model/StaticticsAll';
 import { Payments } from './model/Payments';
+import { Settings } from './model/Settings';
 
 const cron = require('node-cron');
 cron.schedule('* * * * *', async () => {
@@ -14,17 +15,27 @@ cron.schedule('* * * * *', async () => {
 const userOnlineCache = new NodeCache();
 const io = new Server(server, { cors: { origin: '*' } });
 let userOnline = 0;
+let course = 2;
 let statictic: StatisticInit | undefined;
+export const upCourse = (value) => {
+  course = value;
+  io.emit('course', course);
+};
 export const upStatistic =  (value: StatisticInit) => {
   statictic = value;
+};
+export const getCourse = () => {
+  return course;
 };
 io.on('connection', async (socket) => {
   if (statictic === undefined) {
     statictic = await StatisticAll.getInitStatistic();
+    course = await Settings.getCourse();
   }
   userOnline =  userOnline + 1;
   io.to(socket.id).emit('balance', JSON.stringify(statictic));
   io.emit('userOnline', userOnline);
+  io.emit('course', course);
   socket.on('new-session', () => {
     const session = uuidv1();
     io.to(socket.id).emit('sendSession', session);

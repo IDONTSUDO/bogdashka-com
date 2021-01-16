@@ -176,3 +176,18 @@ export const HtmlPedding = () => {
 export const preloadHtml = `<span id='loader'><div class="hourglass"></div><div id='loader-text'>Актуализируем баланс</div></span>`
 export const badBalanceHtml = `<h3 class="mt10 mb10">Ксожалению недостаточно средтсв на балансе</h3>`
 export const prelaodHTML = `<div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div><span id='preloader-text' class="title">Проверяем вступили ли вы в наши группы</span>`
+
+
+
+
+
+export function snackBar(text) {
+  // Get the snackbar DIV
+  var x = document.getElementById("snackbar");
+  x.innerText = `${text}`;
+  // Add the "show" class to DIV
+  x.className = "show";
+
+  // After 3 seconds, remove the show class from DIV
+  setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+}
