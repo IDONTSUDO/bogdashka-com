@@ -49,8 +49,8 @@ socket.on('balance', (msg) => {
         TotalSales.innerText = data.paidTotal;
     }
 })
-
-if (path[1] === '') {
+// path[1] === ''
+if (true) {
     roboxQualityInput.addEventListener('change', (e) => {
         e.preventDefault();
         if (roboxQualityInput.className === 'rub required') {
