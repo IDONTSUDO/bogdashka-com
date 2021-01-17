@@ -12,8 +12,9 @@ console.log("ID",id);
 
 const balanceDoc = document.getElementById('total_balance');
 
-
+// console.log(SERVER_URL);
 const socket = io(SERVER_URL);
+console.log(SERVER_URL)
 const session = localStorage.getItem('sessionId');
 const preloaderDoc = document.getElementById('preloader');
 const LoginInput = document.getElementById('loginInput');
@@ -50,7 +51,7 @@ socket.on('balance', (msg) => {
     }
 })
 // path[1] === ''
-if (true) {
+if (path[1] === '') {
     roboxQualityInput.addEventListener('change', (e) => {
         e.preventDefault();
         if (roboxQualityInput.className === 'rub required') {
@@ -133,8 +134,7 @@ if (true) {
             clearTimeout(timerPreloadThere);
             const bodyPopup = document.getElementById('popup-body');
             if (result.amount) {
-                // typeof result.groups === 'string'
-                if (true) {
+                if (typeof result.groups === 'string') {
                     bodyPopup.classList.remove("centered-loader");
                     const html = `  <h2>Ваш заказ</h2>
                         <div class="item-price">

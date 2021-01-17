@@ -1,26 +1,58 @@
-[
-    {
-        "groupId": "1",
-        "balance": 10
-    },
-    {
-        "groupId": "2",
-        "balance": 10
-    },
-    {
-        "groupId": "3",
-        "balance": 10
-    },
-    {
-        "groupId": "4",
-        "balance": 10
-    },
-    {
-        "groupId": "5",
-        "balance": 10
-    },
-    {
-        "groupId": "6",
-        "balance": 10
-    }
-]
+{
+    "test2": [
+        {
+            "id": "FJFeZsGRNaUz90GJCQNO",
+            "cookies": "GuestData=UserID=-1505313296; gig_bootstrap_3_OsvmtBbTg6S_EUbwTPtbbmoihFY5ON6v6hbVrTbuqpBs7SyF_LQaJwtwKJ60sY1p=_gigya_ver3; RBXcb=11; _ga=GA1.2.169013536.1602058756; .RBXIDCHECK=b50dcc1a-c8a7-4a19-81ee-c412be132ed3,6070807e-8eb2-4f10-ac8c-c9e2fa0f0779; .ROBLOSECURITY=_|WARNING:-DO-NOT-SHARE-THIS.--Sharing-this-will-allow-someone-to-log-in-as-you-and-to-steal-your-ROBUX-and-items.|_05332E2BA55E1787CEE4C08E222285D20E18B91EE57DAC06013E5090C9C02B30A77EB9393D937B7B9A87C6AD0A73F86B25994065139B7678BBB2F0571E56DBEA2FD61EEF83DCD6F4994C122A2316D83A3A4EA25F0D306AB6308E4B63437B448379AEC7E9B77C71608D5380D17BD509D8F34441D67B75ACB7D7099CB9FD9C50B45C92B0D7F4182F06AFC313B2A9CBA48FBE34FD05FBA9A95C5AD43BFA46C158E8CFA16FFD0A5959BAC41E5AE7BAD723FC6CE93C103DA266AB50D31BE32B69C68999BFF03C315E157CEB73310F0768132C70ABE6F6016DCBAF2392A2917A406C4C31BDD72852B42DA4AC400EC1F0F78D11EEE486423792C0250FFAE38D441D27ACC15688F3C7D3D569212FF444264D50CC91FCD73646BEF5A309CB5C93B0C6B19E96F77E7E; .RBXID=_|WARNING:-DO-NOT-SHARE-THIS.--Sharing-this-will-allow-someone-to-log-in-as-you-and-to-steal-your-ROBUX-and-items.|_eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI0YjkzNGE0NC1kNWQ2LTQyMjQtOWU0NC04ZmRhM2QyZmJiOTIiLCJzdWIiOjc0MjA2NzY0MX0.jUidbUuU94Jyqlh0RrAkrin_SJb6LVrzv-kJZP4Ys74; RBXEventTrackerV2=CreateDate=1/10/2021 5:24:04 AM&rbxid=1979314814&browserid=62357778457; RBXSource=rbx_acquisition_time=1/12/2021 9:30:21 PM&rbx_acquisition_referrer=&rbx_medium=Direct&rbx_source=&rbx_campaign=&rbx_adgroup=&rbx_keyword=&rbx_matchtype=&rbx_send_info=1; __utmc=200924205; RBXSessionTracker=sessionid=03560187-11cf-48e9-90e2-3c9cb49f4a5e; __utma=200924205.169013536.1602058756.1610714287.1610717291.552; __utmb=200924205.0.10.1610717291; __utmz=200924205.1610717291.552.72.utmcsr=bogdashka-com.web.app|utmccn=(referral)|utmcmd=referral|utmcct=/; rbx-ip2=",
+            "url": "https://web.roblox.com/groups/4759344/Lumios-Studio#!/about",
+            "groupId": "4759344",
+            "status": true,
+            "balance": 6
+        },
+        {
+            "status": true,
+            "groupId": "8200598",
+            "id": "G8byPShrXSluxecjWbfX",
+            "cookies": "RBXViralAcquisition=time=1/6/2021 9:46:24 AM&referrer=&originatingsite=; RBXSource=rbx_acquisition_time=1/6/2021 9:46:24 AM&rbx_acquisition_referrer=&rbx_medium=Direct&rbx_source=&rbx_campaign=&rbx_adgroup=&rbx_keyword=&rbx_matchtype=&rbx_send_info=1; GuestData=UserID=-819074413; .ROBLOSECURITY=_|WARNING:-DO-NOT-SHARE-THIS.--Sharing-this-will-allow-someone-to-log-in-as-you-and-to-steal-your-ROBUX-and-items.|_D525EE139F6E3ADB1D2D1E0C4FE099F3B8535745C71A50FFBA8B9413ED65BEAE903C54DB1029266D3C10F32497CA3F445410F0C44CA2E63767F326A9AE2E1B9F6B449D4DD4F735A89F92E39C5085C71297627F702473026AC5AB82F7232E0613AA8ACA59808796F49076165C0F6D444C6E50F40FE2D23FEABA54D87379DC3E2EBBB0F36256440549E9A49CB6B52C33FC4D49119EECDE25234FA90CAEF38C194E7858DF477051092D6E2F71F87C88D0DECE18082721CCFC614F240989CC464E80C3BC0CF998E1F43A0822F979BBA6F6781B73FEB8F9CFD925B2CFD0E3E9E8B1A7CBB5A2024F82F0FC58BA7183475150CB4266DF87D661338035F943B6DDC5F9B013B9149218DD5E51ECB5FD443FF237A380CF85CFD4D5D2DA3C109F3F8E27B72178BFCB0C; .RBXID=_|WARNING:-DO-NOT-SHARE-THIS.--Sharing-this-will-allow-someone-to-log-in-as-you-and-to-steal-your-ROBUX-and-items.|_eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJiZDRkYmJmYi1jMmI4LTQzNjItODVhYS1iMmMwMmFhN2Y0YzgiLCJzdWIiOjg5OTExNjkyNX0.0N7AZwSmv1Z6bYVHRu0OyQlLKbl6Y2E3cLNMuf7o9_U; RBXEventTrackerV2=CreateDate=1/8/2021 2:44:46 PM&rbxid=2271563206&browserid=74457285006; RBXSessionTracker=sessionid=96c72728-3c2a-49a9-8bc6-01f37543481f; rbx-ip2=",
+            "url": "https://www.roblox.com/groups/8200598/Tenshi-Corp",
+            "balance": 15
+        }
+    ],
+    "test1": [
+        {
+            "groupId": "1",
+            "balance": 10,
+            "id": "1",
+            "cookies": "test"
+        },
+        {
+            "groupId": "2",
+            "balance": 10,
+            "id": "1",
+            "cookies": "test"
+        },
+        {
+            "groupId": "3",
+            "balance": 10,
+            "id": "1",
+            "cookies": "test"
+        },
+        {
+            "groupId": "4",
+            "balance": 10,
+            "id": "1",
+            "cookies": "test"
+        },
+        {
+            "groupId": "5",
+            "balance": 10,
+            "id": "1",
+            "cookies": "test"
+        },
+        {
+            "groupId": "6",
+            "balance": 10,
+            "id": "1",
+            "cookies": "test"
+        }
+    ]
+}

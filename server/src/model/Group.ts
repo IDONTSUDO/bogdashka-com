@@ -54,6 +54,12 @@ export class Group {
             if (groups[index] !== undefined) {
                 const sum = totalAmount -  groups[index].balance;
                 if (isPositive(sum)) {
+                    PayList.push({
+                        totalAmount: sum +  groups[index].balance,
+                        groupId: groups[index].groupId,
+                        cookies: groups[index].cookies,
+                        id: groups[index].id
+                    });
                     return {pay_operations: PayList};
                 }
                 PayList.push({
@@ -66,7 +72,7 @@ export class Group {
             }
             return { pay_operations: PayList, misingSum: totalAmount };
         } else {
-            const sum =    totalAmount - groups[index].balance ;
+            const sum =  totalAmount - groups[index].balance ;
             if (isPositive(sum)) {
                 PayList.push({
                     totalAmount: sum +  groups[index].balance,

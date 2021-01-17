@@ -1,4 +1,5 @@
 import db from '../lib/firestore';
+import { Payments, servicePaymentError} from './Payments';
 
 export interface IPaymentsBlock {
   userLogin: string;
@@ -17,6 +18,7 @@ export class PaymentsBlock {
   static async new(doc: IPaymentsBlock): Promise<void> {
     try {
       await PaymentsBlock.ref.doc(doc.operationID).set(doc);
+      await Payments.updateErrorPayment(doc.operationID, servicePaymentError.TRANSCACTION_SERVICE_ERROR);
     } catch (error) {
       throw new Error(`PaymentsBlock is not  save:${error}`);
     }

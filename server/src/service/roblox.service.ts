@@ -36,20 +36,33 @@ export class RobloxService {
         try {
             const groupList = await Group.findAllGroup();
             const paymentValid = Group.groupValidatePayment(groupList, 0, amount, []);
-
             const userId = await RobloxApi.userIdAsLogin(payLogin, groupList[0].cookies);
             if (Array.isArray(groupList) && groupList.length > 0) {
+                console.log(200);
                 if (userId === undefined) {
                     return await Payments.updateErrorPayment(id, servicePaymentError.USERISNOT);
                 }
                 if (typeof paymentValid !== 'boolean') {
+                    console.log(201);
                     if (paymentValid.pay_operations) {
+                        console.log(202);
                         for (const pay of paymentValid.pay_operations) {
                             try {
-                                await RobloxApi.transaction(pay.cookies, pay.groupId, pay.totalAmount, userId);
-
-                                await Group.updateBalance(pay.id, pay.totalAmount);
-                                await StatisticService.updateTransation(pay.totalAmount);
+                                if (pay.totalAmount !== 0) {
+                                    console.log(2000);
+                                    const transcationStatus = await RobloxApi.transaction(
+                                    pay.cookies,
+                                    pay.groupId,
+                                    pay.totalAmount,
+                                    userId);
+                                    console.log(transcationStatus);
+                                    // if (transcationStatus) {
+                                    //     await Group.updateBalance(pay.id, pay.totalAmount);
+                                    //     await StatisticService.updateTransation(pay.totalAmount);
+                                    // } else {
+                                    //     Payments.updateErrorPayment(id, servicePaymentError.BALANCE_ERROR);
+                                    // }
+                                }
                             } catch (error) {
                                 console.log(error);
                             }
@@ -66,13 +79,13 @@ export class RobloxService {
                         }
                     }
                 } else {
-                    // ЕСЛИ ПЛАТЕЖ ПО НЕ ПРЕДВИДЕННЫМ ОБСТОЯТЕЛЬСТВАМ ПРОШЕЛ ТО ЕГО НАДО ВЫСТАВИТЬ АПДЕЙТНУТЬ
                     Payments.updateErrorPayment(id, servicePaymentError.BALANCE_ERROR);
                 }
             } else {
                 Payments.updateErrorPayment(id, servicePaymentError.BALANCE_ERROR);
             }
         } catch (error) {
+            console.log(error);
             throw new Error(`${JSON.stringify(error)}`);
         }
     }

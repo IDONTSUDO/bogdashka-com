@@ -32,9 +32,6 @@ export class RobloxApi {
      * @memberof RobloxApi
      */
     static async transaction(cookies, groupId, amountPay, userId): Promise<boolean | void> {
-        try {
-            // if (isProd()) {
-                try {
                     const sessssionTokenCache = await this.getXCrfToken(cookies);
                     const resBody = {
                         PayoutType: 'FixedAmount',
@@ -46,24 +43,21 @@ export class RobloxApi {
                         'x-csrf-token': sessssionTokenCache,
                         'Content-Type': 'application/json'
                     };
-                    const response = await axios.post(`https://groups.roblox.com/v1/groups/${groupId}/payouts`, JSON.stringify(resBody), {
-                        headers: head,
-                        httpsAgent: agent
-                    });
-                    if (JSON.stringify(response.data) === '{}') {
-                        return true;
-                    } else {
-                        return false;
+                    try {
+                        const response = await axios.post(`https://groups.roblox.com/v1/groups/${groupId}/payouts`,
+                         JSON.stringify(resBody), {
+                            headers: head,
+                            httpsAgent: agent
+                        });
+                        console.log(response.data);
+                        if (JSON.stringify(response.data) === '{}') {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    } catch (error) {
+                        await Group.error(groupId);
                     }
-                } catch (error) {
-                    await Group.error(groupId);
-                }
-            // } else {
-                // return true;
-            // }
-        } catch (error) {
-            console.log(error);
-        }
     }
     /**
      * @static
