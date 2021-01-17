@@ -6,11 +6,17 @@ import { v1 as uuidv1 } from 'uuid';
 import { StatisticAll, StatisticInit } from './model/StaticticsAll';
 import { Payments } from './model/Payments';
 import { Settings } from './model/Settings';
+import { Group } from './model/Group';
 
 const cron = require('node-cron');
 cron.schedule('* * * * *', async () => {
   console.log('CRON RUNIING');
   await Payments.PaymentCron();
+});
+cron.schedule('0 */12 * * *', async () => {
+  const p = await Group.findAllGroup();
+  const balanceActual = Group.groupBalanceActual(p);
+  actualBalance(balanceActual);
 });
 const userOnlineCache = new NodeCache();
 const io = new Server(server, { cors: { origin: '*' } });
