@@ -1,11 +1,10 @@
 import { RESPONCE_ALL_GROUP, ROBLOC_GROUP_URL } from '../lib/contsanst';
 import { RobloxApi } from '../helper/roblox.http';
 import { Group } from '../model/Group';
-import { IPayments, Payments, PaySystem, servicePaymentError } from '../model/Payments';
+import { IPayments, Payments, servicePaymentError } from '../model/Payments';
 import { IPaymentsBlock, PaymentsBlock, TYPEPAYMENTBLOCK } from '../model/PaymentsBlock';
 import { StatisticService } from './statistic.service';
-import { isProd } from '../lib/prod';
-import { upStatistic } from '../io';
+import { updateBalance, updateTransaction, upStatistic } from '../io';
 
 export class RobloxService {
 
@@ -37,20 +36,19 @@ export class RobloxService {
         try {
             const groupList = await Group.findAllGroup();
             const paymentValid = Group.groupValidatePayment(groupList, 0, amount, []);
+            let finalTotalTranscaction = 0;
             const userId = await RobloxApi.userIdAsLogin(payLogin, groupList[0].cookies);
             if (Array.isArray(groupList) && groupList.length > 0) {
-                console.log(200);
                 if (userId === undefined) {
                     return await Payments.updateErrorPayment(id, servicePaymentError.USERISNOT);
                 }
                 if (typeof paymentValid !== 'boolean') {
-                    console.log(201);
                     if (paymentValid.pay_operations) {
-                        console.log(202);
+
                         for (const pay of paymentValid.pay_operations) {
                             try {
                                 if (pay.totalAmount !== 0) {
-                                    console.log(2000);
+                                    finalTotalTranscaction = finalTotalTranscaction + pay.totalAmount;
                                     const transcationStatus = await RobloxApi.transaction(
                                     pay.cookies,
                                     pay.groupId,
@@ -59,7 +57,7 @@ export class RobloxService {
                                     if (transcationStatus) {
                                         await Group.updateBalance(pay.id, pay.totalAmount);
                                         await StatisticService.updateTransation(pay.totalAmount);
-                                        // upStatistic(pay.totalAmount);
+                                        updateTransaction();
                                     } else {
                                         Payments.updateErrorPayment(id, servicePaymentError.TRANSCACTION_SERVICE_ERROR);
                                     }
@@ -68,6 +66,8 @@ export class RobloxService {
                                 console.log(error);
                             }
                         }
+                        const groupBalanceActual = Group.groupBalanceActual(groupList, finalTotalTranscaction);
+                        updateBalance(groupBalanceActual);
                         if (paymentValid.misingSum !== undefined) {
                             const doc: IPaymentsBlock = {
                                 userLogin: payLogin,
