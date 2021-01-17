@@ -33,6 +33,7 @@ export class Payments {
                         const calculatedPayment: IPayments = await Payments.getPayment(docId);
                         await RobloxService.transactionClient(calculatedPayment);
                         await Payments.newStatus(docId);
+
                     }
                 }
             });
@@ -114,7 +115,3 @@ enum servicePay {
 export enum PaySystem {
     QIWI = 'QIWI'
 }
-async function main() {
-    await Payments.PaymentCron();
-}
-main();

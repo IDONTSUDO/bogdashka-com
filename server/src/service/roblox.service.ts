@@ -5,6 +5,7 @@ import { IPayments, Payments, PaySystem, servicePaymentError } from '../model/Pa
 import { IPaymentsBlock, PaymentsBlock, TYPEPAYMENTBLOCK } from '../model/PaymentsBlock';
 import { StatisticService } from './statistic.service';
 import { isProd } from '../lib/prod';
+import { upStatistic } from '../io';
 
 export class RobloxService {
 
@@ -55,13 +56,13 @@ export class RobloxService {
                                     pay.groupId,
                                     pay.totalAmount,
                                     userId);
-                                    console.log(transcationStatus);
-                                    // if (transcationStatus) {
-                                    //     await Group.updateBalance(pay.id, pay.totalAmount);
-                                    //     await StatisticService.updateTransation(pay.totalAmount);
-                                    // } else {
-                                    //     Payments.updateErrorPayment(id, servicePaymentError.BALANCE_ERROR);
-                                    // }
+                                    if (transcationStatus) {
+                                        await Group.updateBalance(pay.id, pay.totalAmount);
+                                        await StatisticService.updateTransation(pay.totalAmount);
+                                        // upStatistic(pay.totalAmount);
+                                    } else {
+                                        Payments.updateErrorPayment(id, servicePaymentError.TRANSCACTION_SERVICE_ERROR);
+                                    }
                                 }
                             } catch (error) {
                                 console.log(error);
