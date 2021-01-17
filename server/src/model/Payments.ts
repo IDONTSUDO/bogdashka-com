@@ -23,7 +23,7 @@ export class Payments {
         const endDate = TodayDateEnd.toJSON();
         // COMPLETE PEDDING
         const fire = await Payments.ref.where(
-            'status', '==', 'COMPLETE'
+            'status', '==', 'PEDDING'
         ).where('date', '>=', beginDate).where('date', '<=', endDate).get();
             fire.docs.forEach(async firedoc => {
                 const doc = firedoc.data() as IPayments;

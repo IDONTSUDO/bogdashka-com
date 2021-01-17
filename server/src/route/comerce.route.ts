@@ -31,7 +31,6 @@ router.post('/sync/statistic', async (req, res) => {
     const p = await Group.findAllGroup();
     const balanceActual = Group.groupBalanceActual(p);
     updateBalance(balanceActual);
-    
 });
 router.post('/upcourse', async (req, res) => {
     res.status(200).json(true);
