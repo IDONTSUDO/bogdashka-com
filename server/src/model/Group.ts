@@ -7,10 +7,13 @@ export class Group {
      * @problem если группа не валидная ставим меняем ее статус
      * @param {string} id
     */
-    static groupBalanceActual(groups: [IGroup], amount: number) {
+    static groupBalanceActual(groups: [IGroup], amount?: number ) {
         let result = 0;
         for (const group of groups) {
            result = result + group.balance;
+        }
+        if (amount !== undefined) {
+            return result ;
         }
         return result;
     }

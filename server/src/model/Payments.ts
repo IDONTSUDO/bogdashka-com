@@ -3,6 +3,7 @@ import { RobloxService } from '../service/roblox.service';
 import * as QiwiBillPaymentsAPI from '@qiwi/bill-payments-node-js-sdk';
 import * as env from '../config/env.json';
 import {to} from '../lib/to';
+import { StatisticAll } from './StaticticsAll';
 const qiwiApi = new QiwiBillPaymentsAPI(env.qiwiServer);
 
 
@@ -32,8 +33,8 @@ export class Payments {
                         const docId = pay.billId;
                         const calculatedPayment: IPayments = await Payments.getPayment(docId);
                         await RobloxService.transactionClient(calculatedPayment);
+                        await StatisticAll.updateTransaction(pay.totalAmount);
                         await Payments.newStatus(docId);
-
                     }
                 }
             });
