@@ -1,6 +1,6 @@
 import * as express from 'express';
 import {  Request, Response } from 'express';
-import { upCourse, updateBalance, upStatistic } from '../io';
+import { actualBalance, upCourse, updateBalance, upStatistic } from '../io';
 import { StatisticAll, StatisticInit } from '../model/StaticticsAll';
 import { validate as uuidValidate } from 'uuid';
 
@@ -30,7 +30,7 @@ router.post('/sync/statistic', async (req, res) => {
    res.status(200).json(true);
     const p = await Group.findAllGroup();
     const balanceActual = Group.groupBalanceActual(p);
-    updateBalance(balanceActual);
+    actualBalance(balanceActual);
 });
 router.post('/upcourse', async (req, res) => {
     res.status(200).json(true);

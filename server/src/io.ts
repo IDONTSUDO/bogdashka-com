@@ -31,7 +31,10 @@ export const updateBalance = (value: number) => {
   if (statictic !== undefined) statictic.balance = statictic.balance + value;
   io.emit('balance', JSON.stringify(statictic));
 };
-
+export const actualBalance = (value: number) => {
+  if (statictic !== undefined) statictic.balance = value;
+  io.emit('balance', JSON.stringify(statictic));
+};
 export const getCourse = () => {
   return course;
 };
