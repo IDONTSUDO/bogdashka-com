@@ -2,19 +2,18 @@ import io from 'socket.io-client';
 import { htmlComlpetePay, HtmlerrorPay, load, HtmlPedding, preloadHtml, badBalanceHtml, prelaodHTML,snackBar } from './html';
 import { compose } from './std';
 import { SERVER_URL } from './constants';
+
 let COURSE = 3;
 let  maxPay = 15000;
 
 const coourseHeaderDoc = document.getElementById('courseheader');
 let path = location.pathname.split('/');
 const id = path[1]; 
-console.log("ID",id);
+ 
 
 const balanceDoc = document.getElementById('total_balance');
-
-// console.log(SERVER_URL);
 const socket = io(SERVER_URL);
-console.log(SERVER_URL)
+ 
 const session = localStorage.getItem('sessionId');
 const preloaderDoc = document.getElementById('preloader');
 const LoginInput = document.getElementById('loginInput');
@@ -52,13 +51,15 @@ socket.on('balance', (msg) => {
 })
 // path[1] === ''
 if (path[1] === '') {
-    roboxQualityInput.addEventListener('change', (e) => {
+    roboxQualityInput.addEventListener('input', (e) => {
+
         e.preventDefault();
         if (roboxQualityInput.className === 'rub required') {
             return roboxQualityInput.classList.remove("required");
         }
         const input = parseInt(e.target.value);
         const curency = input / COURSE;
+       
         if(curency > 15000 ){
             roboxQualityInput.classList.add('required');
             return snackBar('Привышает максимальную  сумму робуксов')
@@ -67,10 +68,12 @@ if (path[1] === '') {
             roboxQualityInput.classList.add('required');
             return snackBar('Привышает минимальную  сумму робуксов')
         }
-        SumInput.value = `${parseInt(curency)}`;
+        const value = String(curency.toFixed(1))
+        
+        SumInput.value = String(value);
         
     })
-    SumInput.addEventListener('change', (e) => {
+    SumInput.addEventListener('input', (e) => {
         e.preventDefault();
         
         const p = SumInput.value;
@@ -128,7 +131,6 @@ if (path[1] === '') {
         const responce = await fetch(`${SERVER_URL}/group/user`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: resBody });
         if (responce.status === 200) {
             let result = await responce.json();
-            console.log(result);
             clearTimeout(timerPreloadOne);
             clearTimeout(timerPreloadTwo);
             clearTimeout(timerPreloadThere);

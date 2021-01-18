@@ -11,7 +11,7 @@
     "build:live": "nodemon   --watch '*.ts' --exec 'ts-node' src/main.ts",
     "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register 'test/**/*.ts'",
     "coverage": "nyc npm run test",
-    "prod:start": "pm2 start ecosystem.config.js",
+    "prod:start": "npm run build && pm2 start ecosystem.config.js",
     "prod:restart": "pm2 restart ecosystem.config.js"
   },
   "keywords": [],
