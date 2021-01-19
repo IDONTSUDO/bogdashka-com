@@ -6,6 +6,5 @@ export class StatisticService {
    static async updateTransation(amount: number) {
       await Statistic.updateStatic(EventStatisticUpdate.NEW_TRANSACTION, amount);
       await StatisticAll.updateTransaction(amount);
-      sendIo(EventIO.NEW_PAY, amount);
    }
 }

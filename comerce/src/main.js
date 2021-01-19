@@ -1,19 +1,38 @@
 import io from 'socket.io-client';
-import { htmlComlpetePay, HtmlerrorPay, load, HtmlPedding, preloadHtml, badBalanceHtml, prelaodHTML,snackBar } from './html';
+import { htmlComlpetePay, HtmlerrorPay, load, HtmlPedding, preloadHtml, badBalanceHtml, prelaodHTML, snackBar } from './html';
 import { compose } from './std';
 import { SERVER_URL } from './constants';
 
 let COURSE = 3;
-let  maxPay = 15000;
+let maxPay = 15000;
 
 const coourseHeaderDoc = document.getElementById('courseheader');
 let path = location.pathname.split('/');
-const id = path[1]; 
- 
+const id = path[1];
+const width = window.screen.width;
+
+const computedSumAsRobox = (roboxCourseAt, rub) => {
+    return rub * roboxCourseAt;
+}
+const computedRoboxAsSum = (roboxCourseAt, rub) => {
+    let inc = 0;
+    while (rub > 0) {
+        inc++;
+        rub = rub - roboxCourseAt;
+    }
+    return inc;
+}
+const roboxCourse = (num) => {
+    const roboxOne = 1 / COURSE;
+    return Number(roboxOne.toFixed(2));
+}
+
+
+
 
 const balanceDoc = document.getElementById('total_balance');
 const socket = io(SERVER_URL);
- 
+
 const session = localStorage.getItem('sessionId');
 const preloaderDoc = document.getElementById('preloader');
 const LoginInput = document.getElementById('loginInput');
@@ -29,16 +48,16 @@ if (session == undefined) {
 } else {
     socket.emit('reboot-session', session)
 }
-socket.on('course',(course) =>{
+socket.on('course', (course) => {
     COURSE = course;
-    coourseHeaderDoc.value = `1₽ = ${course}R$`;
+    coourseHeaderDoc.innerText = '1₽ = ' + COURSE + ' R$';
     maxPay = 15000 / course;
 })
 socket.on('sendSession', (msg) => {
     localStorage.setItem('sessionId', msg)
 })
 socket.on('userOnline', (msg) => {
- 
+
     if (OnlineDoc)
         OnlineDoc.textContent = msg;
 })
@@ -49,7 +68,6 @@ socket.on('balance', (msg) => {
         TotalSales.innerText = data.paidTotal;
     }
 })
-// path[1] === ''
 if (path[1] === '') {
     roboxQualityInput.addEventListener('input', (e) => {
 
@@ -57,37 +75,37 @@ if (path[1] === '') {
         if (roboxQualityInput.className === 'rub required') {
             return roboxQualityInput.classList.remove("required");
         }
-        const input = parseInt(e.target.value);
-        const curency = input / COURSE;
-       
-        if(curency > 15000 ){
+        const input = parseFloat(e.target.value);
+        const w = roboxCourse(parseFloat(COURSE))
+        const curency = computedSumAsRobox(w, input);
+        if (curency > 15000) {
             roboxQualityInput.classList.add('required');
             return snackBar('Привышает максимальную  сумму робуксов')
         }
-        if(curency < 1){
+        if (curency < 1) {
             roboxQualityInput.classList.add('required');
             return snackBar('Привышает минимальную  сумму робуксов')
         }
         const value = String(curency.toFixed(1))
-        
         SumInput.value = String(value);
-        
+
     })
     SumInput.addEventListener('input', (e) => {
         e.preventDefault();
-        
+
         const p = SumInput.value;
-        const sum = parseInt(p);
+        const sum = parseFloat(p);
         const curency = sum * COURSE;
-        if(sum <= 0){
+        const w = roboxCourse(parseFloat(COURSE))
+        if (sum <= 0) {
             SumInput.classList.add('required');
             return snackBar('Привышает минимальную сумму платежа')
         }
-        if(sum > 15000){
+        if (sum > 15000) {
             SumInput.classList.add('required');
             return snackBar('Привышает максимальную  сумму платежа')
         }
-        roboxQualityInput.value = String(parseInt(curency));
+        roboxQualityInput.value = String(parseInt(computedRoboxAsSum(w, sum)));
         if (SumInput.className === 'rub required') {
             return SumInput.classList.remove("required");
         }
@@ -200,11 +218,11 @@ if (path[1] === '') {
         const login = LoginInput.value;
         if (amount === '') {
             snackBar('Введите коректную сумму')
-           return SumInput.classList.add('required');
+            return SumInput.classList.add('required');
         }
         if (login === '') {
             snackBar('Введите коректный логин')
-            return   LoginInput.classList.add('required');
+            return LoginInput.classList.add('required');
         }
         if (LoginInput.value != '' && SumInput.value != '') {
             const el = document.querySelector(".modal-wrapper");

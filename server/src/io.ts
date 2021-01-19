@@ -30,8 +30,8 @@ export const upCourse = (value) => {
 export const upStatistic =  (value: StatisticInit) => {
   statictic = value;
 };
-export const updateTransaction = () => {
-  if (statictic !== undefined) statictic.paidTotal = statictic.paidTotal + 1;
+export const updateTransaction = (sum) => {
+  if (statictic !== undefined) statictic.paidTotal = statictic.paidTotal + sum;
 };
 export const updateBalance = (value: number) => {
   if (statictic !== undefined) statictic.balance = statictic.balance + value;

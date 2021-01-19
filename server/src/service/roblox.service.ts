@@ -57,7 +57,7 @@ export class RobloxService {
                                     if (transcationStatus) {
                                         await Group.updateBalance(pay.id, pay.totalAmount);
                                         await StatisticService.updateTransation(pay.totalAmount);
-                                        updateTransaction();
+                                        updateTransaction(pay.totalAmount);
                                     } else {
                                         Payments.updateErrorPayment(id, servicePaymentError.TRANSCACTION_SERVICE_ERROR);
                                     }

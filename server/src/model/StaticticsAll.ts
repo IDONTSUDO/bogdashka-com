@@ -1,5 +1,6 @@
 import { STATISTIC_ALL_ID } from '../lib/contsanst';
 import db from '../lib/firestore';
+import { Group } from './Group';
 import { Statistic } from './Statistics';
 
 export class StatisticAll {
@@ -16,9 +17,11 @@ export class StatisticAll {
   }
   static async getInitStatistic(): Promise<StatisticInit | undefined> {
     const fire = await StatisticAll.ref.get();
+    const group = await Group.findAllGroup();
+    const balance = await Group.groupBalanceActual(group);
     if (fire.exists) {
       const doc: any = fire.data();
-      return {paidTotal: doc.paidInTotal, balance: doc.balance};
+      return {paidTotal: doc.paidInTotal, balance: balance};
     }
 
   }
