@@ -4,7 +4,7 @@ import { Group } from '../model/Group';
 import { IPayments, Payments, servicePaymentError } from '../model/Payments';
 import { IPaymentsBlock, PaymentsBlock, TYPEPAYMENTBLOCK } from '../model/PaymentsBlock';
 import { StatisticService } from './statistic.service';
-import { updateBalance, updateTransaction, upStatistic } from '../io';
+import { actualBalance,  updateTransaction } from '../io';
 
 export class RobloxService {
 
@@ -67,7 +67,7 @@ export class RobloxService {
                             }
                         }
                         const groupBalanceActual = Group.groupBalanceActual(groupList, finalTotalTranscaction);
-                        updateBalance(groupBalanceActual);
+                        actualBalance(groupBalanceActual);
                         if (paymentValid.misingSum !== undefined) {
                             const doc: IPaymentsBlock = {
                                 userLogin: payLogin,

@@ -7,6 +7,7 @@ import { isProd } from '../lib/prod';
 import { FAKE_ORDER_ID } from '../lib/contsanst';
 import { encrypt } from '../lib/crypto';
 import { Settings } from '../model/Settings';
+import { getCourse } from '../io';
 
 const qiwiApi = new QiwiBillPaymentsAPI(env.qiwiServer);
 
@@ -35,14 +36,16 @@ export const payProcessing = async (userLogin, amount, service, sessionId) => {
     return id;
 };
 
+
 export const newPayQiwi = async (amount, uuid) => {
     if (isProd()) {
+        const course = getCourse();
         try {
             const crypt = encrypt(uuid);
             const params = {
                 publicKey,
                 amount: amount,
-                comment: `${amount * 2} количество робуксов, курс 1 к 2`,
+                comment: `${amount * course} количество робуксов, курс 1 к ${course}`,
                 billId: uuid,
                 successUrl: `${env.frontURL}${uuid}`,
                 email: 'm@ya.ru'

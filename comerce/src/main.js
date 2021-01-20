@@ -10,7 +10,19 @@ const coourseHeaderDoc = document.getElementById('courseheader');
 let path = location.pathname.split('/');
 const id = path[1];
 const width = window.screen.width;
-
+if(width <= 1024){
+    document.getElementById('box').innerHTML = ``;
+    document.getElementById('box').innerHTML = `<div class="form-robox__input"><label for="name">КОЛИЧЕСТВО РОБУКСОВ</label> <input id='roboxQuality' class="rub" type="number"
+    placeholder="1 - 30.000 R$">
+    <div class="form-robox__input"><label for="name">СУММА ПЛАТЕЖА</label> <input id='sumInput' class="rub" type="number"
+      step="1" placeholder="1 - 15.000 ₽">
+</div>
+<div>
+  <div class="form-robox__input">         <label for="name">ВВЕДИТЕ НИК</label> <input id='loginInput'class="rub"
+    type="text"   placeholder="nickname"></div>
+</div>
+</div>`;
+}
 const computedSumAsRobox = (roboxCourseAt, rub) => {
     return rub * roboxCourseAt;
 }
@@ -82,22 +94,21 @@ if (path[1] === '') {
             roboxQualityInput.classList.add('required');
             return snackBar('Привышает максимальную  сумму робуксов')
         }
-        if (curency < 1) {
+        if (curency < 0) {
             roboxQualityInput.classList.add('required');
             return snackBar('Привышает минимальную  сумму робуксов')
         }
         const value = String(curency.toFixed(1))
         SumInput.value = String(value);
-
     })
     SumInput.addEventListener('input', (e) => {
         e.preventDefault();
 
         const p = SumInput.value;
         const sum = parseFloat(p);
-        const curency = sum * COURSE;
-        const w = roboxCourse(parseFloat(COURSE))
-        if (sum <= 0) {
+        const w = roboxCourse(parseFloat(COURSE));
+
+        if (w <= 0) {
             SumInput.classList.add('required');
             return snackBar('Привышает минимальную сумму платежа')
         }
@@ -153,6 +164,7 @@ if (path[1] === '') {
             clearTimeout(timerPreloadTwo);
             clearTimeout(timerPreloadThere);
             const bodyPopup = document.getElementById('popup-body');
+            // paylaod
             if (result.amount) {
                 if (typeof result.groups === 'string') {
                     bodyPopup.classList.remove("centered-loader");
