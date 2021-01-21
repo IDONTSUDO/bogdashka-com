@@ -121,7 +121,7 @@ if (path[1] === '') {
             return SumInput.classList.remove("required");
         }
     })
-    LoginInput.addEventListener('change', () => {
+    LoginInput.addEventListener('input', () => {
         if (LoginInput.className === 'rub required') {
             return LoginInput.classList.remove("required");
         }
