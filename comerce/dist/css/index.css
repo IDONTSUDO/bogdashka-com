@@ -1,0 +1,356 @@
+@media (max-width: 1200px){
+	.buy-robox__content .content-box{
+		height: 451px !important;
+	}
+}
+.required{
+  border: 3px solid #da2d45 !important;
+}
+:root {
+	--bg: #e3e4e8;
+	--fg: #2e3138;
+	--primary: #255ff4;
+	font-size: calc(16px + (24 - 16) * (100vw - 320px) / (1280 - 320));
+}
+/* body {
+	background: var(--bg);
+	display: grid;
+	font: 1em/1.5 sans-serif;
+	height: 100vh;
+	place-items: center;
+}
+ */
+.hourglass, .hourglass:before, .hourglass:after {
+	margin: auto;
+	animation-duration: 4s;
+	animation-iteration-count: infinite;
+}
+.hourglass {
+	--polygonH: polygon(0% 0%,100% 0%,100% 5.55%,95% 5.55%,95% 28%,60% 46%,60% 54%,95% 72%,95% 94.45%,100% 94.45%,100% 100%,0% 100%,0% 94.45%,5% 94.45%,5% 72%,40% 54%,40% 46%,5% 28%,5% 5.55%,0% 5.55%);
+	animation-name: flip;
+	animation-timing-function: ease-in-out;
+	background-image: linear-gradient(var(--primary) 0.5em,#737a8c55 0.5em 8.5em,var(--primary) 8.5em);
+	clip-path: var(--polygonH);
+	-webkit-clip-path: var(--polygonH);
+	overflow: hidden;
+	position: relative;
+	width: 5em;
+	height: 9em;
+	z-index: 0;
+}
+.hourglass:before, .hourglass:after {
+	animation-timing-function: linear;
+	content: "";
+	display: block;
+	position: absolute;
+}
+.hourglass:before {
+	--polygonB1: polygon(0% 0%,100% 0%,100% 24%,50% 47%,50% 47%,50% 47%,50% 47%,50% 47%,50% 47%,50% 47%,50% 47%,0% 24%);
+	--polygonB2: polygon(0% 4%,100% 4%,100% 24%,55% 45%,55% 100%,55% 100%,55% 100%,45% 100%,45% 100%,45% 100%,45% 45%,0% 24%);
+	--polygonB3: polygon(0% 24%,100% 24%,100% 24%,55% 45%,55% 80%,100% 100%,100% 100%,0% 100%,0% 100%,45% 80%,45% 45%,0% 24%);
+	--polygonB4: polygon(45% 45%,55% 45%,55% 45%,55% 45%,55% 58%,100% 76%,100% 100%,0% 100%,0% 76%,45% 58%,45% 45%,45% 45%);
+	--polygonB5: polygon(50% 53%,50% 53%,50% 53%,50% 53%,50% 53%,100% 76%,100% 100%,0% 100%,0% 76%,50% 53%,50% 53%,50% 53%);
+	animation-name: fill;
+	background-color: var(--fg);
+	background-size: 100% 3.6em;
+	clip-path: var(--polygonB1);
+	-webkit-clip-path: var(--polygonB1);
+	top: 0.5em;
+	left: 0.5em;
+	width: 4em;
+	height: 8em;
+	z-index: 1;
+}
+.hourglass:after {
+	animation-name: glare;
+	background:
+		linear-gradient(90deg,#0000 0.5em,#0003 0.5em 1.5em,#0000 1.5em 3.5em,#fff3 3.5em 4.5em,#fff0 4.5em 6.5em,#0003 6.5em 7.5em,#0000 7.5em) 0 0 / 100% 0.5em,
+		linear-gradient(90deg,#0000 0.75em,#0003 0.75em 1.25em,#0000 1.25em 3.75em,#fff3 3.75em 4.25em,#fff0 4.25em 6.75em,#0003 6.75em 7.25em,#0000 7.25em) 0 0.5em / 100% 8em,
+		linear-gradient(90deg,#0000 0.5em,#0003 0.5em 1.5em,#0000 1.5em 3.5em,#fff3 3.5em 4.5em,#fff0 4.5em 6.5em,#0003 6.5em 7.5em,#0000 7.5em) 0 100% / 100% 0.5em;
+	background-repeat: repeat-x;
+	top: 0;
+	left: -3em;
+	width: 200%;
+	height: 100%;
+	z-index: 2;
+}
+/* Animations */
+@keyframes fill {
+	from {
+		clip-path: var(--polygonB1);
+		-webkit-clip-path: var(--polygonB1);
+	}
+	10% {
+		clip-path: var(--polygonB2);
+		-webkit-clip-path: var(--polygonB2);
+	}
+	45% {
+		clip-path: var(--polygonB3);
+		-webkit-clip-path: var(--polygonB3);
+	}
+	80% {
+		clip-path: var(--polygonB4);
+		-webkit-clip-path: var(--polygonB4);
+	}
+	85%, to {
+		clip-path: var(--polygonB5);
+		-webkit-clip-path: var(--polygonB5);
+	}
+}
+@keyframes glare {
+	from, 90% {
+		transform: translateX(0);
+	}
+	to {
+		transform: translateX(3em);
+	}
+}
+@keyframes flip {
+	from, 90% {
+		transform: rotate(0);
+	}
+	to {
+		transform: rotate(180deg);
+	}
+}
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+	:root {
+		--bg: #17181c;
+		--fg: #c7cad1;
+	}
+}
+
+.centered-loader{
+	display: flex;
+	align-content: center;
+	flex-flow: column;
+	justify-content: center;
+	place-items: center;
+}
+.form-robox__input{
+	/* display: flex; */
+	flex-direction: column;
+}
+/* display: flex;
+flex-direction: column; */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+}
+.link-d{
+	color: #17181c;
+	margin: 4px;
+}
+.modal-wrapper.open .modal{
+	height: max-content !important;
+}
+.popupContent{
+	height: max-content !important;
+}
+.popupContent .item-price{
+	display: flex !important;
+}
+.mt10{
+	margin-top: 10px;
+}
+.mb10{
+	margin-bottom: 10px;
+}
+.hw100{
+	width: 100vw;
+  height: 93vh;
+}
+.sq-pos{
+    
+    position: absolute;
+   
+    background: #edecffde;
+ 
+    width: 200px;
+    height: 200px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-left: -300px;
+    margin-top: -200px;
+    /* opacity: .6; */
+    width: 600px;
+    height: 575px;
+}
+.txSQ_wait{
+	display: flex;
+	width: 100%;
+	justify-content: center;
+	color: black;
+	font-size: xxx-large;
+	margin-top: 10px;
+	margin-bottom: 33px;
+}
+.txSQ_suc{
+	display: flex;
+	width: 100%;
+	justify-content: center;
+	color: black;
+	font-size: xxx-large;
+	margin-top: 10px;
+	text-align: center;
+	margin-bottom: 10px;
+}
+.check-svg{
+	width: 100px;
+  height: 100px;
+}
+.centered-ch{
+	display: flex;
+	/* flex-direction: column; */
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+ 
+/* Popover styling */
+
+a {
+  text-decoration: none;
+}
+
+
+.popover__wrapper {
+  position: relative;
+  margin-top: 1.5rem;
+  display: inline-block;
+}
+.popover__content {
+	color:black;
+  opacity: 0;
+  visibility: hidden;
+  position: absolute;
+  left: -150px;
+  transform: translate(0, 10px);
+  background-color: white;
+  padding: 1.5rem;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+  width: auto;
+}
+.popover__content:before {
+  position: absolute;
+  z-index: -1;
+  content: "";
+  right: calc(50% - 10px);
+  top: -8px;
+  border-style: solid;
+  border-width: 0 10px 10px 10px;
+  border-color: transparent transparent black transparent;
+  transition-duration: 0.3s;
+  transition-property: transform;
+}
+.popover__wrapper:hover .popover__content {
+  z-index: 10;
+  opacity: 1;
+  visibility: visible;
+  transform: translate(0, -20px);
+  transition: all 0.5s cubic-bezier(0.75, -0.02, 0.2, 0.97);
+}
+.popover__message {
+  text-align: center;
+}
+.buy-robox__content .content-box{
+	/* height: 380px; */
+}
+.buy-robox__content .content-box .form-robox{
+	margin-bottom: 10px;
+	display: flex;
+	flex-direction: column;
+	flex-basis: revert;
+	align-self: center;
+	flex-direction: row;
+}
+/* .buy-robox__content .content-box .form-robox */
+.convert{
+	display: flex;
+	flex-direction: row  ;
+}
+.buy-robox__content .content-box .form-robox__input input[type="number"], .buy-robox__content .content-box .form-robox__input input[type="text"]{
+	width: 200px !important;
+}
+.mg10{
+	margin: 10px;
+}
+@media (max-width: 921px) { 
+	.convert{
+		display: flex;
+		flex-direction: column  ;
+	}
+
+ }
+ @media (max-width: 768px){ 
+ .buy-robox__content .content-box{
+	min-height: 500px;
+	display: flex;
+	place-content: space-between;
+	height: 100% !important;
+ }
+}
+ 
+.preloader{
+	height: 107vh;
+}
+#snackbar {
+  visibility: hidden;  
+  min-width: 250px;  
+  margin-left: -125px;  
+  background-color: #333; 
+  color: #fff; 
+  text-align: center;  
+  border-radius: 2px;  
+  padding: 16px;  
+  position: fixed; 
+  z-index: 1;  
+  left: 50%;  
+  bottom: 30px; 
+}
+
+ #snackbar.show {
+  visibility: visible;  
+  
+  -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+ @-webkit-keyframes fadein {
+  from {bottom: 0; opacity: 0;}
+  to {bottom: 30px; opacity: 1;}
+}
+
+@keyframes fadein {
+  from {bottom: 0; opacity: 0;}
+  to {bottom: 30px; opacity: 1;}
+}
+
+@-webkit-keyframes fadeout {
+  from {bottom: 30px; opacity: 1;}
+  to {bottom: 0; opacity: 0;}
+}
+
+@keyframes fadeout {
+  from {bottom: 30px; opacity: 1;}
+  to {bottom: 0; opacity: 0;}
+}
+.buy-robox__content .content-box .form-robox__input input[type="string"], .buy-robox__content .content-box .form-robox__input input[type="text"]{
+	outline: none;
+	background: transparent;
+	border: 3px solid #2C628C;
+	border-radius: 50px;
+	padding: 15px 15px;
+	height: 42px;
+	width: 250px;
+	-webkit-box-shadow: -2px 2px 3px 1px rgba(0,0,0,0.25);
+	box-shadow: -2px 2px 3px 1px rgba(0,0,0,0.25);
+}
+@media (max-width: 1024px){
+	.buy-robox__content .content-box {
+		min-height: 470px;
+	}
+}

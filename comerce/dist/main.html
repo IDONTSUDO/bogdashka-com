@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Bogdashka</title>
+  <link rel="stylesheet" href="css/animate.css">
+  <link rel="stylesheet" href="css/style.min.css">
+  <link rel="stylesheet" href="css/index.css">
+  <script>window.setTimeout(function () {
+      document.querySelector('.preloader').classList.add("preloader-remove");
+    }, 4000);</script>
+</head>
+
+<body>
+  <div class="preloader" id="preloader">
+    <div class="cssload-circle">
+      <div class="cssload-up">
+        <div class="cssload-innera"></div>
+      </div>
+      <div class="cssload-down">
+        <div class="cssload-innerb"></div>
+      </div>
+    </div>
+  </div>
+  <div id="site" role="main">
+    <section class="home" id="atHome">
+      <header class="header hw100">
+        <section class="home" id="atHome">
+          <header id='header' class="header">
+            <!-- герлянда -->
+            <div class="gerland-wrapper">
+              <div class="vetka" style="position:absolute; top:0; left:0; ; width: 100%;"><img class="vetka-img"
+                  src="https://uguide.ru/js/script/elka.png" alt="vetka"></div>
+              <div id="garland" class="garland_4">
+                <div id="nums_1">1</div>
+              </div>
+              <div id="garland-small" class="garland_4">
+                <div id="nums_1">1</div>
+              </div>
+            </div>
+            <div class="menu-nav">
+              <div class="logo"><a href="#"><img src="./images/logo-crop.png" alt="logo"></a></div>
+              <ul class="menu-nav__links">
+                <li><a href="https://vk.com/topic-199352331_46459026" target="_blank">ОТЗЫВЫ</a></li>
+              </ul>
+            </div>
+          </header>
+        <div class="gerland-wrapper">
+          <div class="vetka" style="position:absolute; top:0; left:0; ; width: 100%;"><img class="vetka-img"
+              src="https://uguide.ru/js/script/elka.png" alt="vetka"></div>
+          <div id="garland" class="garland_4">
+            <div id="nums_1">1</div>
+          </div>
+          <div id="garland-small" class="garland_4">
+            <div id="nums_1">1</div>
+          </div>
+        </div>
+        <div class="sq-pos centered-ch">
+          <svg height="100px" viewBox="0 0 329.26933 329" width="100px" xmlns="http://www.w3.org/2000/svg"><g fill="#f44336"><path d="m21.339844 329.398438c-5.460938 0-10.925782-2.089844-15.082032-6.25-8.34375-8.339844-8.34375-21.824219 0-30.164063l286.589844-286.59375c8.339844-8.339844 21.824219-8.339844 30.164063 0 8.34375 8.339844 8.34375 21.824219 0 30.164063l-286.589844 286.59375c-4.183594 4.179687-9.621094 6.25-15.082031 6.25zm0 0"/><path d="m307.929688 329.398438c-5.460938 0-10.921876-2.089844-15.082032-6.25l-286.589844-286.59375c-8.34375-8.339844-8.34375-21.824219 0-30.164063 8.339844-8.339844 21.820313-8.339844 30.164063 0l286.589844 286.59375c8.34375 8.339844 8.34375 21.824219 0 30.164063-4.160157 4.179687-9.621094 6.25-15.082031 6.25zm0 0"/></g></svg>
+          <span class="txSQ_suc">Случилась критическая ошибка, нам жаль номер платежа!</span>
+          <a href="https://vk.com/bogdashkacom" target="_blank" id='pay_process' class="pay__btn btn" style='    display: flex;justify-content: center;'>Обратится в тех поддержку</a>
+        </div>
+        <!-- https://vk.com/bogdashkacom -->
+  </div>
+  </div>
+  </header>
+  </div>
+  </div>
+  </div>
+  </section>
+  </div>
+  <script type="text/javascript">function garland() {
+      nums = document.getElementById('nums_1').innerHTML
+      if (nums == 1) {
+        document.getElementById('garland').className = 'garland_1';
+        document.getElementById('nums_1').innerHTML = '2'
+      }
+
+      if (nums == 2) {
+        document.getElementById('garland').className = 'garland_2';
+        document.getElementById('nums_1').innerHTML = '3'
+      }
+
+      if (nums == 3) {
+        document.getElementById('garland').className = 'garland_3';
+        document.getElementById('nums_1').innerHTML = '4'
+      }
+
+      if (nums == 4) {
+        document.getElementById('garland').className = 'garland_4';
+        document.getElementById('nums_1').innerHTML = '1'
+      }
+
+      if (nums == 1) {
+        document.getElementById('garland-small').className = 'garland_1';
+        document.getElementById('nums_1').innerHTML = '2'
+      }
+
+      if (nums == 2) {
+        document.getElementById('garland-small').className = 'garland_2';
+        document.getElementById('nums_1-small').innerHTML = '3'
+      }
+
+      if (nums == 3) {
+        document.getElementById('garland-small').className = 'garland_3';
+        document.getElementById('nums_1').innerHTML = '4'
+      }
+
+      if (nums == 4) {
+        document.getElementById('garland-small').className = 'garland_4';
+        document.getElementById('nums_1').innerHTML = '1'
+      }
+    }
+    setInterval(function () {
+      garland()
+    }
+
+      , 600)</script>
+  <script defer="defer" src="js/libs.min.js"></script>
+  <script defer="defer" src="js/main.js"></script>
+  <!-- <script defer="defer" src="js/bundle.js"></script> -->
+</body>
+
+</html>
