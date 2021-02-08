@@ -42,7 +42,7 @@ export const newPayQiwi = async (amount, uuid) => {
             const params = {
                 publicKey,
                 amount: amount,
-                comment: `${amount * 2} количество робуксов, курс 1 к 2`,
+                comment: `${amount * amount * await Settings.getCourse()} количество робуксов, курс 1 к 2`,
                 billId: uuid,
                 successUrl: `${env.frontURL}${uuid}`,
                 email: 'm@ya.ru'

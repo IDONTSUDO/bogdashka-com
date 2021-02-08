@@ -10,10 +10,10 @@ export class Group {
     static groupBalanceActual(groups: [IGroup], amount?: number ) {
         let result = 0;
         for (const group of groups) {
-           result = result + group.balance;
+           result = Math.floor(result) + Math.floor(group.balance);
         }
         if (amount !== undefined) {
-            return result ;
+            return result;
         }
         return result;
     }

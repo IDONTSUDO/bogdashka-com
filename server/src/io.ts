@@ -31,7 +31,7 @@ export const upStatistic =  (value: StatisticInit) => {
   statictic = value;
 };
 export const updateTransaction = (sum) => {
-  if (statictic !== undefined) statictic.paidTotal = statictic.paidTotal + sum;
+  if (statictic !== undefined) statictic.paidTotal =  Math.floor(statictic.paidTotal + sum);
 };
 export const updateBalance = (value: number) => {
   if (statictic !== undefined) statictic.balance = statictic.balance + value;

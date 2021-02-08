@@ -354,3 +354,30 @@ a {
 		min-height: 470px;
 	}
 }
+
+.popupContent .price__summ{
+	place-content: center;
+	display: flex;
+}
+@media (min-device-width:929px)
+and (max-device-width: 1015px)
+{
+	.convert{
+		display: block;
+	}
+}
+@media (max-device-width: 1015px)
+{
+	.buy-robox__content-img{
+		display: none;
+	}
+}
+@media (max-width: 1015px){
+	.buy-robox__content {
+    padding: 40px;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+}
+}

@@ -9,7 +9,6 @@ let maxPay = 15000;
 const coourseHeaderDoc = document.getElementById('courseheader');
 let path = location.pathname.split('/');
 const id = path[1];
-const width = window.screen.width;
 
 const computedSumAsRobox = (roboxCourseAt, rub) => {
     return rub * roboxCourseAt;
@@ -68,7 +67,8 @@ socket.on('balance', (msg) => {
         TotalSales.innerText = data.paidTotal;
     }
 })
-if (path[1] === '') {
+// path[1] === ''
+if (true) {
     roboxQualityInput.addEventListener('input', (e) => {
 
         e.preventDefault();

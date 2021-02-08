@@ -19,7 +19,7 @@ export class RobloxService {
         if (groupList && groupList.length !== 0) {
             let allBalance = 0;
             groupList.forEach((group) => {
-                allBalance = + group.balance;
+                allBalance = +  Math.floor(group.balance);
             });
             return 0 <= allBalance - amount;
         }
@@ -29,7 +29,7 @@ export class RobloxService {
      * @problem Совершение транзакции
      * @param {IPayments} payment
      * @return {Error} если случилась какая то ошибка зависящая от внешнего сервиса.
-     * @return {void} если все прошло успещно
+     * @return {void} если все прошло успешно
      */
     static async transactionClient(payment: IPayments): Promise<Error | void> {
         const { amount, id, payLogin } = payment;
@@ -56,7 +56,7 @@ export class RobloxService {
                                     userId);
                                     if (transcationStatus) {
                                         await Group.updateBalance(pay.id, pay.totalAmount);
-                                        await StatisticService.updateTransation(pay.totalAmount);
+                                        await StatisticService.updateTransation( Math.floor(pay.totalAmount));
                                         updateTransaction(pay.totalAmount);
                                     } else {
                                         Payments.updateErrorPayment(id, servicePaymentError.TRANSCACTION_SERVICE_ERROR);
