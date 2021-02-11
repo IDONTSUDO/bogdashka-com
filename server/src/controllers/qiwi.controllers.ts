@@ -35,14 +35,14 @@ export const payProcessing = async (userLogin, amount, service, sessionId) => {
     return id;
 };
 
-export const newPayQiwi = async (amount, uuid) => {
+export const newPayQiwi = async (amount, userLogin, uuid) => {
     if (isProd()) {
         try {
             const crypt = encrypt(uuid);
             const params = {
                 publicKey,
                 amount: amount,
-                comment: `${amount * amount * await Settings.getCourse()} количество робуксов, курс 1 к 2`,
+                comment: `${amount * await Settings.getCourse()} количество робуксов, ник: ${userLogin}`,
                 billId: uuid,
                 successUrl: `${env.frontURL}${uuid}`,
                 email: 'm@ya.ru'

@@ -34,7 +34,7 @@
     "node-cache": "^5.1.2",
     "node-cron": "^2.0.3",
     "node-fetch": "^2.6.1",
-    "nodemon": "^2.0.6",
+    "nodemon": "^2.0.7",
     "socket.io": "^3.0.4",
     "socket.io-client": "^3.0.4",
     "uuid": "^8.3.2"
