@@ -68,7 +68,7 @@ socket.on('balance', (msg) => {
     }
 })
 // path[1] === ''
-if (true) {
+if ( path[1] === '') {
     roboxQualityInput.addEventListener('input', (e) => {
 
         e.preventDefault();
@@ -82,7 +82,7 @@ if (true) {
             roboxQualityInput.classList.add('required');
             return snackBar('Привышает максимальную  сумму робуксов')
         }
-        if (curency < 1) {
+        if (curency < 10) {
             roboxQualityInput.classList.add('required');
             return snackBar('Привышает минимальную  сумму робуксов')
         }
@@ -97,7 +97,7 @@ if (true) {
         const sum = parseFloat(p);
         const curency = sum * COURSE;
         const w = roboxCourse(parseFloat(COURSE))
-        if (sum <= 0) {
+        if (sum <= 10) {
             SumInput.classList.add('required');
             return snackBar('Привышает минимальную сумму платежа')
         }

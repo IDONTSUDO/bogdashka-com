@@ -366,7 +366,7 @@ and (max-device-width: 1015px)
 		display: block;
 	}
 }
-@media (max-device-width: 1015px)
+@media (max-width: 1015px)
 {
 	.buy-robox__content-img{
 		display: none;
