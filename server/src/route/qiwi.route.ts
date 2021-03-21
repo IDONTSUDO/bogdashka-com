@@ -14,7 +14,7 @@ router.post('/qiwi/pay', async (req: Request, res: Response) => {
         const { userLogin, amount, sessionId, serviceType } = req.body;
 
         const id = await payProcessing(userLogin, amount, serviceType, sessionId);
-        return res.status(200).json(await newPayQiwi(amount, id));
+        return res.status(200).json(await newPayQiwi(amount, userLogin, id));
     } catch (error) {
         return res.status(400).json(error);
     }
