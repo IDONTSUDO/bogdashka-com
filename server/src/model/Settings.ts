@@ -1,13 +1,15 @@
 import db from '../lib/firestore';
 
 export class Settings {
-  static ref = db.collection('Settings').doc('Pcd9URGV3CYfrLWBfCW7');
-  static async getCourse() {
-    const p: any | ISettings = await Settings.ref.get();
-    const data = p.data();
-    return data.course;
+  static ref = db.collection('Settings');
+  static async getCourse(courseType: CourseType): Promise<number> {
+    const data = (await Settings.ref.doc(courseType).get()).data() as ISettings;
+    return parseInt(data.course) as number;
   }
 }
 interface ISettings {
-  course: number;
+  course: string;
+  maxRoboxPay: string;
+  mininalPay: string;
 }
+export enum CourseType { GROUP = 'group' }

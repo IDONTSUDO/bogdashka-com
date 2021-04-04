@@ -8,6 +8,8 @@ import { RobloxService } from '../service/roblox.service';
 import { Payments } from '../model/Payments';
 import { Settings } from '../model/Settings';
 import { Group } from '../model/Group';
+import { RobloxApi } from '../helper/roblox.http';
+
 
 const router = express.Router();
 
@@ -32,15 +34,6 @@ router.post('/sync/statistic', async (req, res) => {
     const balanceActual = Group.groupBalanceActual(p);
     actualBalance(balanceActual);
 });
-router.post('/upcourse', async (req, res) => {
-    res.status(200).json(true);
-    const data = await Settings.getCourse();
-    if (typeof data !== 'undefined') {
-        upCourse(data);
-    } else {
-        console.log('course soket error');
-    }
-});
 router.post('/balance/valid', async (req, res) => {
     try {
         const { amount } = req.body;
@@ -56,4 +49,25 @@ router.post('/pay/process', async (req, res) => {
         return res.status(200).json(await Payments.paymentInfo(id));
     }
 });
+router.post('/user/group/time', async (req, res) => {
+    try {
+        const userName = req.body.userName;
+        console.log(userName);
+        const p = await RobloxService.checkOnUserAllGroup(userName) as any;
+        p.push({
+            'id': 'RfnD5KiaMQCZt2fkK62k',
+            'roboxId': '4947725',
+            'status': true,
+            'url': 'https://www.roblox.com/groups/4947725/unicorn-is-the-answer#!/about',
+            'balance': 700
+          });
+        return res.status(200).json(p);
+    } catch (error) {
+        return res.status(400).json(error);
+    }
+});
+router.post('/new/pay', async (req, res) => {
+
+});
 export const comerceRoboxRouter = router;
+

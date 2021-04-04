@@ -38,6 +38,14 @@ export class Group {
             await Group.ref.doc(id).set({ 'balance': parseInt(doc.balance) - amount }, {merge: true});
         }
     }
+    static async findAll(): Promise<IGroup[]> {
+        const fire: FirebaseFirestore.DocumentData = await Group.ref.get();
+        const fireDoc: IGroup[] = [];
+        fire.docs.forEach(doc  => {
+            fireDoc.push(doc.data() as IGroup);
+        });
+        return fireDoc;
+    }
     /**
      * @problem Поиск всех групп с не нулевым баланцем.
      * @return {*}  {Promise<[IGroup]>}

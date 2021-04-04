@@ -45,10 +45,6 @@ export const getCourse = () => {
   return course;
 };
 io.on('connection', async (socket) => {
-  if (statictic === undefined) {
-    statictic = await StatisticAll.getInitStatistic();
-    course = await Settings.getCourse();
-  }
   userOnline =  userOnline + 1;
   io.to(socket.id).emit('balance', JSON.stringify(statictic));
   io.emit('userOnline', userOnline);

@@ -1,0 +1,11 @@
+https://economy.roblox.com/v1/groups/4947725/users-payout-eligibility?userIds=1939020221
+
+
+{"usersGroupPayoutEligibility":{"1939020221":"PayoutRestricted"}}
+
+https://economy.roblox.com/v1/groups/4947725/users-payout-eligibility?userIds=1899553161
+{"usersGroupPayoutEligibility":{"1899553161":"Eligible"}}
+
+
+https://groups.roblox.com/v1/groups/4947725/payouts
+{"PayoutType":"FixedAmount","Recipients":[{"recipientId":405190350,"recipientType":"User","amount":1}]}

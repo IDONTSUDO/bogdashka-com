@@ -5,7 +5,7 @@
   "main": "build/src/main.js",
   "scripts": {
     "build": "tsc",
-    "start": "tsc  && node --max-old-space-size=8192 build/src/io.js",
+    "start": "tsc  && node --max-old-space-size=8192 build/src/main.js",
     "watch": "tsc -w",
     "dev": "nodemon   --watch src --exec \"npm start\"",
     "build:live": "nodemon   --watch '*.ts' --exec 'ts-node' src/main.ts",
@@ -30,6 +30,7 @@
     "firebase-admin": "^9.3.0",
     "firebase-functions": "^3.12.0",
     "firebase-tools": "^8.18.1",
+    "geoip-country": "^4.0.62",
     "mongodb-typescript": "^2.2.1",
     "node-cache": "^5.1.2",
     "node-cron": "^2.0.3",

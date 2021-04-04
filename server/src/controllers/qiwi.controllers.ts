@@ -6,7 +6,7 @@ import { IPayments, Payments, PaySystem } from '../model/Payments';
 import { isProd } from '../lib/prod';
 import { FAKE_ORDER_ID } from '../lib/contsanst';
 import { encrypt } from '../lib/crypto';
-import { Settings } from '../model/Settings';
+import { CourseType, Settings } from '../model/Settings';
 
 const qiwiApi = new QiwiBillPaymentsAPI(env.qiwiServer);
 
@@ -21,7 +21,8 @@ export const payProcessing = async (userLogin, amount, service, sessionId) => {
     } else {
         id = FAKE_ORDER_ID;
     }
-    const finalAmount = amount * await Settings.getCourse();
+    const finalAmount = amount * await Settings.getCourse(CourseType.GROUP);
+    console.log(finalAmount);
     const trancaction: IPayments = {
         id: id,
         amount: finalAmount,
@@ -35,14 +36,14 @@ export const payProcessing = async (userLogin, amount, service, sessionId) => {
     return id;
 };
 
-export const newPayQiwi = async (amount, userLogin, uuid) => {
+export const newPayQiwi = async (amount: number, userLogin: string, uuid: string, courseType: CourseType) => {
     if (isProd()) {
         try {
             const crypt = encrypt(uuid);
             const params = {
                 publicKey,
                 amount: amount,
-                comment: `${amount * await Settings.getCourse()} количество робуксов, ник: ${userLogin}`,
+                comment: `${amount * await Settings.getCourse(courseType)} количество робуксов, ник: ${userLogin}`,
                 billId: uuid,
                 successUrl: `${env.frontURL}${uuid}`,
                 email: 'm@ya.ru'
