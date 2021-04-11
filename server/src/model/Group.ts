@@ -1,13 +1,25 @@
 import { sign } from 'jsonwebtoken';
 import { RESPONCE_ALL_GROUP } from '../lib/contsanst';
 import db from '../lib/firestore';
+import { IcheckGroup } from '../service/roblox.service';
 export class Group {
     static ref = db.collection('Groups');
     /**
      * @problem если группа не валидная ставим меняем ее статус
      * @param {string} id
     */
-    static groupBalanceActual(groups: [IGroup], amount?: number ) {
+   static async groupFindAllByIdByCheckGroup(groups: IcheckGroup[]): Promise<IGroup[]> {
+       const GroupResult: IGroup[] = [];
+       for await (const group of groups) {
+        const groupFire = await Group.ref.doc(group.id).get();
+        if (groupFire.exists) {
+            const groupValid = groupFire.data() as IGroup;
+            GroupResult.push(groupValid);
+        }
+       }
+       return GroupResult;
+   }
+    static groupBalanceActual(groups: IGroup[], amount?: number ) {
         let result = 0;
         for (const group of groups) {
            result = Math.floor(result) + Math.floor(group.balance);
@@ -54,6 +66,7 @@ export class Group {
         const fire: FirebaseFirestore.DocumentData = await Group.ref.where('balance', '>', 0).where('status', '==', true).orderBy('balance', 'asc').get();
         const fireDoc: any = [];
         fire.docs.forEach(doc  => {
+            console.log(doc.data());
             fireDoc.push(doc.data());
         });
         return fireDoc;
@@ -67,7 +80,7 @@ export class Group {
     * @return {boolean} если баланс слишком маленький
     * @return {IPayList} лист платежа, с каких групп сколько списать.
     */
-    static groupValidatePayment(groups: [IGroup], index: number, totalAmount: number, PayList): boolean | IPayList {
+    static groupValidatePayment(groups: IGroup[], index: number, totalAmount: number, PayList): boolean | IPayList {
         if (groups.length !== 1) {
             if (groups[index] !== undefined) {
                 const sum = totalAmount -  groups[index].balance;

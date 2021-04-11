@@ -16,7 +16,6 @@ const router = express.Router();
 router.post('/group/user', async (req: Request, res: Response) => {
     try {
         const { login, amount } = req.body;
-        // tslint:disable-next-line:radix
         const amountResult = await RobloxService.amountValid(parseInt(amount));
         const groupsResponce =  await RobloxService.checkOnUserAllGroup(login);
         res.status(200).json({
@@ -52,15 +51,7 @@ router.post('/pay/process', async (req, res) => {
 router.post('/user/group/time', async (req, res) => {
     try {
         const userName = req.body.userName;
-        console.log(userName);
-        const p = await RobloxService.checkOnUserAllGroup(userName) as any;
-        p.push({
-            'id': 'RfnD5KiaMQCZt2fkK62k',
-            'roboxId': '4947725',
-            'status': true,
-            'url': 'https://www.roblox.com/groups/4947725/unicorn-is-the-answer#!/about',
-            'balance': 700
-          });
+        const p = await RobloxService.checkOnUserAllGroup(userName);
         return res.status(200).json(p);
     } catch (error) {
         return res.status(400).json(error);

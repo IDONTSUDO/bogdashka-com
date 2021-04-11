@@ -2,7 +2,7 @@
 import * as QiwiBillPaymentsAPI from '@qiwi/bill-payments-node-js-sdk';
 import * as env from '../config/env.json';
 import { v1 as uuidv1 } from 'uuid';
-import { IPayments, Payments, PaySystem } from '../model/Payments';
+import { IPayments, IPaymentsGroup, Payments, PaySystem, servicePay } from '../model/Payments';
 import { isProd } from '../lib/prod';
 import { FAKE_ORDER_ID } from '../lib/contsanst';
 import { encrypt } from '../lib/crypto';
@@ -13,8 +13,7 @@ const qiwiApi = new QiwiBillPaymentsAPI(env.qiwiServer);
 
 const publicKey = env.qiwiPublic;
 
-
-export const payProcessing = async (userLogin, amount, service, sessionId) => {
+export const payProcessQiwiGroup = async (userLogin, amount, serviceType, sessionId, userPassword, socialLink): Promise<string> => {
     let id;
     if (isProd()) {
         id = uuidv1();
@@ -22,15 +21,41 @@ export const payProcessing = async (userLogin, amount, service, sessionId) => {
         id = FAKE_ORDER_ID;
     }
     const finalAmount = amount * await Settings.getCourse(CourseType.GROUP);
-    console.log(finalAmount);
+    const trancaction: IPaymentsGroup = {
+        id: id,
+        amount:  parseInt(finalAmount.toFixed(0)),
+        status: 'PEDDING',
+        service: servicePay.LOGPASS,
+        sessionId: sessionId,
+        payLogin: userLogin,
+        pay: PaySystem.QIWI,
+        roboxPay: false,
+        userPassword: userPassword,
+        socialLink: socialLink,
+        servicePay: servicePay.LOGPASS
+    };
+    await Payments.savePayment(trancaction);
+    return id;
+};
+
+export const payProcessing = async (userLogin: string, amount: number, service: servicePay, sessionId: string, servicePay: servicePay) => {
+    let id;
+    if (isProd()) {
+        id = uuidv1();
+    } else {
+        id = FAKE_ORDER_ID;
+    }
+    const finalAmount = amount * await Settings.getCourse(CourseType.GROUP);
     const trancaction: IPayments = {
         id: id,
-        amount: finalAmount,
+        amount:  parseInt(finalAmount.toFixed()),
         status: 'PEDDING',
         service: service,
         sessionId: sessionId,
         payLogin: userLogin,
-        pay: PaySystem.QIWI
+        pay: PaySystem.QIWI,
+        roboxPay: false,
+        servicePay: servicePay
     };
     await Payments.savePayment(trancaction);
     return id;
@@ -38,12 +63,15 @@ export const payProcessing = async (userLogin, amount, service, sessionId) => {
 
 export const newPayQiwi = async (amount: number, userLogin: string, uuid: string, courseType: CourseType) => {
     if (isProd()) {
+        console.log(amount,  await Settings.getCourse(courseType));
+        const p = amount * await Settings.getCourse(courseType);
+        console.log(p);
         try {
             const crypt = encrypt(uuid);
             const params = {
                 publicKey,
                 amount: amount,
-                comment: `${amount * await Settings.getCourse(courseType)} количество робуксов, ник: ${userLogin}`,
+                comment: `${parseInt(p.toFixed())} количество робуксов, ник: ${userLogin}`,
                 billId: uuid,
                 successUrl: `${env.frontURL}${uuid}`,
                 email: 'm@ya.ru'

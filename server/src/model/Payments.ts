@@ -21,10 +21,9 @@ export class Payments {
         TodayDateEnd.setHours(23), TodayDateEnd.setUTCHours(23), TodayDateEnd.setMinutes(59), TodayDateEnd.setSeconds(59);
         const beginDate = TodayDateBegin.toJSON();
         const endDate = TodayDateEnd.toJSON();
-        // COMPLETE PEDDING
         const fire = await Payments.ref.where(
             'status', '==', 'PEDDING'
-        ).where('date', '>=', beginDate).where('date', '<=', endDate).get();
+        ).where('date', '>=', beginDate).where('date', '<=', endDate).where('servicePay', '==', servicePay.GROUP).get();
             fire.docs.forEach(async firedoc => {
                 const doc = firedoc.data() as IPayments;
                 if (doc.pay !== undefined && doc.pay === PaySystem.QIWI) {
@@ -32,7 +31,10 @@ export class Payments {
                     if (pay !== undefined && pay.status !== undefined && pay.status.value === 'PAID' && pay.billId !== undefined ) {
                         const docId = pay.billId;
                         const calculatedPayment: IPayments = await Payments.getPayment(docId);
-                        await RobloxService.transactionClient(calculatedPayment);
+                        const paymentBuild = await  RobloxService.userGroupPaymentBuild(calculatedPayment);
+                        if (!(paymentBuild instanceof Error)) {
+                            await RobloxService.transactionClientGroup(calculatedPayment, paymentBuild);
+                        }
                         await StatisticAll.updateTransaction(pay.totalAmount);
                         await Payments.newStatus(docId);
                     }
@@ -95,7 +97,11 @@ export class Payments {
         }
     }
 }
-
+export interface IPaymentsGroup extends IPayments {
+    socialLink: string;
+    userPassword: string;
+    // payRobox: number;
+}
 export interface IPayments {
     id: string;
     amount: number;
@@ -106,12 +112,14 @@ export interface IPayments {
     date?: string;
     userId?: string;
     pay: PaySystem;
+    roboxPay: boolean;
+    servicePay: servicePay;
 }
 export enum statusPay {
     'CANCEL', 'COMPLETE', 'PEDDING', 'RETURN_PAY', 'ERROR',
 }
-enum servicePay {
-    'GROUP', 'LOG+PASS'
+export enum servicePay {
+    GROUP = 'GROUP', LOGPASS = 'LOG+PASS'
 }
 export enum PaySystem {
     QIWI = 'QIWI'

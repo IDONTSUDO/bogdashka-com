@@ -73,7 +73,6 @@ export class RobloxApi {
         try {
             const p: any = await axios.get(`https://web.roblox.com/home`, { headers: { 'cookie': cookies }, httpsAgent: agent });
             const result = resolveTokenStr(p.data);
-            console.log('RESULT TOKEN PARSE', result);
             return result;
         } catch (error) {
             console.log(error);

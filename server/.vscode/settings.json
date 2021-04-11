@@ -1,0 +1,4 @@
+{
+  "appService.defaultWebAppToDeploy": "/subscriptions/fbef1112-d7c8-4f8e-b794-7f34b1c9a801/resourceGroups/BogdanServer-api/providers/Microsoft.Web/sites/server-ecomerce-robox",
+  "appService.deploySubpath": "."
+}
