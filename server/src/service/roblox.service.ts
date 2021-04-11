@@ -23,14 +23,14 @@ export class RobloxService {
         }
         return false;
     }
-    static  async  userGroupPaymentBuild(payment: IPayments)  {
+    static async userGroupPaymentBuild(payment: IPayments) {
         const user = payment.payLogin;
-       const result =  await RobloxService.checkOnUserAllGroup(user);
-       if (!(result instanceof  Error)) {
-          return result.filter((n) => n.status === true);
-       } else {
-           return result;
-       }
+        const result = await RobloxService.checkOnUserAllGroup(user);
+        if (!(result instanceof Error)) {
+            return result.filter((n) => n.status === true);
+        } else {
+            return result;
+        }
 
     }
     /**
@@ -43,7 +43,6 @@ export class RobloxService {
         const { amount, id, payLogin } = payment;
         try {
             const groupList = await Group.groupFindAllByIdByCheckGroup(group);
-            console.log(groupList);
             const paymentValid = Group.groupValidatePayment(groupList, 0, amount, []);
             let finalTotalTranscaction = 0;
             const userId = await RobloxApi.userIdAsLogin(payLogin, groupList[0].cookies);
@@ -59,13 +58,13 @@ export class RobloxService {
                                 if (pay.totalAmount !== 0) {
                                     finalTotalTranscaction = finalTotalTranscaction + pay.totalAmount;
                                     const transcationStatus = await RobloxApi.transaction(
-                                    pay.cookies,
-                                    pay.groupId,
-                                    pay.totalAmount,
-                                    userId);
+                                        pay.cookies,
+                                        pay.groupId,
+                                        pay.totalAmount,
+                                        userId);
                                     if (transcationStatus) {
                                         await Group.updateBalance(pay.id, pay.totalAmount);
-                                        await StatisticService.updateTransation( Math.floor(pay.totalAmount));
+                                        await StatisticService.updateTransation(Math.floor(pay.totalAmount));
                                         updateTransaction(pay.totalAmount);
                                     } else {
                                         Payments.updateErrorPayment(id, servicePaymentError.TRANSCACTION_SERVICE_ERROR);
@@ -99,10 +98,10 @@ export class RobloxService {
             throw new Error(`${JSON.stringify(error)}`);
         }
     }
-    static async  checkUserAllGroup(user: string) {
+    static async checkUserAllGroup(user: string) {
         const groups = await Group.findAll();
         groups.forEach(async (group) => {
-            const {cookies, groupId} = group;
+            const { cookies, groupId } = group;
             // const result = await RobloxApi.UserLoginWithGroup(user, cookies, );
         });
     }
@@ -115,7 +114,7 @@ export class RobloxService {
     static async checkOnUserAllGroup(userName: string): Promise<IcheckGroup[] | Error> {
         const groups = await Group.findAllGroup();
         if (groups !== undefined) {
-            const userId  = await RobloxApi.userIdAsLogin(userName, groups[0].cookies);
+            const userId = await RobloxApi.userIdAsLogin(userName, groups[0].cookies);
             if (userId !== undefined) {
                 const responce: string | any = [];
                 if (groups[0] !== undefined && groups[0].cookies !== undefined) {
@@ -137,7 +136,7 @@ export class RobloxService {
         } else {
             return Error('Техническая ошибка');
         }
-}
+    }
 }
 export interface IcheckGroup {
     id: string;

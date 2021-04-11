@@ -21,9 +21,10 @@ export const payProcessQiwiGroup = async (userLogin, amount, serviceType, sessio
         id = FAKE_ORDER_ID;
     }
     const finalAmount = amount * await Settings.getCourse(CourseType.GROUP);
+    console.log(finalAmount, await Settings.getCourse(CourseType.GROUP));
     const trancaction: IPaymentsGroup = {
         id: id,
-        amount:  parseInt(finalAmount.toFixed(0)),
+        amount:  parseInt(finalAmount.toFixed()),
         status: 'PEDDING',
         service: servicePay.LOGPASS,
         sessionId: sessionId,
@@ -63,11 +64,8 @@ export const payProcessing = async (userLogin: string, amount: number, service: 
 
 export const newPayQiwi = async (amount: number, userLogin: string, uuid: string, courseType: CourseType) => {
     if (isProd()) {
-        console.log(amount,  await Settings.getCourse(courseType));
         const p = amount * await Settings.getCourse(courseType);
-        console.log(p);
         try {
-            const crypt = encrypt(uuid);
             const params = {
                 publicKey,
                 amount: amount,
