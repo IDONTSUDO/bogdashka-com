@@ -97,8 +97,8 @@ export class RobloxApi {
          { headers: { 'cookie': cookies, 'x-csrf-token': sessssionTokenCache }, httpsAgent: agent } );
          if (res.status === 200) {
             const data = res.data as ICheckUserPayGroupValid;
+            console.log(data);
             if (
-                data.usersGroupPayoutEligibility[userId] === 'PayoutRestricted' ||
                 data.usersGroupPayoutEligibility[userId] === 'Eligible'
                 ) {
                 return true;

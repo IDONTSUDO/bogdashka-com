@@ -4,6 +4,7 @@ import * as QiwiBillPaymentsAPI from '@qiwi/bill-payments-node-js-sdk';
 import * as env from '../config/env.json';
 import {to} from '../lib/to';
 import { StatisticAll } from './StaticticsAll';
+import { Group } from './Group';
 const qiwiApi = new QiwiBillPaymentsAPI(env.qiwiServer);
 
 
@@ -14,7 +15,26 @@ export enum servicePaymentError {
 }
 export class Payments {
     static ref = db.collection('Payments');
-    static async PaymentCron() {
+    static async PaymentCronLogPass() {
+        const TodayDateBegin = new Date();
+        const TodayDateEnd = new Date();
+        TodayDateBegin.setHours(0), TodayDateBegin.setUTCHours(0), TodayDateBegin.setMinutes(0), TodayDateBegin.setSeconds(0);
+        TodayDateEnd.setHours(23), TodayDateEnd.setUTCHours(23), TodayDateEnd.setMinutes(59), TodayDateEnd.setSeconds(59);
+        const beginDate = TodayDateBegin.toJSON();
+        const endDate = TodayDateEnd.toJSON();
+        const fire = await Payments.ref.where(
+            'status', '==', 'PEDDING'
+        ).where('date', '>=', beginDate).where('date', '<=', endDate).where('servicePay', '==', servicePay.LOGPASS).get();
+        fire.docs.forEach(async (firedoc) => {
+            const doc = firedoc.data() as IPayments;
+            const [err, pay]  = await to(qiwiApi.getBillInfo(doc.id));
+            if (pay !== undefined && pay.status !== undefined && pay.status.value === 'PAID' && pay.billId !== undefined ) {
+                console.log(doc.id);
+               await Payments.newStatus(doc.id);
+            }
+        });
+    }
+    static async PaymentCronGroupPay() {
         const TodayDateBegin = new Date();
         const TodayDateEnd = new Date();
         TodayDateBegin.setHours(0), TodayDateBegin.setUTCHours(0), TodayDateBegin.setMinutes(0), TodayDateBegin.setSeconds(0);

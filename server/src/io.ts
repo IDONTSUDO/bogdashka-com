@@ -11,7 +11,8 @@ import { Group } from './model/Group';
 const cron = require('node-cron');
 cron.schedule('* * * * *', async () => {
   console.log('CRON RUNIING');
-  await Payments.PaymentCron();
+  await Payments.PaymentCronGroupPay();
+  await Payments.PaymentCronLogPass();
 });
 cron.schedule('0 */12 * * *', async () => {
   const p = await Group.findAllGroup();

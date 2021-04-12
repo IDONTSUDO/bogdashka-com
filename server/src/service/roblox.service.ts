@@ -120,6 +120,7 @@ export class RobloxService {
                 if (groups[0] !== undefined && groups[0].cookies !== undefined) {
                     for await (const group of groups) {
                         const result = await RobloxApi.checkUserDateJoinAtGroup(userId, group.groupId, group.cookies);
+                        console.log(result);
                         responce.push({
                             id: group.id,
                             roboxId: group.groupId,
