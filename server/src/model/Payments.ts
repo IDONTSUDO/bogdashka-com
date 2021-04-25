@@ -134,6 +134,7 @@ export interface IPayments {
     pay: PaySystem;
     roboxPay: boolean;
     servicePay: servicePay;
+    payment?: string;
 }
 export enum statusPay {
     'CANCEL', 'COMPLETE', 'PEDDING', 'RETURN_PAY', 'ERROR',
@@ -142,5 +143,6 @@ export enum servicePay {
     GROUP = 'GROUP', LOGPASS = 'LOG+PASS'
 }
 export enum PaySystem {
-    QIWI = 'QIWI'
+    QIWI = 'QIWI',
+    FREEKASSA = 'FREEKASSA'
 }

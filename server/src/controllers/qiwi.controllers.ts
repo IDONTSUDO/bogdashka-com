@@ -21,7 +21,6 @@ export const payProcessQiwiGroup = async (userLogin, amount, serviceType, sessio
         id = FAKE_ORDER_ID;
     }
     const finalAmount = amount * await Settings.getCourse(CourseType.GROUP);
-    console.log(finalAmount, await Settings.getCourse(CourseType.GROUP));
     const trancaction: IPaymentsGroup = {
         id: id,
         amount:  parseInt(finalAmount.toFixed()),
@@ -33,13 +32,15 @@ export const payProcessQiwiGroup = async (userLogin, amount, serviceType, sessio
         roboxPay: false,
         userPassword: userPassword,
         socialLink: socialLink,
-        servicePay: servicePay.LOGPASS
+        servicePay: servicePay.LOGPASS,
+        payment: 'AWAITING'
     };
     await Payments.savePayment(trancaction);
     return id;
 };
 
 export const payProcessing = async (userLogin: string, amount: number, service: servicePay, sessionId: string, servicePay: servicePay) => {
+    console.log(userLogin, amount, service, sessionId, servicePay);
     let id;
     if (isProd()) {
         id = uuidv1();

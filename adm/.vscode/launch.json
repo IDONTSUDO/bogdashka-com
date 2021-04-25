@@ -1,0 +1,16 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+      {
+          "name": "adm",
+          "request": "launch",
+          "type": "dart",
+          "args": [
+              "--web-port",
+              "4200",
+              "--dart-define=FLUTTER_WEB_USE_SKIA",
+              "false"
+          ]
+      }
+  ]
+}
